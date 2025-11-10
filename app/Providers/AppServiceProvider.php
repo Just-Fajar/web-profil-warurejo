@@ -4,6 +4,21 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+// Models
+use App\Models\Berita;
+use App\Models\Galeri;
+use App\Models\PotensiDesa;
+
+// Repositories
+use App\Repositories\BeritaRepository;
+use App\Repositories\GaleriRepository;
+use App\Repositories\PotensiDesaRepository;
+
+// Services
+use App\Services\BeritaService;
+use App\Services\GaleriService;
+use App\Services\PotensiDesaService;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -11,7 +26,31 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Register Repositories
+        $this->app->singleton(BeritaRepository::class, function ($app) {
+            return new BeritaRepository(new Berita());
+        });
+
+        $this->app->singleton(GaleriRepository::class, function ($app) {
+            return new GaleriRepository(new Galeri());
+        });
+
+        $this->app->singleton(PotensiDesaRepository::class, function ($app) {
+            return new PotensiDesaRepository(new PotensiDesa());
+        });
+
+        // Register Services
+        $this->app->singleton(BeritaService::class, function ($app) {
+            return new BeritaService($app->make(BeritaRepository::class));
+        });
+
+        $this->app->singleton(GaleriService::class, function ($app) {
+            return new GaleriService($app->make(GaleriRepository::class));
+        });
+
+        $this->app->singleton(PotensiDesaService::class, function ($app) {
+            return new PotensiDesaService($app->make(PotensiDesaRepository::class));
+        });
     }
 
     /**
