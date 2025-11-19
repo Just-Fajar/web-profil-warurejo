@@ -22,39 +22,167 @@
             
             {{-- Search & Filter --}}
             <div class="mb-8 bg-white rounded-lg shadow-md p-6">
-                <form method="GET" action="{{ route('berita.index') }}" class="flex flex-col md:flex-row gap-4">
-                    <div class="flex-1">
-                        <input 
-                            type="text" 
-                            name="search" 
-                            placeholder="Cari berita..." 
-                            value="{{ request('search') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-                        >
+                <form method="GET" action="{{ route('berita.index') }}" class="space-y-4" x-data="searchAutocomplete()">
+                    
+                    {{-- Search Input with Autocomplete --}}
+                    <div class="relative">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Cari Berita</label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                name="search" 
+                                x-model="searchQuery"
+                                @input.debounce.300ms="fetchSuggestions()"
+                                @focus="showSuggestions = true"
+                                @click.away="showSuggestions = false"
+                                placeholder="Cari berita berdasarkan judul atau konten..." 
+                                value="{{ request('search') }}"
+                                class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                            <svg class="w-5 h-5 absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            
+                            {{-- Autocomplete Dropdown --}}
+                            <div 
+                                x-show="showSuggestions && suggestions.length > 0"
+                                x-transition
+                                class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto"
+                            >
+                                <template x-for="suggestion in suggestions" :key="suggestion.url">
+                                    <a 
+                                        :href="suggestion.url"
+                                        class="block px-4 py-3 hover:bg-primary-50 border-b border-gray-100 last:border-b-0 transition"
+                                    >
+                                        <div class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            <span x-text="suggestion.title" class="text-sm text-gray-800"></span>
+                                        </div>
+                                    </a>
+                                </template>
+                            </div>
+                        </div>
                     </div>
-                    <button 
-                        type="submit" 
-                        class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-semibold"
-                    >
-                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                        </svg>
-                        Cari
-                    </button>
+                    
+                    {{-- Advanced Filters Row --}}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        
+                        {{-- Date From --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                            <input 
+                                type="date" 
+                                name="date_from" 
+                                value="{{ request('date_from') }}"
+                                max="{{ date('Y-m-d') }}"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                        </div>
+                        
+                        {{-- Date To --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Akhir</label>
+                            <input 
+                                type="date" 
+                                name="date_to" 
+                                value="{{ request('date_to') }}"
+                                max="{{ date('Y-m-d') }}"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                        </div>
+                        
+                        {{-- Sort By --}}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
+                            <select 
+                                name="sort"
+                                class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                            >
+                                <option value="latest" {{ request('sort') === 'latest' || !request('sort') ? 'selected' : '' }}>Terbaru</option>
+                                <option value="oldest" {{ request('sort') === 'oldest' ? 'selected' : '' }}>Terlama</option>
+                                <option value="popular" {{ request('sort') === 'popular' ? 'selected' : '' }}>Terpopuler</option>
+                            </select>
+                        </div>
+                        
+                    </div>
+                    
+                    {{-- Action Buttons --}}
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button 
+                            type="submit" 
+                            class="flex-1 sm:flex-none px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition font-semibold inline-flex items-center justify-center"
+                        >
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            Terapkan Filter
+                        </button>
+                        
+                        @if(request()->anyFilled(['search', 'date_from', 'date_to', 'sort']))
+                        <a 
+                            href="{{ route('berita.index') }}" 
+                            class="flex-1 sm:flex-none px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-semibold inline-flex items-center justify-center"
+                        >
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            Reset Filter
+                        </a>
+                        @endif
+                    </div>
+                    
+                    {{-- Active Filters Display --}}
+                    @if(request()->anyFilled(['search', 'date_from', 'date_to', 'sort']))
+                    <div class="flex flex-wrap gap-2 pt-3 border-t border-gray-200">
+                        <span class="text-sm text-gray-600 font-medium">Filter aktif:</span>
+                        
+                        @if(request('search'))
+                        <span class="inline-flex items-center px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            "{{ request('search') }}"
+                        </span>
+                        @endif
+                        
+                        @if(request('date_from') || request('date_to'))
+                        <span class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            {{ request('date_from') ? \Carbon\Carbon::parse(request('date_from'))->format('d M Y') : 'Awal' }} 
+                            - 
+                            {{ request('date_to') ? \Carbon\Carbon::parse(request('date_to'))->format('d M Y') : 'Akhir' }}
+                        </span>
+                        @endif
+                        
+                        @if(request('sort') && request('sort') !== 'latest')
+                        <span class="inline-flex items-center px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
+                            </svg>
+                            {{ request('sort') === 'oldest' ? 'Terlama' : 'Terpopuler' }}
+                        </span>
+                        @endif
+                    </div>
+                    @endif
+                    
                 </form>
             </div>
 
             {{-- Berita List --}}
-            @if(isset($beritas) && $beritas->count() > 0)
+            @if(isset($berita) && $berita->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($beritas as $berita)
+                    @foreach($berita as $item)
                         <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group">
                             {{-- Gambar --}}
                             <div class="relative overflow-hidden h-48">
-                                @if($berita->gambar_url)
+                                @if($item->gambar_utama)
                                     <img 
-                                        src="{{ $berita->gambar_url }}" 
-                                        alt="{{ $berita->judul }}"
+                                        src="{{ $item->gambar_utama_url }}" 
+                                        alt="{{ $item->judul }}"
                                         class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                                     >
                                 @else
@@ -80,30 +208,30 @@
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                                     </svg>
-                                    <span>{{ $berita->tanggal_publikasi->format('d M Y') }}</span>
+                                    <span>{{ $item->published_at ? $item->published_at->format('d M Y') : $item->created_at->format('d M Y') }}</span>
                                     
-                                    @if($berita->penulis)
+                                    @if($item->admin)
                                         <span class="mx-2">•</span>
                                         <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                                         </svg>
-                                        <span>{{ $berita->penulis }}</span>
+                                        <span>{{ $item->admin->name ?? $item->admin->username }}</span>
                                     @endif
                                 </div>
 
                                 {{-- Title --}}
                                 <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-primary-600 transition line-clamp-2">
-                                    {{ $berita->judul }}
+                                    {{ $item->judul }}
                                 </h3>
 
                                 {{-- Excerpt --}}
                                 <p class="text-gray-600 mb-4 line-clamp-3">
-                                    {{ $berita->excerpt ?? Str::limit(strip_tags($berita->konten), 120) }}
+                                    {{ $item->excerpt ?? Str::limit(strip_tags($item->konten), 120) }}
                                 </p>
 
                                 {{-- Read More --}}
                                 <a 
-                                    href="{{ route('berita.show', $berita->slug) }}" 
+                                    href="{{ route('berita.show', $item->slug) }}" 
                                     class="inline-flex items-center text-primary-600 hover:text-primary-700 font-semibold"
                                 >
                                     Baca Selengkapnya
@@ -118,7 +246,7 @@
 
                 {{-- Pagination --}}
                 <div class="mt-12">
-                    {{ $beritas->links() }}
+                    {{ $berita->withQueryString()->links() }}
                 </div>
             @else
                 {{-- Empty State --}}
@@ -172,3 +300,31 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+function searchAutocomplete() {
+    return {
+        searchQuery: '{{ request("search") }}',
+        suggestions: [],
+        showSuggestions: false,
+        
+        async fetchSuggestions() {
+            if (this.searchQuery.length < 2) {
+                this.suggestions = [];
+                return;
+            }
+            
+            try {
+                const response = await fetch(`{{ route('berita.autocomplete') }}?q=${encodeURIComponent(this.searchQuery)}`);
+                this.suggestions = await response.json();
+                this.showSuggestions = this.suggestions.length > 0;
+            } catch (error) {
+                console.error('Autocomplete error:', error);
+                this.suggestions = [];
+            }
+        }
+    }
+}
+</script>
+@endpush

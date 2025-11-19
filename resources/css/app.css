@@ -149,12 +149,13 @@
 }
 
 @layer utilities {
-    /* Line Clamp */
+    /* Line Clamp - Cross-browser compatible */
     .line-clamp-1 {
         overflow: hidden;
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 1;
+        line-clamp: 1; /* Standard property */
     }
 
     .line-clamp-2 {
@@ -162,6 +163,7 @@
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
+        line-clamp: 2; /* Standard property */
     }
 
     .line-clamp-3 {
@@ -169,6 +171,7 @@
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 3;
+        line-clamp: 3; /* Standard property */
     }
 
     /* Smooth Scroll */
@@ -176,14 +179,21 @@
         scroll-behavior: smooth;
     }
 
-    /* No Scrollbar */
+    /* No Scrollbar - Cross-browser compatible */
     .no-scrollbar::-webkit-scrollbar {
-        display: none;
+        display: none; /* Safari, Chrome, Edge */
     }
 
     .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
+        -ms-overflow-style: none; /* IE 10+ */
+        scrollbar-width: none; /* Firefox 64+ */
+    }
+    
+    /* Fallback for older browsers */
+    @supports not (scrollbar-width: none) {
+        .no-scrollbar {
+            overflow: -moz-scrollbars-none; /* Old Firefox */
+        }
     }
 }
 

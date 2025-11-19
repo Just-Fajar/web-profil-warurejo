@@ -4,7 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>@yield('title', 'Desa Warurejo')</title>
+    
+    {{-- SEO Meta Tags --}}
+    @php
+    use App\Helpers\SEOHelper;
+
+    $seo = SEOHelper::generateMetaTags($seoData ?? []);
+    @endphp
+
+    
+    <title>{{ $seo['title'] }}</title>
+    <meta name="description" content="{{ $seo['description'] }}">
+    <meta name="keywords" content="{{ $seo['keywords'] }}">
+    <meta name="author" content="{{ $seo['author'] }}">
+    <meta name="robots" content="index, follow">
+    
+    {{-- Canonical URL --}}
+    <link rel="canonical" href="{{ $seo['url'] }}">
+    
+    {{-- Open Graph Meta Tags (Facebook) --}}
+    <meta property="og:type" content="{{ $seo['type'] }}">
+    <meta property="og:title" content="{{ $seo['title'] }}">
+    <meta property="og:description" content="{{ $seo['description'] }}">
+    <meta property="og:image" content="{{ $seo['image'] }}">
+    <meta property="og:url" content="{{ $seo['url'] }}">
+    <meta property="og:site_name" content="{{ $seo['site_name'] }}">
+    <meta property="og:locale" content="{{ $seo['locale'] }}">
+    
+    {{-- Twitter Card Meta Tags --}}
+    <meta name="twitter:card" content="{{ $seo['twitter_card'] }}">
+    <meta name="twitter:title" content="{{ $seo['title'] }}">
+    <meta name="twitter:description" content="{{ $seo['description'] }}">
+    <meta name="twitter:image" content="{{ $seo['image'] }}">
+    
+    {{-- Structured Data (JSON-LD) --}}
+    @if(isset($structuredData))
+        <script type="application/ld+json">
+            {!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+        </script>
+    @else
+        {{-- Default Organization Schema --}}
+        <script type="application/ld+json">
+            {!! json_encode(SEOHelper::getOrganizationSchema(), JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+        </script>
+    @endif
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">

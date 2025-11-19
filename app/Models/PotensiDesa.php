@@ -20,6 +20,7 @@ class PotensiDesa extends Model
         'gambar',
         'lokasi',
         'kontak',
+        'whatsapp',
         'is_active',
         'urutan',
     ];

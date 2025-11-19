@@ -56,25 +56,18 @@
             </div>
 
             {{-- Potensi List --}}
-            @if(isset($potensis) && $potensis->count() > 0)
+            @if(isset($potensi) && $potensi->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($potensis as $potensi)
+                    @foreach($potensi as $item)
                         <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group">
                             {{-- Gambar --}}
                             <div class="relative overflow-hidden h-56">
-                                @if($potensi->gambar_url)
-                                    <img 
-                                        src="{{ $potensi->gambar_url }}" 
-                                        alt="{{ $potensi->nama }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
-                                    >
-                                @else
-                                    <div class="w-full h-full bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center">
-                                        <svg class="w-24 h-24 text-white opacity-50" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                @endif
+                                <img 
+                                    src="{{ $item->gambar ? asset('storage/' . $item->gambar) : asset('images/default-potensi.jpg') }}" 
+                                    alt="{{ $item->nama }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                                    onerror="this.src='{{ asset('images/logo-web-desa.jpg') }}'"
+                                >
                                 
                                 {{-- Category Badge --}}
                                 <div class="absolute top-3 right-3">
@@ -82,14 +75,16 @@
                                         $kategoriColors = [
                                             'pertanian' => 'bg-green-600',
                                             'peternakan' => 'bg-amber-600',
-                                            'umkm' => 'bg-blue-600',
-                                            'wisata' => 'bg-purple-600',
+                                            'perikanan' => 'bg-blue-600',
+                                            'umkm' => 'bg-purple-600',
+                                            'wisata' => 'bg-pink-600',
+                                            'kerajinan' => 'bg-indigo-600',
                                             'lainnya' => 'bg-gray-600',
                                         ];
-                                        $bgColor = $kategoriColors[$potensi->kategori ?? 'lainnya'] ?? 'bg-gray-600';
+                                        $bgColor = $kategoriColors[$item->kategori ?? 'lainnya'] ?? 'bg-gray-600';
                                     @endphp
                                     <span class="px-3 py-1 {{ $bgColor }} text-white text-xs font-semibold rounded-full uppercase">
-                                        {{ $potensi->kategori ?? 'Lainnya' }}
+                                        {{ ucfirst($item->kategori ?? 'Lainnya') }}
                                     </span>
                                 </div>
                             </div>
@@ -98,27 +93,27 @@
                             <div class="p-6">
                                 {{-- Title --}}
                                 <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition line-clamp-2">
-                                    {{ $potensi->nama }}
+                                    {{ $item->nama }}
                                 </h3>
 
                                 {{-- Description --}}
                                 <p class="text-gray-600 mb-4 line-clamp-3">
-                                    {{ $potensi->deskripsi_singkat ?? Str::limit(strip_tags($potensi->deskripsi), 120) }}
+                                    {{ $item->deskripsi_singkat ?? Str::limit(strip_tags($item->deskripsi), 120) }}
                                 </p>
 
                                 {{-- Meta Info --}}
-                                @if($potensi->lokasi)
+                                @if($item->lokasi)
                                     <div class="flex items-center text-sm text-gray-500 mb-4">
                                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                         </svg>
-                                        <span>{{ $potensi->lokasi }}</span>
+                                        <span>{{ $item->lokasi }}</span>
                                     </div>
                                 @endif
 
                                 {{-- Read More --}}
                                 <a 
-                                    href="{{ route('potensi.show', $potensi->slug) }}" 
+                                    href="{{ route('potensi.show', $item->slug) }}" 
                                     class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold"
                                 >
                                     Lihat Detail
@@ -132,9 +127,11 @@
                 </div>
 
                 {{-- Pagination --}}
-                <div class="mt-12">
-                    {{ $potensis->links() }}
-                </div>
+                @if($potensi->hasPages())
+                    <div class="mt-12">
+                        {{ $potensi->appends(request()->query())->links() }}
+                    </div>
+                @endif
             @else
                 {{-- Empty State --}}
                 <div class="bg-white rounded-lg shadow-md p-12 text-center">

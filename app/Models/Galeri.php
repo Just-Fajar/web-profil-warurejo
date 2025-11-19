@@ -53,6 +53,15 @@ class Galeri extends Model
         return $query->where('is_active', true);
     }
 
+    public function scopePublished($query)
+    {
+        return $query->where('is_active', true)
+            ->where(function($q) {
+                $q->whereNull('tanggal')
+                  ->orWhere('tanggal', '<=', now());
+            });
+    }
+
     public function scopeByKategori($query, $kategori)
     {
         return $query->where('kategori', $kategori);

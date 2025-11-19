@@ -10,6 +10,15 @@ use App\Http\Controllers\Public\KontakController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
+use App\Http\Controllers\Admin\PotensiController as AdminPotensiController;
+use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
+use App\Http\Controllers\Admin\ProfilDesaController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
+use App\Http\Controllers\SitemapController;
+
+// SEO Routes
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Public Routes
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -23,6 +32,7 @@ Route::prefix('profil')->name('profil.')->group(function () {
 
 Route::prefix('berita')->name('berita.')->group(function () {
     Route::get('/', [BeritaController::class, 'index'])->name('index');
+    Route::get('/autocomplete', [BeritaController::class, 'autocomplete'])->name('autocomplete');
     Route::get('/{slug}', [BeritaController::class, 'show'])->name('show');
 });
 
@@ -37,7 +47,6 @@ Route::prefix('galeri')->name('galeri.')->group(function () {
 
 Route::prefix('kontak')->name('kontak.')->group(function () {
     Route::get('/', [KontakController::class, 'index'])->name('index');
-    Route::post('/send', [KontakController::class, 'send'])->name('send');
 });
 
 // Peta Desa
@@ -50,7 +59,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Guest Routes (Not Authenticated)
     Route::middleware('admin.guest')->group(function () {
         Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
-        Route::post('/login', [AdminAuthController::class, 'login'])->name('login.post');
+        Route::post('/login', [AdminAuthController::class, 'login'])
+            ->middleware('throttle:5,1') // 5 attempts per minute
+            ->name('login.post');
     });
 
     // Authenticated Routes
@@ -60,6 +71,35 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         
         // Berita Management
+        Route::post('berita/bulk-delete', [AdminBeritaController::class, 'bulkDelete'])->name('berita.bulk-delete');
         Route::resource('berita', AdminBeritaController::class);
+        
+        // Potensi Management
+        Route::post('potensi/bulk-delete', [AdminPotensiController::class, 'bulkDelete'])->name('potensi.bulk-delete');
+        Route::resource('potensi', AdminPotensiController::class);
+        
+        // Galeri Management
+        Route::post('galeri/bulk-delete', [AdminGaleriController::class, 'bulkDelete'])->name('galeri.bulk-delete');
+        Route::resource('galeri', AdminGaleriController::class);
+        
+        // Profil Desa Management
+        Route::prefix('profil-desa')->name('profil-desa.')->group(function () {
+            Route::get('/', [ProfilDesaController::class, 'edit'])->name('edit');
+            Route::put('/', [ProfilDesaController::class, 'update'])->name('update');
+        });
+        
+        // Admin Profile Management
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [AdminProfileController::class, 'show'])->name('show');
+            Route::get('/edit', [AdminProfileController::class, 'edit'])->name('edit');
+            Route::put('/update', [AdminProfileController::class, 'update'])->name('update');
+            Route::put('/password', [AdminProfileController::class, 'updatePassword'])->name('update-password');
+        });
+        
+        // Admin Settings
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', [AdminSettingsController::class, 'index'])->name('index');
+            Route::put('/update', [AdminSettingsController::class, 'update'])->name('update');
+        });
     });
 });

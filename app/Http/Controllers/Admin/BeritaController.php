@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\BeritaRequest;
 use App\Services\BeritaService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BeritaController extends Controller
 {
@@ -34,6 +35,10 @@ class BeritaController extends Controller
             $data['admin_id'] = auth()->guard('admin')->id();
 
             $this->beritaService->createBerita($data);
+
+            // Clear cache
+            Cache::forget('home.latest_berita');
+            Cache::forget('profil_desa');
 
             return redirect()
                 ->route('admin.berita.index')
@@ -64,6 +69,10 @@ class BeritaController extends Controller
             $data = $request->validated();
             $this->beritaService->updateBerita($id, $data);
 
+            // Clear cache
+            Cache::forget('home.latest_berita');
+            Cache::forget('profil_desa');
+
             return redirect()
                 ->route('admin.berita.index')
                 ->with('success', 'Berita berhasil diperbarui.');
@@ -80,6 +89,10 @@ class BeritaController extends Controller
         try {
             $this->beritaService->deleteBerita($id);
 
+            // Clear cache
+            Cache::forget('home.latest_berita');
+            Cache::forget('profil_desa');
+
             return redirect()
                 ->route('admin.berita.index')
                 ->with('success', 'Berita berhasil dihapus.');
@@ -89,4 +102,41 @@ class BeritaController extends Controller
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
-}
+
+    /**
+     * Bulk delete berita
+     */
+    public function bulkDelete(Request $request)
+    {
+        try {
+            $ids = $request->input('ids', []);
+            
+            if (empty($ids)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak ada berita yang dipilih.'
+                ], 400);
+            }
+
+            $count = 0;
+            foreach ($ids as $id) {
+                $this->beritaService->deleteBerita($id);
+                $count++;
+            }
+
+            // Clear cache
+            Cache::forget('home.latest_berita');
+            Cache::forget('profil_desa');
+
+            return response()->json([
+                'success' => true,
+                'message' => "{$count} berita berhasil dihapus."
+            ]);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }} 

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\PotensiDesaRepository;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class PotensiDesaService
@@ -66,19 +67,28 @@ class PotensiDesaService
             $data['slug'] = Str::slug($data['nama']);
         }
 
-        return $this->potensiRepository->create($data);
+        $potensi = $this->potensiRepository->create($data);
+
+        // Clear cache when new potensi is created
+        Cache::forget('home.potensi');
+
+        return $potensi;
     }
 
     public function updatePotensi($id, array $data)
     {
         $potensi = $this->potensiRepository->find($id);
 
-        if (isset($data['gambar'])) {
+        // Handle new image upload (check if it's a file object, not null/string)
+        if (isset($data['gambar']) && is_object($data['gambar'])) {
             // Delete old image
             if ($potensi->gambar) {
                 Storage::disk('public')->delete($potensi->gambar);
             }
             $data['gambar'] = $this->uploadImage($data['gambar']);
+        } else {
+            // Keep existing image if no new upload - REMOVE from data array
+            unset($data['gambar']);
         }
 
         // Update slug if nama changed
@@ -86,7 +96,12 @@ class PotensiDesaService
             $data['slug'] = Str::slug($data['nama']);
         }
 
-        return $this->potensiRepository->update($id, $data);
+        $updated = $this->potensiRepository->update($id, $data);
+
+        // Clear cache when potensi is updated
+        Cache::forget('home.potensi');
+
+        return $updated;
     }
 
     public function deletePotensi($id)
@@ -98,7 +113,12 @@ class PotensiDesaService
             Storage::disk('public')->delete($potensi->gambar);
         }
 
-        return $this->potensiRepository->delete($id);
+        $deleted = $this->potensiRepository->delete($id);
+
+        // Clear cache when potensi is deleted
+        Cache::forget('home.potensi');
+
+        return $deleted;
     }
 
     public function toggleActive($id)
@@ -109,6 +129,14 @@ class PotensiDesaService
     public function reorderPotensi(array $order)
     {
         return $this->potensiRepository->reorder($order);
+    }
+
+    /**
+     * Search potensi by name or description
+     */
+    public function searchPotensi($keyword)
+    {
+        return $this->potensiRepository->search($keyword);
     }
 
     protected function uploadImage($image)
