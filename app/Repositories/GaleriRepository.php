@@ -17,7 +17,8 @@ class GaleriRepository extends BaseRepository
     public function getActive($perPage = 24)
     {
         return $this->model
-            ->active()
+            ->with('admin') // Eager load admin to prevent N+1
+            ->published()
             ->latest()
             ->paginate($perPage);
     }
@@ -28,7 +29,8 @@ class GaleriRepository extends BaseRepository
     public function getLatest($limit = 6)
     {
         return $this->model
-            ->active()
+            ->with('admin') // Eager load admin to prevent N+1
+            ->published()
             ->latest()
             ->limit($limit)
             ->get();
@@ -40,7 +42,8 @@ class GaleriRepository extends BaseRepository
     public function getByKategori($kategori, $perPage = 24)
     {
         return $this->model
-            ->active()
+            ->with('admin') // Eager load admin to prevent N+1
+            ->published()
             ->byKategori($kategori)
             ->latest()
             ->paginate($perPage);
@@ -52,7 +55,7 @@ class GaleriRepository extends BaseRepository
     public function getCategoriesWithCount()
     {
         return $this->model
-            ->active()
+            ->published()
             ->selectRaw('kategori, COUNT(*) as count')
             ->groupBy('kategori')
             ->get();
@@ -64,6 +67,7 @@ class GaleriRepository extends BaseRepository
     public function getByAdmin($adminId, $perPage = 15)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->where('admin_id', $adminId)
             ->latest()
             ->paginate($perPage);
@@ -75,7 +79,8 @@ class GaleriRepository extends BaseRepository
     public function getByDateRange($startDate, $endDate, $perPage = 24)
     {
         return $this->model
-            ->active()
+            ->with('admin') // Eager load admin to prevent N+1
+            ->published()
             ->whereBetween('tanggal', [$startDate, $endDate])
             ->latest()
             ->paginate($perPage);
@@ -87,7 +92,8 @@ class GaleriRepository extends BaseRepository
     public function getRecent($limit = 12)
     {
         return $this->model
-            ->active()
+            ->with('admin') // Eager load admin to prevent N+1
+            ->published()
             ->whereNotNull('tanggal')
             ->orderBy('tanggal', 'desc')
             ->limit($limit)

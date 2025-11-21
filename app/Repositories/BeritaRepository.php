@@ -17,6 +17,7 @@ class BeritaRepository extends BaseRepository
     public function getPublished($perPage = 10)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->published()
             ->latest()
             ->paginate($perPage);
@@ -28,6 +29,7 @@ class BeritaRepository extends BaseRepository
     public function getLatest($limit = 5)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->published()
             ->latest()
             ->limit($limit)
@@ -40,6 +42,7 @@ class BeritaRepository extends BaseRepository
     public function findBySlug($slug)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->where('slug', $slug)
             ->published()
             ->firstOrFail();
@@ -60,7 +63,9 @@ class BeritaRepository extends BaseRepository
      */
     public function getByStatus($status, $perPage = 15)
     {
-        $query = $this->model->where('status', $status);
+        $query = $this->model
+            ->with('admin') // Eager load admin to prevent N+1
+            ->where('status', $status);
         
         if ($status === 'published') {
             $query->latest();
@@ -77,6 +82,7 @@ class BeritaRepository extends BaseRepository
     public function search($keyword, $perPage = 10)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->where(function($query) use ($keyword) {
                 $query->where('judul', 'like', "%{$keyword}%")
                     ->orWhere('ringkasan', 'like', "%{$keyword}%")
@@ -93,6 +99,7 @@ class BeritaRepository extends BaseRepository
     public function getPopular($limit = 5)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->published()
             ->orderBy('views', 'desc')
             ->limit($limit)
@@ -105,8 +112,72 @@ class BeritaRepository extends BaseRepository
     public function getByAdmin($adminId, $perPage = 15)
     {
         return $this->model
+            ->with('admin') // Eager load admin to prevent N+1
             ->where('admin_id', $adminId)
             ->latest()
             ->paginate($perPage);
+    }
+    
+    /**
+     * Advanced search with multiple filters
+     */
+    public function advancedSearch(array $filters, $perPage = 12)
+    {
+        $query = $this->model->with('admin')->published();
+        
+        // Search by keyword
+        if (!empty($filters['search'])) {
+            $keyword = $filters['search'];
+            $query->where(function($q) use ($keyword) {
+                $q->where('judul', 'like', "%{$keyword}%")
+                  ->orWhere('ringkasan', 'like', "%{$keyword}%")
+                  ->orWhere('konten', 'like', "%{$keyword}%");
+            });
+        }
+        
+        // Filter by date range
+        if (!empty($filters['date_from'])) {
+            $query->whereDate('published_at', '>=', $filters['date_from']);
+        }
+        
+        if (!empty($filters['date_to'])) {
+            $query->whereDate('published_at', '<=', $filters['date_to']);
+        }
+        
+        // Sort by
+        $sortBy = $filters['sort'] ?? 'latest';
+        switch ($sortBy) {
+            case 'popular':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'oldest':
+                $query->oldest();
+                break;
+            case 'latest':
+            default:
+                $query->latest();
+                break;
+        }
+        
+        return $query->paginate($perPage);
+    }
+    
+    /**
+     * Get search suggestions for autocomplete
+     */
+    public function getSearchSuggestions($query, $limit = 5)
+    {
+        return $this->model
+            ->published()
+            ->where('judul', 'like', "%{$query}%")
+            ->select('judul', 'slug')
+            ->limit($limit)
+            ->get()
+            ->map(function($berita) {
+                return [
+                    'title' => $berita->judul,
+                    'url' => route('berita.show', $berita->slug)
+                ];
+            });
     }
 }

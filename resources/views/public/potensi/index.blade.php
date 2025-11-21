@@ -56,25 +56,18 @@
             </div>
 
             {{-- Potensi List --}}
-            @if(isset($potensis) && $potensis->count() > 0)
+            @if(isset($potensi) && $potensi->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    @foreach($potensis as $potensi)
+                    @foreach($potensi as $item)
                         <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group">
                             {{-- Gambar --}}
                             <div class="relative overflow-hidden h-56">
-                                @if($potensi->gambar_url)
-                                    <img 
-                                        src="{{ $potensi->gambar_url }}" 
-                                        alt="{{ $potensi->nama }}"
-                                        class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
-                                    >
-                                @else
-                                    <div class="w-full h-full bg-linear-to-br from-green-400 to-green-600 flex items-center justify-center">
-                                        <svg class="w-24 h-24 text-white opacity-50" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </div>
-                                @endif
+                                <img 
+                                    src="{{ $item->gambar ? asset('storage/' . $item->gambar) : asset('images/default-potensi.jpg') }}" 
+                                    alt="{{ $item->nama }}"
+                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-300"
+                                    onerror="this.src='{{ asset('images/logo-web-desa.jpg') }}'"
+                                >
                                 
                                 {{-- Category Badge --}}
                                 <div class="absolute top-3 right-3">
@@ -82,14 +75,16 @@
                                         $kategoriColors = [
                                             'pertanian' => 'bg-green-600',
                                             'peternakan' => 'bg-amber-600',
-                                            'umkm' => 'bg-blue-600',
-                                            'wisata' => 'bg-purple-600',
+                                            'perikanan' => 'bg-blue-600',
+                                            'umkm' => 'bg-purple-600',
+                                            'wisata' => 'bg-pink-600',
+                                            'kerajinan' => 'bg-indigo-600',
                                             'lainnya' => 'bg-gray-600',
                                         ];
-                                        $bgColor = $kategoriColors[$potensi->kategori ?? 'lainnya'] ?? 'bg-gray-600';
+                                        $bgColor = $kategoriColors[$item->kategori ?? 'lainnya'] ?? 'bg-gray-600';
                                     @endphp
                                     <span class="px-3 py-1 {{ $bgColor }} text-white text-xs font-semibold rounded-full uppercase">
-                                        {{ $potensi->kategori ?? 'Lainnya' }}
+                                        {{ ucfirst($item->kategori ?? 'Lainnya') }}
                                     </span>
                                 </div>
                             </div>
@@ -98,27 +93,27 @@
                             <div class="p-6">
                                 {{-- Title --}}
                                 <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition line-clamp-2">
-                                    {{ $potensi->nama }}
+                                    {{ $item->nama }}
                                 </h3>
 
                                 {{-- Description --}}
                                 <p class="text-gray-600 mb-4 line-clamp-3">
-                                    {{ $potensi->deskripsi_singkat ?? Str::limit(strip_tags($potensi->deskripsi), 120) }}
+                                    {{ $item->deskripsi_singkat ?? Str::limit(strip_tags($item->deskripsi), 120) }}
                                 </p>
 
                                 {{-- Meta Info --}}
-                                @if($potensi->lokasi)
+                                @if($item->lokasi)
                                     <div class="flex items-center text-sm text-gray-500 mb-4">
                                         <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                         </svg>
-                                        <span>{{ $potensi->lokasi }}</span>
+                                        <span>{{ $item->lokasi }}</span>
                                     </div>
                                 @endif
 
                                 {{-- Read More --}}
                                 <a 
-                                    href="{{ route('potensi.show', $potensi->slug) }}" 
+                                    href="{{ route('potensi.show', $item->slug) }}" 
                                     class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold"
                                 >
                                     Lihat Detail
@@ -132,9 +127,11 @@
                 </div>
 
                 {{-- Pagination --}}
-                <div class="mt-12">
-                    {{ $potensis->links() }}
-                </div>
+                @if($potensi->hasPages())
+                    <div class="mt-12">
+                        {{ $potensi->appends(request()->query())->links() }}
+                    </div>
+                @endif
             @else
                 {{-- Empty State --}}
                 <div class="bg-white rounded-lg shadow-md p-12 text-center">
@@ -159,62 +156,6 @@
                 </div>
             @endif
 
-        </div>
-    </div>
-</section>
-
-{{-- Info Section --}}
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Kategori Potensi Desa</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                {{-- Pertanian --}}
-                <div class="bg-linear-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-200 hover:border-green-400 transition">
-                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Pertanian</h3>
-                    <p class="text-gray-600 text-sm">Potensi hasil pertanian seperti padi, jagung, dan sayuran</p>
-                </div>
-
-                {{-- Peternakan --}}
-                <div class="bg-linear-to-br from-amber-50 to-amber-100 rounded-lg p-6 border-2 border-amber-200 hover:border-amber-400 transition">
-                    <div class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Peternakan</h3>
-                    <p class="text-gray-600 text-sm">Potensi peternakan sapi, kambing, ayam, dan lainnya</p>
-                </div>
-
-                {{-- UMKM --}}
-                <div class="bg-linear-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-200 hover:border-blue-400 transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">UMKM</h3>
-                    <p class="text-gray-600 text-sm">Usaha mikro, kecil, dan menengah produk lokal</p>
-                </div>
-
-                {{-- Wisata --}}
-                <div class="bg-linear-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200 hover:border-purple-400 transition">
-                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Wisata</h3>
-                    <p class="text-gray-600 text-sm">Potensi wisata alam, budaya, dan edukasi</p>
-                </div>
-
-            </div>
         </div>
     </div>
 </section>

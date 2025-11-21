@@ -18,6 +18,8 @@ use App\Repositories\PotensiDesaRepository;
 use App\Services\BeritaService;
 use App\Services\GaleriService;
 use App\Services\PotensiDesaService;
+use App\Services\ImageUploadService;
+use App\Services\HtmlSanitizerService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,9 +41,23 @@ class AppServiceProvider extends ServiceProvider
             return new PotensiDesaRepository(new PotensiDesa());
         });
 
+        // Register ImageUploadService
+        $this->app->singleton(ImageUploadService::class, function ($app) {
+            return new ImageUploadService();
+        });
+
+        // Register HtmlSanitizerService
+        $this->app->singleton(HtmlSanitizerService::class, function ($app) {
+            return new HtmlSanitizerService();
+        });
+
         // Register Services
         $this->app->singleton(BeritaService::class, function ($app) {
-            return new BeritaService($app->make(BeritaRepository::class));
+            return new BeritaService(
+                $app->make(BeritaRepository::class),
+                $app->make(ImageUploadService::class),
+                $app->make(HtmlSanitizerService::class)
+            );
         });
 
         $this->app->singleton(GaleriService::class, function ($app) {
@@ -58,6 +74,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Force HTTPS in production environment
+        if ($this->app->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
     }
 }

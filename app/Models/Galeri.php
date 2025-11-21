@@ -19,6 +19,7 @@ class Galeri extends Model
         'kategori',
         'tanggal',
         'is_active',
+        'views',
     ];
 
     protected $casts = [
@@ -32,9 +33,20 @@ class Galeri extends Model
         return $this->belongsTo(Admin::class);
     }
 
+    public function images()
+    {
+        return $this->hasMany(GaleriImage::class)->orderBy('urutan');
+    }
+
     // Accessors
     public function getGambarUrlAttribute()
     {
+        // Jika ada multiple images, ambil yang pertama
+        if ($this->images && $this->images->count() > 0) {
+            return $this->images->first()->image_url;
+        }
+        
+        // Fallback ke gambar single jika ada
         return $this->gambar 
             ? asset('storage/' . $this->gambar) 
             : asset('images/default-gallery.jpg');
@@ -51,6 +63,15 @@ class Galeri extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function scopePublished($query)
+    {
+        return $query->where('is_active', true)
+            ->where(function($q) {
+                $q->whereNull('tanggal')
+                  ->orWhere('tanggal', '<=', now());
+            });
     }
 
     public function scopeByKategori($query, $kategori)
@@ -78,5 +99,11 @@ class Galeri extends Model
             self::KATEGORI_BUDAYA => 'Budaya',
             self::KATEGORI_UMUM => 'Umum',
         ];
+    }
+
+    // Method untuk increment views
+    public function incrementViews()
+    {
+        $this->increment('views');
     }
 }

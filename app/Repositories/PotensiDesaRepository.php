@@ -19,7 +19,7 @@ class PotensiDesaRepository extends BaseRepository
         return $this->model
             ->active()
             ->ordered()
-            ->get();
+            ->paginate(12);
     }
 
     /**
@@ -31,7 +31,7 @@ class PotensiDesaRepository extends BaseRepository
             ->active()
             ->byKategori($kategori)
             ->ordered()
-            ->get();
+            ->paginate(12);
     }
 
     /**
@@ -106,6 +106,21 @@ class PotensiDesaRepository extends BaseRepository
             ->active()
             ->ordered()
             ->limit($limit)
+            ->get();
+    }
+
+    /**
+     * Search potensi by name or description
+     */
+    public function search($keyword)
+    {
+        return $this->model
+            ->active()
+            ->where(function($query) use ($keyword) {
+                $query->where('nama', 'like', "%{$keyword}%")
+                    ->orWhere('deskripsi', 'like', "%{$keyword}%");
+            })
+            ->ordered()
             ->get();
     }
 }

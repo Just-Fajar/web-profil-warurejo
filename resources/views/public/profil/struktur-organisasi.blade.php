@@ -35,145 +35,123 @@
                 </div>
             </div>
 
-            {{-- Kepala Desa --}}
-            <div class="mb-12">
-                <div class="bg-white rounded-lg shadow-xl overflow-hidden">
-                    <div class="bg-linear-to-r from-blue-600 to-blue-700 p-6 text-center">
-                        <h2 class="text-2xl font-bold text-white mb-2">KEPALA DESA</h2>
-                        <p class="text-blue-100">Pemimpin Pemerintahan Desa</p>
-                    </div>
-                    <div class="p-8 text-center">
-                        <div class="inline-block">
-                            <div class="w-32 h-32 mx-auto mb-4 bg-linear-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center">
-                                <svg class="w-20 h-20 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-1">Nama Kepala Desa</h3>
-                            <p class="text-gray-600 mb-3">Kepala Desa Warurejo</p>
-                        </div>
-                    </div>
+{{-- Kepala Desa --}}
+<div class="mb-12">
+    <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+        <div class="bg-linear-to-r from-blue-600 to-blue-700 p-6 text-center">
+            <h2 class="text-2xl font-bold text-white mb-2">KEPALA DESA</h2>
+            <p class="text-blue-100">Pemimpin Pemerintahan Desa</p>
+        </div>
+        <div class="p-8 text-center">
+            <div class="inline-block">
+                <div class="w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                    <img src="/images/kepala-desa.jpg" alt="SUNARTO" class="w-full h-full object-cover">
                 </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-1">SUNARTO</h3>
+                <p class="text-gray-600 mb-3">Kepala Desa Warurejo</p>
             </div>
+        </div>
+    </div>
+</div>
 
-            {{-- Sekretaris Desa & Perangkat --}}
-            <div class="mb-12">
-                <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Perangkat Desa</h2>
-                
-                {{-- Sekretaris Desa --}}
-                <div class="mb-8">
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <div class="bg-linear-to-r from-green-600 to-green-700 p-4 text-center">
-                            <h3 class="text-xl font-bold text-white">SEKRETARIS DESA</h3>
-                        </div>
-                        <div class="p-6 text-center">
-                            <div class="w-24 h-24 mx-auto mb-3 bg-linear-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
-                                <svg class="w-14 h-14 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                </svg>
-                            </div>
-                            <h4 class="text-xl font-bold text-gray-800">Nama Sekretaris Desa</h4>
-                            <p class="text-gray-600">Sekretaris Desa</p>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Kaur (Kepala Urusan) --}}
-                <div class="mb-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Kepala Urusan</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {{-- Kaur Tata Usaha & Umum --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kaur TU</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kaur Tata Usaha & Umum</p>
-                                <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">Administrasi</span>
-                            </div>
-                        </div>
-
-                        {{-- Kaur Keuangan --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-yellow-100 to-yellow-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kaur Keuangan</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kaur Keuangan</p>
-                                <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Keuangan</span>
-                            </div>
-                        </div>
-
-                        {{-- Kaur Perencanaan --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kaur Perencanaan</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kaur Perencanaan</p>
-                                <span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">Perencanaan</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Kepala Dusun / Kasi --}}
-                <div class="mb-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Kepala Seksi</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {{-- Kasi Pemerintahan --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-indigo-100 to-indigo-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kasi Pemerintahan</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kasi Pemerintahan</p>
-                                <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">Pemerintahan</span>
-                            </div>
-                        </div>
-
-                        {{-- Kasi Kesejahteraan --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-pink-100 to-pink-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-pink-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kasi Kesejahteraan</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kasi Kesejahteraan</p>
-                                <span class="inline-block px-3 py-1 bg-pink-100 text-pink-800 rounded-full text-xs font-semibold">Kesejahteraan</span>
-                            </div>
-                        </div>
-
-                        {{-- Kasi Pelayanan --}}
-                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
-                            <div class="text-center">
-                                <div class="w-20 h-20 mx-auto mb-3 bg-linear-to-br from-teal-100 to-teal-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
-                                <h4 class="font-bold text-gray-800 mb-1">Nama Kasi Pelayanan</h4>
-                                <p class="text-gray-600 text-sm mb-2">Kasi Pelayanan</p>
-                                <span class="inline-block px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-xs font-semibold">Pelayanan</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{{-- Sekretaris Desa --}}
+<div class="mb-8">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-linear-to-r from-green-600 to-green-700 p-4 text-center">
+            <h3 class="text-xl font-bold text-white">PLT. SEKRETARIS DESA</h3>
+        </div>
+        <div class="p-6 text-center">
+            <div class="w-24 h-24 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/sekretaris-desa.jpg" alt="HAYYUN JOKO IRAWAN" class="w-full h-full object-cover">
             </div>
+            <h4 class="text-xl font-bold text-gray-800">HAYYUN JOKO IRAWAN</h4>
+            <p class="text-gray-600">Sekretaris Desa</p>
+        </div>
+    </div>
+</div>
+
+{{-- Kaur dan Staff --}}
+<h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Kepala Urusan & Staff</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {{-- Kaur Keuangan --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kaur-keuangan.jpg" alt="PARTINI" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">PARTINI</h4>
+            <p class="text-gray-600 text-sm mb-2">Kaur Keuangan</p>
+            <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Keuangan</span>
+            <p class="text-gray-500 text-sm mt-2">Staff: SETIYO PARYONO</p>
+        </div>
+    </div>
+
+    {{-- Kaur Perencanaan --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kaur-perencanaan.jpg" alt="JOKO MARSENO" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">JOKO MARSENO</h4>
+            <p class="text-gray-600 text-sm mb-2">Kaur Perencanaan</p>
+            <span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">Perencanaan</span>
+            <p class="text-gray-500 text-sm mt-2">Staff: RATNA ROSIANA</p>
+        </div>
+    </div>
+
+    {{-- Kaur Tata Usaha & Umum --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kaur-tata-usaha.jpg" alt="PUJIATI" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">PUJIATI</h4>
+            <p class="text-gray-600 text-sm mb-2">Kaur Tata Usaha & Umum</p>
+            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">Administrasi</span>
+            <p class="text-gray-500 text-sm mt-2">Staff: ELLY MITA PURNAMASARI</p>
+        </div>
+    </div>
+</div>
+
+{{-- Kasi dan Staff --}}
+<h3 class="text-2xl font-bold text-gray-800 mb-6 mt-12 text-center">Kepala Seksi & Staff</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    {{-- Kasi Pemerintahan --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kasi-pemerintahan.jpg" alt="BUDI PURWANTO" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">BUDI PURWANTO</h4>
+            <p class="text-gray-600 text-sm mb-2">Kasi Pemerintahan</p>
+        </div>
+    </div>
+
+    {{-- Kasi Kesejahteraan --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kasi-kesejahteraan.jpg" alt="BADRUT TAMAM" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">BADRUT TAMAM</h4>
+            <p class="text-gray-600 text-sm mb-2">Kasi Kesejahteraan</p>
+            <p class="text-gray-500 text-sm mt-2">Staff: ABI NANGGALA SAKTI JR</p>
+        </div>
+    </div>
+
+    {{-- Kasi Pelayanan --}}
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-6">
+        <div class="text-center">
+            <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden">
+                <img src="/images/kasi-pelayanan.jpg" alt="MUJIONO" class="w-full h-full object-cover">
+            </div>
+            <h4 class="font-bold text-gray-800 mb-1">MUJIONO</h4>
+            <p class="text-gray-600 text-sm mb-2">Kasi Pelayanan</p>
+        </div>
+    </div>
+</div>
 
             {{-- Catatan --}}
             <div class="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-lg mb-12">

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\GaleriRepository;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class GaleriService
@@ -64,22 +65,36 @@ class GaleriService
             $data['tanggal'] = now();
         }
 
-        return $this->galeriRepository->create($data);
+        $galeri = $this->galeriRepository->create($data);
+
+        // Clear cache when new galeri is created
+        Cache::forget('home.galeri');
+
+        return $galeri;
     }
 
     public function updateGaleri($id, array $data)
     {
         $galeri = $this->galeriRepository->find($id);
 
-        if (isset($data['gambar'])) {
+        // Handle new image upload (check if it's a file object, not null/string)
+        if (isset($data['gambar']) && is_object($data['gambar'])) {
             // Delete old image
             if ($galeri->gambar) {
                 Storage::disk('public')->delete($galeri->gambar);
             }
             $data['gambar'] = $this->uploadImage($data['gambar']);
+        } else {
+            // Keep existing image if no new upload - REMOVE from data array
+            unset($data['gambar']);
         }
 
-        return $this->galeriRepository->update($id, $data);
+        $updated = $this->galeriRepository->update($id, $data);
+
+        // Clear cache when galeri is updated
+        Cache::forget('home.galeri');
+
+        return $updated;
     }
 
     public function deleteGaleri($id)
@@ -91,7 +106,12 @@ class GaleriService
             Storage::disk('public')->delete($galeri->gambar);
         }
 
-        return $this->galeriRepository->delete($id);
+        $deleted = $this->galeriRepository->delete($id);
+
+        // Clear cache when galeri is deleted
+        Cache::forget('home.galeri');
+
+        return $deleted;
     }
 
     public function toggleActive($id)

@@ -28,10 +28,10 @@
             {{-- Article Header --}}
             <article class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
                 {{-- Featured Image --}}
-                @if($berita->gambar_url)
+                @if($berita->gambar_utama)
                     <div class="relative h-96 overflow-hidden">
                         <img 
-                            src="{{ $berita->gambar_url }}" 
+                            src="{{ $berita->gambar_utama_url }}" 
                             alt="{{ $berita->judul }}"
                             class="w-full h-full object-cover"
                         >
@@ -49,14 +49,14 @@
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
                             </svg>
-                            <span>{{ $berita->tanggal_publikasi->format('d F Y') }}</span>
+                            <span>{{ $berita->published_at ? $berita->published_at->format('d F Y') : $berita->created_at->format('d F Y') }}</span>
                         </div>
-                        @if($berita->penulis)
+                        @if($berita->admin)
                             <div class="flex items-center text-gray-600">
                                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                                 </svg>
-                                <span>{{ $berita->penulis }}</span>
+                                <span>{{ $berita->admin->name ?? $berita->admin->username }}</span>
                             </div>
                         @endif
                     </div>

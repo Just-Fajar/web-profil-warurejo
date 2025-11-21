@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Services\PotensiDesaService;
+use App\Helpers\SEOHelper;
 use Illuminate\Http\Request;
 
 class PotensiController extends Controller
@@ -25,7 +26,16 @@ class PotensiController extends Controller
             $potensi = $this->potensiService->getActivePotensi();
         }
         
-        return view('public.potensi.index', compact('potensi', 'kategori'));
+        // SEO Data
+        $title = $kategori ? "Potensi Desa - {$kategori}" : 'Potensi Desa';
+        $seoData = SEOHelper::generateMetaTags([
+            'title' => $title . ' - Desa Warurejo',
+            'description' => 'Potensi dan kekayaan Desa Warurejo. Temukan berbagai potensi wisata, pertanian, ekonomi, dan lainnya.',
+            'keywords' => 'potensi desa warurejo, wisata desa, ekonomi desa, pertanian desa',
+            'type' => 'website'
+        ]);
+        
+        return view('public.potensi.index', compact('potensi', 'kategori', 'seoData'));
     }
 
     public function show($slug)
@@ -36,7 +46,27 @@ class PotensiController extends Controller
             // Get related potensi
             $relatedPotensi = $this->potensiService->getRelatedPotensi($potensi, 3);
             
-            return view('public.potensi.show', compact('potensi', 'relatedPotensi'));
+            // SEO Data
+            $excerpt = strip_tags(substr($potensi->deskripsi, 0, 160));
+            $seoData = SEOHelper::generateMetaTags([
+                'title' => $potensi->nama . ' - Potensi Desa Warurejo',
+                'description' => $excerpt,
+                'keywords' => "potensi desa, {$potensi->nama}, {$potensi->kategori}, desa warurejo",
+                'image' => asset('storage/' . $potensi->gambar),
+                'type' => 'article'
+            ]);
+            
+            // Structured Data for Place
+            $structuredData = SEOHelper::getPlaceSchema($potensi);
+            
+            // Breadcrumb
+            $breadcrumb = SEOHelper::getBreadcrumbSchema([
+                ['name' => 'Home', 'url' => route('home')],
+                ['name' => 'Potensi Desa', 'url' => route('potensi.index')],
+                ['name' => $potensi->nama, 'url' => route('potensi.show', $potensi->slug)]
+            ]);
+            
+            return view('public.potensi.show', compact('potensi', 'relatedPotensi', 'seoData', 'structuredData', 'breadcrumb'));
         } catch (\Exception $e) {
             abort(404, 'Potensi desa tidak ditemukan');
         }

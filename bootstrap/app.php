@@ -15,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\AdminAuthenticate::class,
             'admin.guest' => \App\Http\Middleware\RedirectIfAdmin::class,
         ]);
+        
+        // Add TrackVisitor to web middleware group for automatic visitor tracking
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackVisitor::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

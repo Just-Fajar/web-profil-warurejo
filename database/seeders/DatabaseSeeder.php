@@ -11,16 +11,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->command->info('🌱 Mulai seeding database...');
+        $this->command->newLine();
+
+        // Seed data utama (wajib)
+        $this->command->info('📦 Seeding data utama...');
         $this->call([
             AdminSeeder::class,
-            ProfilDesaSeeder::class,
         ]);
+        $this->command->newLine();
+
+        // Seed data dummy (optional tapi recommended untuk development)
+        $this->command->info('📦 Seeding data dummy untuk development...');
+        $this->call([
+            BeritaSeeder::class,
+            PotensiSeeder::class,
+            GaleriSeeder::class,
+        ]);
+        $this->command->newLine();
+
+        $this->command->info('✅ Database seeding selesai!');
+        $this->command->info('🎉 Semua data berhasil di-seed ke database.');
+        $this->command->newLine();
         
-        // Optional: Uncomment untuk seed data dummy
-        // $this->call([
-        //     BeritaSeeder::class,
-        //     PotensiDesaSeeder::class,
-        //     GaleriSeeder::class,
-        // ]);
+        // Summary
+        $this->command->table(
+            ['Model', 'Jumlah Data'],
+            [
+                ['Admin', '1 user'],
+                ['Berita', '20 berita'],
+                ['Potensi Desa', '15 potensi'],
+                ['Galeri', '30 item (25 foto + 5 video)'],
+            ]
+        );
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Services\BeritaService;
+use App\Helpers\SEOHelper;
 use Illuminate\Http\Request;
 
 class BeritaController extends Controller
@@ -18,9 +19,50 @@ class BeritaController extends Controller
     public function index(Request $request)
     {
         $perPage = 12;
-        $berita = $this->beritaService->getPublishedBerita($perPage);
         
-        return view('public.berita.index', compact('berita'));
+        // Get filter parameters
+        $search = $request->get('search');
+        $dateFrom = $request->get('date_from');
+        $dateTo = $request->get('date_to');
+        $sortBy = $request->get('sort', 'latest'); // latest, popular, oldest
+        
+        // Apply filters
+        if ($search || $dateFrom || $dateTo || $sortBy !== 'latest') {
+            $berita = $this->beritaService->searchWithFilters([
+                'search' => $search,
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+                'sort' => $sortBy
+            ], $perPage);
+        } else {
+            $berita = $this->beritaService->getPublishedBerita($perPage);
+        }
+        
+        // SEO Data
+        $seoData = SEOHelper::generateMetaTags([
+            'title' => 'Berita Desa - Desa Warurejo',
+            'description' => 'Kumpulan berita dan informasi terkini dari Desa Warurejo. Dapatkan update kegiatan, program, dan pengumuman desa.',
+            'keywords' => 'berita desa warurejo, informasi desa, kegiatan desa, pengumuman desa',
+            'type' => 'website'
+        ]);
+        
+        return view('public.berita.index', compact('berita', 'seoData'));
+    }
+    
+    /**
+     * API endpoint for search autocomplete suggestions
+     */
+    public function autocomplete(Request $request)
+    {
+        $query = $request->get('q', '');
+        
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+        
+        $suggestions = $this->beritaService->getSearchSuggestions($query, 5);
+        
+        return response()->json($suggestions);
     }
 
     public function show($slug)
@@ -31,7 +73,27 @@ class BeritaController extends Controller
             // Get related berita (same category or recent)
             $relatedBerita = $this->beritaService->getLatestBerita(4);
             
-            return view('public.berita.show', compact('berita', 'relatedBerita'));
+            // SEO Data
+            $excerpt = strip_tags(substr($berita->konten, 0, 160));
+            $seoData = SEOHelper::generateMetaTags([
+                'title' => $berita->judul . ' - Berita Desa Warurejo',
+                'description' => $excerpt,
+                'keywords' => "berita desa, {$berita->judul}, desa warurejo",
+                'image' => asset('storage/' . $berita->gambar),
+                'type' => 'article'
+            ]);
+            
+            // Structured Data for Article
+            $structuredData = SEOHelper::getArticleSchema($berita);
+            
+            // Breadcrumb
+            $breadcrumb = SEOHelper::getBreadcrumbSchema([
+                ['name' => 'Home', 'url' => route('home')],
+                ['name' => 'Berita', 'url' => route('berita.index')],
+                ['name' => $berita->judul, 'url' => route('berita.show', $berita->slug)]
+            ]);
+            
+            return view('public.berita.show', compact('berita', 'relatedBerita', 'seoData', 'structuredData', 'breadcrumb'));
         } catch (\Exception $e) {
             abort(404, 'Berita tidak ditemukan');
         }
