@@ -7,12 +7,14 @@ use App\Http\Controllers\Public\ProfilController;
 use App\Http\Controllers\Public\PotensiController;
 use App\Http\Controllers\Public\GaleriController;
 use App\Http\Controllers\Public\KontakController;
+use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BeritaController as AdminBeritaController;
 use App\Http\Controllers\Admin\PotensiController as AdminPotensiController;
 use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\ProfilDesaController;
+use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\SitemapController;
@@ -49,6 +51,13 @@ Route::prefix('kontak')->name('kontak.')->group(function () {
     Route::get('/', [KontakController::class, 'index'])->name('index');
 });
 
+// Publikasi Routes
+Route::prefix('publikasi')->name('publikasi.')->group(function () {
+    Route::get('/', [PublikasiController::class, 'index'])->name('index');
+    Route::get('/{id}', [PublikasiController::class, 'show'])->name('show');
+    Route::get('/{id}/download', [PublikasiController::class, 'download'])->name('download');
+});
+
 // Peta Desa
 Route::get('/peta-desa', function () {
     return view('public.peta-desa');
@@ -81,6 +90,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Galeri Management
         Route::post('galeri/bulk-delete', [AdminGaleriController::class, 'bulkDelete'])->name('galeri.bulk-delete');
         Route::resource('galeri', AdminGaleriController::class);
+        
+        // Publikasi Management
+        Route::post('publikasi/bulk-delete', [AdminPublikasiController::class, 'bulkDelete'])->name('publikasi.bulk-delete');
+        Route::resource('publikasi', AdminPublikasiController::class);
         
         // Profil Desa Management
         Route::prefix('profil-desa')->name('profil-desa.')->group(function () {

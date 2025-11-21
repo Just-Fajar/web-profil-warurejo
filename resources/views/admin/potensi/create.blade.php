@@ -50,7 +50,7 @@
            required
            class="w-full px-4 py-2 border rounded-lg 
                   border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                  @error('nama') border-red-500 @enderror">
+                  @error('nama')  @enderror">
 
     @error('nama')
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -73,7 +73,7 @@
               required
               class="w-full px-4 py-2 border rounded-lg 
                      border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                     @error('deskripsi_singkat') border-red-500 @enderror">{{ old('deskripsi_singkat') }}</textarea>
+                     @error('deskripsi_singkat') @enderror">{{ old('deskripsi_singkat') }}</textarea>
 
     @error('deskripsi_singkat')
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -93,31 +93,13 @@
               rows="15"
               class="w-full px-4 py-2 border rounded-lg 
                      border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                     @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi') }}</textarea>
+                     @error('deskripsi') @enderror">{{ old('deskripsi') }}</textarea>
 
     @error('deskripsi')
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>
 
-<!-- Keunggulan (Optional) -->
-<div class="mb-4">
-    <label for="keunggulan" class="block text-sm font-medium text-gray-700 mb-1">
-        Keunggulan <small class="text-gray-500">(Opsional)</small>
-    </label>
-
-    <textarea id="keunggulan"
-              name="keunggulan"
-              rows="4"
-              placeholder="Keunggulan atau nilai tambah dari potensi ini"
-              class="w-full px-4 py-2 border rounded-lg 
-                     border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                     @error('keunggulan') border-red-500 @enderror">{{ old('keunggulan') }}</textarea>
-
-    @error('keunggulan')
-        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
 
                     <!-- Right Column -->
                     <div class="col-md-4">
@@ -218,43 +200,26 @@
            required
            class="w-full px-4 py-2 border rounded-lg 
                   border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                  @error('lokasi') border-red-500 @enderror">
+                  @error('lokasi') @enderror">
     @error('lokasi')
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
 </div>
 
 
-<div class="mb-4">
-    <label for="kapasitas_produksi" class="block text-sm font-medium text-gray-700 mb-1">
-        Kapasitas Produksi <small class="text-gray-500">(Opsional)</small>
-    </label>
-    <input type="text"
-           id="kapasitas_produksi"
-           name="kapasitas_produksi"
-           value="{{ old('kapasitas_produksi') }}"
-           placeholder="Contoh: 10 ton/tahun"
-           class="w-full px-4 py-2 border rounded-lg 
-                  border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                  @error('kapasitas_produksi') border-red-500 @enderror">
-    @error('kapasitas_produksi')
-        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-    @enderror
-</div>
-
 
 <div class="mb-4">
     <label for="kontak" class="block text-sm font-medium text-gray-700 mb-1">
-        Kontak <small class="text-gray-500">(Opsional)</small>
+        Email <small class="text-gray-500">(Opsional)</small>
     </label>
     <input type="text"
            id="kontak"
            name="kontak"
            value="{{ old('kontak') }}"
-           placeholder="Contoh: 08123456789 / email@example.com"
+           placeholder="Contoh: warurejo@gmail.com"
            class="w-full px-4 py-2 border rounded-lg 
                   border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                  @error('kontak') border-red-500 @enderror">
+                  @error('kontak') @enderror">
     @error('kontak')
         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
     @enderror
@@ -279,7 +244,7 @@
                pattern="[0-9]*"
                class="w-full px-4 py-2 border border-gray-300 rounded-r-lg
                       focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                      @error('whatsapp') border-red-500 @enderror">
+                      @error('whatsapp') @enderror">
     </div>
 
     @error('whatsapp')
@@ -359,37 +324,40 @@
 @endsection
 
 @push('styles')
-<!-- TinyMCE -->
-<style>
-    .tox-tinymce {
-        border-radius: 0.25rem;
-    }
-</style>
 @endpush
 
 @push('scripts')
-<!-- TinyMCE -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- CKEditor 5 -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 
 <script>
 $(document).ready(function() {
-    // Initialize TinyMCE
-    tinymce.init({
-        selector: '#deskripsi',
-        height: 400,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        language: 'id'
-    });
+    // Initialize CKEditor
+    let editorInstance;
+    ClassicEditor
+        .create(document.querySelector('#deskripsi'), {
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'blockQuote', 'insertTable', '|',
+                    'undo', 'redo'
+                ]
+            },
+            language: 'id',
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            }
+        })
+        .then(editor => {
+            editorInstance = editor;
+            editor.ui.view.editable.element.style.minHeight = '400px';
+            window.editorInstance = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     // Character counter for deskripsi_singkat
     $('#deskripsi_singkat').on('input', function() {
@@ -471,12 +439,14 @@ $(document).ready(function() {
 
     // Form Validation
     $('#potensiForm').on('submit', function(e) {
-        // Update TinyMCE content
-        tinymce.triggerSave();
+        // Update CKEditor content to textarea
+        if (window.editorInstance) {
+            $('#deskripsi').val(window.editorInstance.getData());
+        }
         
         // Validate required fields
         var nama = $('#nama').val().trim();
-        var deskripsi = $('#deskripsi').val().trim();
+        var deskripsi = window.editorInstance ? window.editorInstance.getData().trim() : '';
         var deskripsi_singkat = $('#deskripsi_singkat').val().trim();
         var kategori = $('#kategori').val();
         var lokasi = $('#lokasi').val().trim();

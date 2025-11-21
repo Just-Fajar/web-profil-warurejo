@@ -31,13 +31,15 @@ class GaleriRequest extends FormRequest
             'is_active' => 'required|boolean',
         ];
 
-        // Image validation
+        // Multiple images validation
         if ($galeriId) {
-            // Update: gambar optional
-            $rules['gambar'] = 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048';
+            // Update: images optional
+            $rules['images'] = 'nullable|array|min:1';
+            $rules['images.*'] = 'image|mimes:jpeg,png,jpg,webp|max:2048';
         } else {
-            // Create: gambar required
-            $rules['gambar'] = 'required|image|mimes:jpeg,png,jpg,webp|max:2048';
+            // Create: images required
+            $rules['images'] = 'required|array|min:1';
+            $rules['images.*'] = 'image|mimes:jpeg,png,jpg,webp|max:2048';
         }
 
         return $rules;
@@ -52,7 +54,8 @@ class GaleriRequest extends FormRequest
     {
         return [
             'judul' => 'Judul',
-            'gambar' => 'Gambar',
+            'images' => 'Gambar',
+            'images.*' => 'Gambar',
             'kategori' => 'Kategori',
             'deskripsi' => 'Deskripsi',
             'tanggal' => 'Tanggal',
@@ -70,10 +73,12 @@ class GaleriRequest extends FormRequest
         return [
             'judul.required' => 'Judul wajib diisi',
             'judul.max' => 'Judul maksimal 255 karakter',
-            'gambar.required' => 'Gambar wajib diunggah',
-            'gambar.image' => 'File harus berupa gambar',
-            'gambar.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp',
-            'gambar.max' => 'Ukuran gambar maksimal 2MB',
+            'images.required' => 'Minimal upload 1 gambar',
+            'images.array' => 'Format gambar tidak valid',
+            'images.min' => 'Minimal upload 1 gambar',
+            'images.*.image' => 'File harus berupa gambar',
+            'images.*.mimes' => 'Format gambar harus jpeg, png, jpg, atau webp',
+            'images.*.max' => 'Ukuran gambar maksimal 2MB',
             'kategori.required' => 'Kategori wajib dipilih',
             'kategori.in' => 'Kategori tidak valid',
             'tanggal.required' => 'Tanggal wajib diisi',

@@ -85,16 +85,16 @@ class HtmlSanitizerService
     protected function removeDangerousAttributes(string $html): string
     {
         // Remove event handlers (onclick, onload, onerror, etc.)
-        $html = preg_replace('/\s*on\w+\s*=\s*["\'][^"\']*["\']/i', '', $html);
+        $html = preg_replace('/(<[^>]+)\s+on\w+\s*=\s*["\'][^"\']*["\']([^>]*>)/i', '$1$2', $html);
 
         // Remove javascript: protocol in href and src
-        $html = preg_replace('/(href|src)\s*=\s*["\']javascript:[^"\']*["\']/i', '', $html);
+        $html = preg_replace('/(<[^>]+)(href|src)\s*=\s*["\']javascript:[^"\']*["\']([^>]*>)/i', '$1$3', $html);
 
         // Remove data: protocol (can be used for XSS)
-        $html = preg_replace('/(href|src)\s*=\s*["\']data:[^"\']*["\']/i', '', $html);
+        $html = preg_replace('/(<[^>]+)(href|src)\s*=\s*["\']data:[^"\']*["\']([^>]*>)/i', '$1$3', $html);
 
         // Remove style attribute (can contain javascript)
-        $html = preg_replace('/\s*style\s*=\s*["\'][^"\']*["\']/i', '', $html);
+        $html = preg_replace('/(<[^>]+)\s+style\s*=\s*["\'][^"\']*["\']([^>]*>)/i', '$1$2', $html);
 
         return $html;
     }

@@ -12,8 +12,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Ubah tipe kolom kategori dari enum ke string
-        DB::statement("ALTER TABLE `galeri` MODIFY `kategori` VARCHAR(50) NOT NULL DEFAULT 'kegiatan'");
+        // Check if running on SQLite (testing environment)
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            // SQLite doesn't support MODIFY, use recreate strategy
+            Schema::table('galeri', function (Blueprint $table) {
+                // Already has kategori as string from original migration
+                // No modification needed for SQLite
+            });
+        } else {
+            // MySQL/MariaDB: Ubah tipe kolom kategori dari enum ke string
+            DB::statement("ALTER TABLE `galeri` MODIFY `kategori` VARCHAR(50) NOT NULL DEFAULT 'kegiatan'");
+        }
     }
 
     /**
@@ -21,7 +30,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Kembalikan ke enum asli
-        DB::statement("ALTER TABLE `galeri` MODIFY `kategori` ENUM('kegiatan', 'infrastruktur', 'budaya', 'umum') NOT NULL DEFAULT 'umum'");
+        // Check if running on SQLite (testing environment)
+        if (DB::connection()->getDriverName() === 'sqlite') {
+            // SQLite doesn't support enum anyway
+            Schema::table('galeri', function (Blueprint $table) {
+                // No rollback needed for SQLite
+            });
+        } else {
+            // MySQL/MariaDB: Kembalikan ke enum asli
+            DB::statement("ALTER TABLE `galeri` MODIFY `kategori` ENUM('kegiatan', 'infrastruktur', 'budaya', 'umum') NOT NULL DEFAULT 'umum'");
+        }
     }
 };

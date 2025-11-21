@@ -3,226 +3,133 @@
 @section('title', 'Edit Profil Desa')
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Edit Profil Desa</li>
+    <li class="inline-flex items-center text-gray-500">
+        <i class="fas fa-chevron-right mx-2"></i>
+        <a href="{{ route('admin.dashboard') }}" class="hover:text-primary-600">Dashboard</a>
+    </li>
+    <li class="inline-flex items-center text-gray-500">
+        <i class="fas fa-chevron-right mx-2"></i>
+        <span>Edit Profil Desa</span>
+    </li>
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="mb-1">
-                        <i class="fas fa-images text-primary mr-2"></i>
-                        Edit Gambar Profil Desa
-                    </h2>
-                    <p class="text-muted mb-0">
-                        <i class="fas fa-info-circle mr-1"></i>
-                        Kelola gambar header dan struktur organisasi desa
-                    </p>
+<div class="container mx-auto px-4 py-6">
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Left Column -->
+        <div class="flex-1 space-y-6">
+
+            <!-- Alerts -->
+            @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Sukses!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Error!</strong>
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+            @endif
+
+            <!-- Instructions -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded shadow-sm">
+                <h3 class="font-semibold text-blue-700 mb-2"><i class="fas fa-lightbulb mr-2"></i>Petunjuk Upload Gambar</h3>
+                <ul class="list-disc pl-5 text-gray-700 text-sm space-y-1">
+                    <li><strong>Gambar Header:</strong> Banner homepage (1920x600px disarankan)</li>
+                    <li><strong>Struktur Organisasi:</strong> Bagan struktur organisasi desa (1920x1080px disarankan)</li>
+                    <li>Format: JPEG, PNG, WEBP, Maks 5MB per gambar</li>
+                </ul>
+            </div>
+
+            <!-- Form -->
+            <form action="{{ route('admin.profil-desa.update') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                @csrf
+                @method('PUT')
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <!-- Gambar Header -->
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <h4 class="font-semibold text-gray-700 mb-3"><i class="fas fa-image mr-2"></i>Gambar Header</h4>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-primary-500" id="dropzone-header">
+                            @if($profil->gambar_header)
+                                <img src="{{ Storage::url($profil->gambar_header) }}" class="mx-auto mb-3 rounded shadow" style="max-height:200px;">
+                                <p class="text-green-600 text-sm font-medium"><i class="fas fa-check-circle mr-1"></i>Gambar saat ini</p>
+                            @else
+                                <i class="fas fa-image text-gray-400 text-6xl mb-2"></i>
+                                <p class="text-gray-500 text-sm">Belum ada gambar header</p>
+                            @endif
+                            <input type="file" name="gambar_header" id="gambar_header" class="hidden" accept="image/*">
+                            <p class="text-xs text-gray-400 mt-2">Klik atau drop gambar di sini</p>
+                        </div>
+                        @error('gambar_header')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        <div id="preview_header" class="mt-3 hidden">
+                            <p class="font-medium text-gray-700 mb-1">Preview:</p>
+                            <img id="preview_header_img" src="" class="mx-auto rounded shadow">
+                        </div>
+                    </div>
+
+                    <!-- Struktur Organisasi -->
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <h4 class="font-semibold text-gray-700 mb-3"><i class="fas fa-sitemap mr-2"></i>Struktur Organisasi</h4>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-green-500" id="dropzone-struktur">
+                            @if($profil->struktur_organisasi)
+                                <img src="{{ Storage::url($profil->struktur_organisasi) }}" class="mx-auto mb-3 rounded shadow" style="max-height:200px;">
+                                <p class="text-green-600 text-sm font-medium"><i class="fas fa-check-circle mr-1"></i>Struktur saat ini</p>
+                            @else
+                                <i class="fas fa-sitemap text-gray-400 text-6xl mb-2"></i>
+                                <p class="text-gray-500 text-sm">Belum ada struktur organisasi</p>
+                            @endif
+                            <input type="file" name="struktur_organisasi" id="struktur_organisasi" class="hidden" accept="image/*">
+                            <p class="text-xs text-gray-400 mt-2">Klik atau drop gambar di sini</p>
+                        </div>
+                        @error('struktur_organisasi')
+                        <p class="text-red-600 text-sm mt-2">{{ $message }}</p>
+                        @enderror
+                        <div id="preview_struktur" class="mt-3 hidden">
+                            <p class="font-medium text-gray-700 mb-1">Preview:</p>
+                            <img id="preview_struktur_img" src="" class="mx-auto rounded shadow">
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Kembali
+
+                <!-- Action Buttons -->
+                <div class="flex justify-between items-center mt-4">
+                    <a href="{{ route('admin.dashboard') }}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 flex items-center">
+                        <i class="fas fa-times mr-2"></i>Batal
                     </a>
+                    <button type="submit" class="px-6 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow hover:from-indigo-600 hover:to-blue-500 flex items-center">
+                        <i class="fas fa-save mr-2"></i>Simpan Gambar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Right Column -->
+        <div class="w-full md:w-1/3 space-y-6">
+
+            <!-- Info Panel -->
+            <div class="bg-white rounded-lg shadow p-4">
+                <h5 class="font-semibold text-gray-700 mb-3"><i class="fas fa-info-circle text-blue-500 mr-2"></i>Informasi Sistem</h5>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p><span class="font-medium">Framework:</span> Laravel 12.x</p>
+                    <p><span class="font-medium">PHP Version:</span> {{ phpversion() }}</p>
+                    <p><span class="font-medium">Environment:</span> <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">{{ config('app.env') }}</span></p>
+                    <p><span class="font-medium">Debug Mode:</span> <span class="px-2 py-1 {{ config('app.debug') ? 'bg-yellow-100 text-yellow-700' : 'bg-green-100 text-green-700' }} rounded-full text-xs">{{ config('app.debug') ? 'ON' : 'OFF' }}</span></p>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-4">
-                    @if(session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            <i class="fas fa-check-circle mr-2"></i>
-                            {{ session('success') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
-                    @if(session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-circle mr-2"></i>
-                            {{ session('error') }}
-                            <button type="button" class="close" data-dismiss="alert">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                    @endif
-
-                    <form action="{{ route('admin.profil-desa.update') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
-
-                        <!-- Petunjuk -->
-                        <div class="alert alert-info mb-4">
-                            <h5 class="alert-heading">
-                                <i class="fas fa-lightbulb mr-2"></i>
-                                Petunjuk Upload Gambar
-                            </h5>
-                            <hr>
-                            <ul class="mb-0 pl-3">
-                                <li><strong>Gambar Header:</strong> Banner yang tampil di homepage (Sambutan Kepala Desa). Ukuran disarankan: 1920x600px (landscape lebar)</li>
-                                <li><strong>Struktur Organisasi:</strong> Bagan struktur organisasi desa. Bisa dibuat di Canva/PowerPoint lalu screenshot. Ukuran disarankan: 1920x1080px</li>
-                                <li>Format: JPEG, PNG, WEBP</li>
-                                <li>Maksimal ukuran: 5MB per gambar</li>
-                            </ul>
-                        </div>
-
-                        <div class="row">
-                            <!-- Gambar Header -->
-                            <div class="col-md-6 mb-4">
-                                <div class="card border-primary h-100">
-                                    <div class="card-header bg-primary text-white">
-                                        <h5 class="mb-0">
-                                            <i class="fas fa-image mr-2"></i>
-                                            Gambar Header (Homepage)
-                                        </h5>
-                                    </div>
-                                    <div class="card-body">
-                                        @if($profil->gambar_header)
-                                            <div class="text-center mb-3 p-3" style="background: #f8f9fa; border-radius: 10px;">
-                                                <img src="{{ Storage::url($profil->gambar_header) }}" 
-                                                     alt="Gambar Header" 
-                                                     class="img-fluid rounded shadow-sm" 
-                                                     style="max-height: 300px; border: 3px solid #007bff;">
-                                                <p class="text-muted mt-2 mb-0">
-                                                    <i class="fas fa-check-circle text-success mr-1"></i>
-                                                    Gambar header saat ini
-                                                </p>
-                                            </div>
-                                        @else
-                                            <div class="text-center mb-3 p-5" style="background: #f8f9fa; border-radius: 10px; border: 2px dashed #dee2e6;">
-                                                <i class="fas fa-image text-muted" style="font-size: 64px;"></i>
-                                                <p class="text-muted mt-3 mb-0">Belum ada gambar header</p>
-                                                <small class="text-muted">Upload gambar untuk banner homepage</small>
-                                            </div>
-                                        @endif
-                                        
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">
-                                                <i class="fas fa-upload mr-1"></i>
-                                                Upload Gambar Header Baru
-                                            </label>
-                                            <div class="custom-file">
-                                                <input type="file" 
-                                                       name="gambar_header" 
-                                                       class="custom-file-input @error('gambar_header') is-invalid @enderror" 
-                                                       id="gambar_header"
-                                                       accept="image/jpeg,image/png,image/jpg,image/webp">
-                                                <label class="custom-file-label" for="gambar_header">Pilih gambar...</label>
-                                            </div>
-                                            <small class="form-text text-muted mt-2">
-                                                <i class="fas fa-info-circle mr-1"></i>
-                                                Banner homepage (Sambutan Kepala Desa)<br>
-                                                <i class="fas fa-file-image mr-1"></i>
-                                                Format: JPEG, PNG, WEBP<br>
-                                                <i class="fas fa-weight mr-1"></i>
-                                                Maksimal: 5MB<br>
-                                                <i class="fas fa-expand-arrows-alt mr-1"></i>
-                                                Ukuran disarankan: 1920x600px (landscape lebar)
-                                            </small>
-                                            @error('gambar_header')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Preview -->
-                                        <div id="preview_header" class="mt-3" style="display: none;">
-                                            <p class="font-weight-bold mb-2">Preview:</p>
-                                            <img id="preview_header_img" src="" alt="Preview" class="img-fluid rounded shadow-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Struktur Organisasi -->
-                            <div class="col-md-6 mb-4">
-                                <div class="card border-success h-100">
-                                    <div class="card-header bg-success text-white">
-                                        <h5 class="mb-0">
-                                            <i class="fas fa-sitemap mr-2"></i>
-                                            Struktur Organisasi
-                                        </h5>
-                                    </div>
-                                    <div class="card-body">
-                                        @if($profil->struktur_organisasi)
-                                            <div class="text-center mb-3 p-3" style="background: #f8f9fa; border-radius: 10px;">
-                                                <img src="{{ Storage::url($profil->struktur_organisasi) }}" 
-                                                     alt="Struktur Organisasi Desa {{ $profil->nama_desa }}" 
-                                                     class="img-fluid rounded shadow-sm" 
-                                                     style="max-height: 500px; border: 3px solid #007bff;">
-                                                <p class="text-muted mt-2 mb-0">
-                                                    <i class="fas fa-check-circle text-success mr-1"></i>
-                                                    Struktur organisasi saat ini
-                                                </p>
-                                            </div>
-                                        @else
-                                            <div class="text-center mb-3 p-5" style="background: #f8f9fa; border-radius: 10px; border: 2px dashed #dee2e6;">
-                                                <i class="fas fa-sitemap text-muted" style="font-size: 64px;"></i>
-                                                <p class="text-muted mt-3 mb-0">Belum ada struktur organisasi</p>
-                                                <small class="text-muted">Upload bagan struktur organisasi desa</small>
-                                            </div>
-                                        @endif
-                                        
-                                        <div class="form-group">
-                                            <label class="font-weight-bold">
-                                                <i class="fas fa-upload mr-1"></i>
-                                                Upload Struktur Organisasi Baru
-                                            </label>
-                                            <div class="custom-file">
-                                                <input type="file" 
-                                                       name="struktur_organisasi" 
-                                                       class="custom-file-input @error('struktur_organisasi') is-invalid @enderror" 
-                                                       id="struktur_organisasi"
-                                                       accept="image/jpeg,image/png,image/jpg,image/webp">
-                                                <label class="custom-file-label" for="struktur_organisasi">Pilih gambar...</label>
-                                            </div>
-                                            <small class="form-text text-muted mt-2">
-                                                <i class="fas fa-info-circle mr-1"></i>
-                                                Bagan struktur organisasi (bisa dibuat di Canva/PowerPoint)<br>
-                                                <i class="fas fa-file-image mr-1"></i>
-                                                Format: JPEG, PNG, WEBP<br>
-                                                <i class="fas fa-weight mr-1"></i>
-                                                Maksimal: 5MB<br>
-                                                <i class="fas fa-expand-arrows-alt mr-1"></i>
-                                                Ukuran disarankan: 1920x1080px
-                                            </small>
-                                            @error('struktur_organisasi')
-                                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Preview -->
-                                        <div id="preview_struktur" class="mt-3" style="display: none;">
-                                            <p class="font-weight-bold mb-2">Preview:</p>
-                                            <img id="preview_struktur_img" src="" alt="Preview" class="img-fluid rounded shadow-sm">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="border-top pt-4 mt-4 d-flex justify-content-between align-items-center">
-                            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary btn-lg">
-                                <i class="fas fa-times mr-2"></i>
-                                Batal
-                            </a>
-                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
-                                <i class="fas fa-save mr-2"></i>
-                                Simpan Gambar
-                            </button>
-                        </div>
-                    </form>
-                </div>
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow p-4 space-y-3">
+                <h5 class="font-semibold text-gray-700 mb-3"><i class="fas fa-bolt text-yellow-500 mr-2"></i>Quick Actions</h5>
+                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 border border-blue-500 text-blue-600 rounded-lg hover:bg-blue-50 flex items-center"><i class="fas fa-chart-line mr-2"></i>Dashboard</a>
+                <a href="{{ route('admin.profil-desa.edit') }}" class="block px-4 py-2 border border-green-500 text-green-600 rounded-lg hover:bg-green-50 flex items-center"><i class="fas fa-building mr-2"></i>Edit Profil Desa</a>
+                <a href="{{ route('home') }}" target="_blank" class="block px-4 py-2 border border-indigo-500 text-indigo-600 rounded-lg hover:bg-indigo-50 flex items-center"><i class="fas fa-external-link-alt mr-2"></i>Lihat Website</a>
             </div>
         </div>
     </div>
@@ -231,66 +138,38 @@
 
 @push('scripts')
 <script>
-// Custom file input label update
-$('.custom-file-input').on('change', function() {
-    let fileName = $(this).val().split('\\').pop();
-    $(this).next('.custom-file-label').addClass("selected").html(fileName);
-});
-
-// Preview gambar header
-document.getElementById('gambar_header').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview_header_img').src = e.target.result;
-            document.getElementById('preview_header').style.display = 'block';
+    // Header preview
+    const headerInput = document.getElementById('gambar_header');
+    const headerPreview = document.getElementById('preview_header');
+    const headerImg = document.getElementById('preview_header_img');
+    document.getElementById('dropzone-header').addEventListener('click', ()=> headerInput.click());
+    headerInput.addEventListener('change', (e)=>{
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = e=>{
+                headerImg.src = e.target.result;
+                headerPreview.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
-    }
-});
+    });
 
-// Preview struktur organisasi
-document.getElementById('struktur_organisasi').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview_struktur_img').src = e.target.result;
-            document.getElementById('preview_struktur').style.display = 'block';
+    // Struktur preview
+    const strukturInput = document.getElementById('struktur_organisasi');
+    const strukturPreview = document.getElementById('preview_struktur');
+    const strukturImg = document.getElementById('preview_struktur_img');
+    document.getElementById('dropzone-struktur').addEventListener('click', ()=> strukturInput.click());
+    strukturInput.addEventListener('change', (e)=>{
+        const file = e.target.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = e=>{
+                strukturImg.src = e.target.result;
+                strukturPreview.classList.remove('hidden');
+            }
+            reader.readAsDataURL(file);
         }
-        reader.readAsDataURL(file);
-    }
-});
+    });
 </script>
-
-<style>
-/* Image hover effects */
-.img-fluid:hover {
-    transform: scale(1.02);
-    transition: transform 0.3s;
-}
-
-/* Card enhancements */
-.card {
-    transition: all 0.3s;
-}
-
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-}
-
-/* Button enhancements */
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-}
-
-.btn-primary:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-</style>
 @endpush

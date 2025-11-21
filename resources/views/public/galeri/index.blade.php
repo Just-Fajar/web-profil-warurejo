@@ -71,19 +71,28 @@
             
             @if(isset($galeris) && $galeris->count() > 0)
                 {{-- Masonry Grid --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" x-data="{ openModal: false, modalSrc: '', modalTitle: '', modalDesc: '' }">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" x-data="{ openModal: false, modalSrc: '', modalTitle: '', modalDesc: '', modalImages: [] }">
                     @foreach($galeris as $galeri)
                         <div class="group relative bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition cursor-pointer"
-                             @click="openModal = true; modalSrc = '{{ asset('storage/' . $galeri->gambar) }}'; modalTitle = '{{ addslashes($galeri->judul) }}'; modalDesc = '{{ addslashes($galeri->deskripsi ?? '') }}'">
+                             @click="openModal = true; modalImages = @js($galeri->images->map(fn($img) => ['url' => asset('storage/' . $img->image_path)])->toArray()); modalTitle = '{{ addslashes($galeri->judul) }}'; modalDesc = '{{ addslashes($galeri->deskripsi ?? '') }}'">
                             
-                            {{-- Thumbnail --}}
+                            {{-- Thumbnail - Show first image from images relation --}}
                             <div class="relative overflow-hidden h-64">
-                                @if($galeri->gambar)
+                                @if($galeri->images && $galeri->images->count() > 0)
                                     <img 
-                                        src="{{ asset('storage/' . $galeri->gambar) }}" 
+                                        src="{{ $galeri->images->first()->image_url }}" 
                                         alt="{{ $galeri->judul }}"
                                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                                     >
+                                    
+                                    {{-- Multiple Images Badge --}}
+                                    @if($galeri->images->count() > 1)
+                                        <div class="absolute top-3 left-3">
+                                            <span class="px-3 py-1 bg-black/70 text-white text-xs font-semibold rounded-full">
+                                                <i class="fas fa-images mr-1"></i>{{ $galeri->images->count() }} Foto
+                                            </span>
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="w-full h-full bg-linear-to-br from-purple-400 to-purple-600 flex items-center justify-center">
                                         <svg class="w-20 h-20 text-white opacity-50" fill="currentColor" viewBox="0 0 20 20">
@@ -132,7 +141,7 @@
                         </div>
                     @endforeach
                     
-                    {{-- Modal --}}
+                    {{-- Modal with Image Carousel --}}
                     <div x-show="openModal" 
                          x-cloak
                          @click.self="openModal = false"
@@ -142,7 +151,8 @@
                          x-transition:enter-end="opacity-100"
                          x-transition:leave="transition ease-in duration-200"
                          x-transition:leave-start="opacity-100"
-                         x-transition:leave-end="opacity-0">
+                         x-transition:leave-end="opacity-0"
+                         x-data="{ currentIndex: 0 }">
                         
                         <div class="relative max-w-5xl w-full bg-white rounded-lg shadow-2xl overflow-hidden"
                              @click.stop>
@@ -155,14 +165,43 @@
                                 </svg>
                             </button>
                             
-                            {{-- Image Content --}}
-                            <div class="bg-black flex items-center justify-center" style="max-height: 70vh;">
-                                <img :src="modalSrc" :alt="modalTitle" class="max-w-full max-h-full object-contain">
+                            {{-- Image Carousel --}}
+                            <div class="bg-black flex items-center justify-center relative" style="max-height: 70vh;">
+                                <template x-for="(image, index) in modalImages" :key="index">
+                                    <img x-show="currentIndex === index" 
+                                         :src="image.url" 
+                                         :alt="modalTitle" 
+                                         class="max-w-full max-h-full object-contain"
+                                         x-transition:enter="transition ease-out duration-300"
+                                         x-transition:enter-start="opacity-0"
+                                         x-transition:enter-end="opacity-100">
+                                </template>
+                                
+                                {{-- Navigation Arrows (only show if multiple images) --}}
+                                <template x-if="modalImages.length > 1">
+                                    <div>
+                                        <button @click="currentIndex = currentIndex > 0 ? currentIndex - 1 : modalImages.length - 1" 
+                                                class="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition">
+                                            <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                                            </svg>
+                                        </button>
+                                        <button @click="currentIndex = currentIndex < modalImages.length - 1 ? currentIndex + 1 : 0" 
+                                                class="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center transition">
+                                            <svg class="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </template>
                             </div>
                             
                             {{-- Info --}}
                             <div class="p-6">
-                                <h2 class="text-2xl font-bold text-gray-800 mb-2" x-text="modalTitle"></h2>
+                                <div class="flex items-center justify-between mb-2">
+                                    <h2 class="text-2xl font-bold text-gray-800" x-text="modalTitle"></h2>
+                                    <span x-show="modalImages.length > 1" class="text-sm text-gray-600" x-text="(currentIndex + 1) + ' / ' + modalImages.length"></span>
+                                </div>
                                 <p class="text-gray-600" x-text="modalDesc || 'Tidak ada deskripsi'"></p>
                             </div>
                         </div>

@@ -56,16 +56,16 @@
 
                 <!-- Dropdown Publikasi -->
                 <div class="relative group">
-                    <button :class="scrolled ? 'text-gray-700 hover:text-green-600' : 'text-white hover:text-green-200'" class="font-medium transition-colors duration-300 flex items-center">
+                    <button :class="scrolled ? 'text-gray-700 hover:text-green-600' : 'text-white hover:text-green-200'" class="font-medium transition-colors duration-300 flex items-center {{ request()->routeIs('publikasi.*') ? 'font-bold' : '' }}">
                         Publikasi
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
                     <div class="absolute left-0 mt-2 w-64 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">APBDes</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">RPJMDes</a>
-                        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">RKPDes</a>
+                        <a href="{{ route('publikasi.index', ['kategori' => 'APBDes']) }}" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">APBDes</a>
+                        <a href="{{ route('publikasi.index', ['kategori' => 'RPJMDes']) }}" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">RPJMDes</a>
+                        <a href="{{ route('publikasi.index', ['kategori' => 'RKPDes']) }}" class="block px-4 py-2 text-gray-700 hover:bg-primary-50 hover:text-primary-600">RKPDes</a>
                     </div>
                 </div>
             </div>
@@ -101,9 +101,10 @@
 
             <div class="pl-2 mt-2">
                 <p class="py-2 text-gray-700 font-semibold px-4">Publikasi</p>
-                <a href="#" class="block py-2 px-6 text-gray-700 hover:text-primary-600">APBDes</a>
-                <a href="#" class="block py-2 px-6 text-gray-700 hover:text-primary-600">RPJMDes</a>
-                <a href="#" class="block py-2 px-6 text-gray-700 hover:text-primary-600">RKPDes</a>            </div>
+                <a href="{{ route('publikasi.index', ['kategori' => 'APBDes']) }}" class="block py-2 px-6 text-gray-700 hover:text-primary-600">APBDes</a>
+                <a href="{{ route('publikasi.index', ['kategori' => 'RPJMDes']) }}" class="block py-2 px-6 text-gray-700 hover:text-primary-600">RPJMDes</a>
+                <a href="{{ route('publikasi.index', ['kategori' => 'RKPDes']) }}" class="block py-2 px-6 text-gray-700 hover:text-primary-600">RKPDes</a>
+            </div>
         </div>
     </div>
 </nav>

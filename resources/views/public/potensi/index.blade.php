@@ -160,62 +160,6 @@
     </div>
 </section>
 
-{{-- Info Section --}}
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Kategori Potensi Desa</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                
-                {{-- Pertanian --}}
-                <div class="bg-linear-to-br from-green-50 to-green-100 rounded-lg p-6 border-2 border-green-200 hover:border-green-400 transition">
-                    <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Pertanian</h3>
-                    <p class="text-gray-600 text-sm">Potensi hasil pertanian seperti padi, jagung, dan sayuran</p>
-                </div>
-
-                {{-- Peternakan --}}
-                <div class="bg-linear-to-br from-amber-50 to-amber-100 rounded-lg p-6 border-2 border-amber-200 hover:border-amber-400 transition">
-                    <div class="w-16 h-16 bg-amber-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 3.5a1.5 1.5 0 013 0V4a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-.5a1.5 1.5 0 000 3h.5a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-.5a1.5 1.5 0 00-3 0v.5a1 1 0 01-1 1H6a1 1 0 01-1-1v-3a1 1 0 00-1-1h-.5a1.5 1.5 0 010-3H4a1 1 0 001-1V6a1 1 0 011-1h3a1 1 0 001-1v-.5z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Peternakan</h3>
-                    <p class="text-gray-600 text-sm">Potensi peternakan sapi, kambing, ayam, dan lainnya</p>
-                </div>
-
-                {{-- UMKM --}}
-                <div class="bg-linear-to-br from-blue-50 to-blue-100 rounded-lg p-6 border-2 border-blue-200 hover:border-blue-400 transition">
-                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">UMKM</h3>
-                    <p class="text-gray-600 text-sm">Usaha mikro, kecil, dan menengah produk lokal</p>
-                </div>
-
-                {{-- Wisata --}}
-                <div class="bg-linear-to-br from-purple-50 to-purple-100 rounded-lg p-6 border-2 border-purple-200 hover:border-purple-400 transition">
-                    <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mb-4">
-                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-bold text-gray-800 mb-2">Wisata</h3>
-                    <p class="text-gray-600 text-sm">Potensi wisata alam, budaya, dan edukasi</p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</section>
-
 {{-- CTA Section --}}
 <section class="py-16 bg-linear-to-r from-green-600 to-green-700">
     <div class="container mx-auto px-4">

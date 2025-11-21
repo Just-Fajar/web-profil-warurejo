@@ -119,6 +119,9 @@
     </div>
 </section>
 
+{{-- ============================
+     P O T E N S I   D E S A
+============================= --}}
 <section class="py-16 bg-white">
     <div class="container mx-auto px-4">
 
@@ -127,44 +130,48 @@
             <p class="text-gray-600">Kekayaan dan potensi yang dimiliki {{ $profil->nama_desa }}</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @forelse($potensi->take(4) as $item)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            @forelse($potensi->take(3) as $item)
+
+                {{-- CARD KLIKABLE SEPERTI BERITA --}}
+                <a href="{{ route('potensi.show', $item->slug) }}"
+                   class="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
 
                     {{-- Gambar --}}
                     <img src="{{ asset('storage/' . $item->gambar) }}"
-                         alt="{{ $item->nama_potensi }}"
-                         class="w-full h-40 object-cover">
+                         alt="{{ $item->nama }}"
+                         class="w-full h-48 object-cover">
 
-                    {{-- Konten Card --}}
-                    <div class="p-5 text-left">
+                    {{-- Konten --}}
+                    <div class="p-6">
 
-                        {{-- Kategori --}}
-                        <span class="text-sm text-primary-600 font-semibold tracking-wide">
-                            {{ $item->kategori_label }}
+                        {{-- Tanggal dan Views --}}
+                    <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
+                        <span>
+                            <i class="far fa-calendar-alt mr-1"></i>
+                            {{ $item->created_at->format('d M Y') }}
                         </span>
+                        <span>
+                            <i class="far fa-eye mr-1"></i>
+                            {{ number_format($item->views) }} lihat
+                        </span>
+                    </div>
 
-                        {{-- Nama --}}
-                        <h3 class="mt-2 font-bold text-gray-800 text-lg">
-                            {{ $item->nama_potensi }}
+                        {{-- Nama Potensi --}}
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
+                            {{ $item->nama }}
                         </h3>
 
-                        {{-- Lokasi --}}
-                        <p class="text-gray-600 text-sm mt-1">
-                            📍 <strong>Lokasi:</strong> {{ $item->lokasi }}
+                        {{-- Deskripsi Singkat (excerpt dari "deskripsi") --}}
+                        <p class="text-gray-600 mb-4 line-clamp-3">
+                            {{ Str::limit(strip_tags($item->deskripsi), 120) }}
                         </p>
-
-                        {{-- WhatsApp --}}
-                        @if ($item->whatsapp)
-                        <p class="text-gray-600 text-sm mt-1">
-                            📞 <strong>WhatsApp:</strong> +62{{ $item->whatsapp }}
-                        </p>
-                        @endif
 
                     </div>
-                </div>
+                </a>
+
             @empty
-                <div class="col-span-4 text-center py-12">
+                <div class="col-span-3 text-center py-12">
                     <p class="text-gray-500">Belum ada data potensi</p>
                 </div>
             @endforelse
@@ -173,9 +180,7 @@
         @if($potensi->count() > 0)
             <div class="text-center mt-12">
                 <a href="{{ route('potensi.index') }}" 
-                   class="inline-block border-2 border-primary-600 text-primary-600 
-                          px-8 py-3 rounded-lg font-semibold hover:bg-primary-600 
-                          hover:text-white transition">
+                   class="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition">
                     Lihat Semua Potensi
                 </a>
             </div>
@@ -184,9 +189,14 @@
     </div>
 </section>
 
-<!-- Latest News -->
+
+
+{{-- ============================
+      B E R I T A   T E R K I N I
+============================= --}}
 <section class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
+
         <div class="text-center mb-12">
             <h2 class="text-3xl font-bold text-gray-800 mb-2">Berita Terkini</h2>
             <p class="text-gray-600">Informasi dan kabar terbaru dari {{ $profil->nama_desa }}</p>
@@ -194,23 +204,39 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             @forelse($latest_berita as $berita)
-                <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
-                    <img src="{{ $berita->gambar_utama_url }}" alt="{{ $berita->judul }}" class="w-full h-48 object-cover">
+                
+                {{-- CARD KLIKABLE --}}
+                <a href="{{ route('berita.show', $berita->slug) }}"
+                   class="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition">
+
+                    {{-- Gambar --}}
+                    <img src="{{ $berita->gambar_utama_url }}" 
+                         alt="{{ $berita->judul }}" 
+                         class="w-full h-48 object-cover">
+
+                    {{-- Konten --}}
                     <div class="p-6">
-                        <div class="text-sm text-gray-500 mb-2">
-                            {{ $berita->published_at?->format('d M Y') }}
+                        <div class="flex items-center justify-between text-sm text-gray-500 mb-2">
+                            <span>
+                                <i class="far fa-calendar-alt mr-1"></i>
+                                {{ $berita->published_at?->format('d M Y') }}
+                            </span>
+                            <span>
+                                <i class="far fa-eye mr-1"></i>
+                                {{ number_format($berita->views) }} lihat
+                            </span>
                         </div>
+
                         <h3 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
                             {{ $berita->judul }}
                         </h3>
+
                         <p class="text-gray-600 mb-4 line-clamp-3">
                             {{ $berita->excerpt }}
                         </p>
-                        <a href="{{ route('berita.show', $berita->slug) }}" class="text-primary-600 font-semibold hover:text-primary-800">
-                            Baca Selengkapnya →
-                        </a>
                     </div>
-                </article>
+                </a>
+
             @empty
                 <div class="col-span-3 text-center py-12">
                     <p class="text-gray-500">Belum ada berita tersedia</p>
@@ -220,13 +246,16 @@
 
         @if($latest_berita->count() > 0)
             <div class="text-center mt-12">
-                <a href="{{ route('berita.index') }}" class="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition">
+                <a href="{{ route('berita.index') }}" 
+                   class="inline-block bg-primary-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition">
                     Lihat Semua Berita
                 </a>
             </div>
         @endif
+
     </div>
 </section>
+
 
 <!-- Gallery Preview -->
 <section class="py-16 bg-gray-50">
@@ -237,14 +266,28 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            @forelse($galeri as $item)
-                <div class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition group">
-                    <img src="{{ $item->gambar_url }}" alt="{{ $item->judul }}" class="w-full h-64 object-cover group-hover:scale-110 transition duration-300">
-                    <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex items-end p-4">
-                        <h3 class="text-white font-semibold">{{ $item->judul }}</h3>
-                    </div>
-                </div>
-            @empty
+    @forelse($galeri as $item)
+        <div 
+            onclick="openImageModal('{{ $item->gambar_url }}')" 
+            class="relative overflow-hidden rounded-lg shadow-md hover:shadow-xl transition group cursor-pointer"
+        >
+            <img src="{{ $item->gambar_url }}" 
+                 alt="{{ $item->judul }}" 
+                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-300">
+            <div class="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex flex-col justify-end p-4">
+                <h3 class="text-white font-semibold">{{ $item->judul }}</h3>
+                <p class="text-white/80 text-xs mt-1">
+                    <i class="far fa-calendar-alt mr-1"></i>
+                    {{ $item->formatted_date }}
+                    <span class="ml-2">
+                        <i class="far fa-eye mr-1"></i>
+                        {{ number_format($item->views) }}
+                    </span>
+                </p>
+            </div>
+        </div>
+    @empty
+
                 <div class="col-span-3 text-center py-12">
                     <p class="text-gray-500">Belum ada dokumentasi</p>
                 </div>

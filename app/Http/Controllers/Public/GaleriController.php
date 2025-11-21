@@ -24,7 +24,7 @@ class GaleriController extends Controller
         
         // Build query
         if ($search || $kategori) {
-            $query = Galeri::with('admin')->published()->latest();
+            $query = Galeri::with(['admin', 'images'])->published()->latest();
             
             if ($search) {
                 $query->where(function($q) use ($search) {
@@ -40,7 +40,7 @@ class GaleriController extends Controller
             $galeris = $query->paginate(24)->appends($request->query());
         } else {
             // Use published scope instead of active
-            $galeris = Galeri::with('admin')->published()->latest()->paginate(24);
+            $galeris = Galeri::with(['admin', 'images'])->published()->latest()->paginate(24);
         }
         
         // SEO Data

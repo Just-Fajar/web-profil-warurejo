@@ -23,6 +23,7 @@ class PotensiDesa extends Model
         'whatsapp',
         'is_active',
         'urutan',
+        'views',
     ];
 
     protected $casts = [
@@ -113,5 +114,11 @@ class PotensiDesa extends Model
                 $potensi->urutan = $maxUrutan + 1;
             }
         });
+    }
+
+    // Method untuk increment views
+    public function incrementViews()
+    {
+        $this->increment('views');
     }
 }

@@ -75,10 +75,25 @@
 
         <!-- Thumbnail -->
         <div class="relative h-48 overflow-hidden bg-gray-200">
-            <img src="{{ asset('storage/' . $item->gambar) }}" 
-                 alt="{{ $item->judul }}"
-                 class="w-full h-full object-cover"
-                 onerror="this.style.display='none'; this.parentElement.classList.add('bg-gray-300')">
+            @if($item->images && $item->images->count() > 0)
+                <img src="{{ $item->images->first()->image_url }}" 
+                     alt="{{ $item->judul }}"
+                     class="w-full h-full object-cover"
+                     onerror="this.style.display='none'; this.parentElement.classList.add('bg-gray-300')">
+                
+                {{-- Multiple Images Badge --}}
+                @if($item->images->count() > 1)
+                    <div class="absolute top-2 left-2">
+                        <span class="px-2 py-1 bg-black/70 text-white text-xs font-semibold rounded">
+                            <i class="fas fa-images mr-1"></i>{{ $item->images->count() }} Foto
+                        </span>
+                    </div>
+                @endif
+            @else
+                <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                    <i class="fas fa-image text-gray-500 text-4xl"></i>
+                </div>
+            @endif
         </div>
 
         <!-- Body -->

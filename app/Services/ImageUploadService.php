@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -69,7 +70,7 @@ switch ($extension) {
             return $path;
             
         } catch (\Exception $e) {
-            \Log::error('Image upload failed: ' . $e->getMessage());
+            Log::error('Image upload failed: ' . $e->getMessage());
             return null;
         }
     }
@@ -113,7 +114,7 @@ switch ($extension) {
             }
             return false;
         } catch (\Exception $e) {
-            \Log::error('Image delete failed: ' . $e->getMessage());
+            Log::error('Image delete failed: ' . $e->getMessage());
             return false;
         }
     }
@@ -202,7 +203,7 @@ switch ($extension) {
             return $path;
             
         } catch (\Exception $e) {
-            \Log::error('Thumbnail creation failed: ' . $e->getMessage());
+            Log::error('Thumbnail creation failed: ' . $e->getMessage());
             return null;
         }
     }
@@ -219,18 +220,24 @@ switch ($extension) {
     public function createThumbnailFromPath($imagePath, $folder = 'thumbnails', $width = 300, $height = 300)
     {
         try {
-            $fullPath = storage_path('app/public/' . $imagePath);
-            
-            if (!file_exists($fullPath)) {
+            // Try to get file content from Storage facade (works with fake storage in tests)
+            if (!Storage::disk('public')->exists($imagePath)) {
+                Log::error("Thumbnail source file not found in storage: {$imagePath}");
                 return null;
             }
 
-            // Load existing image
-            $imageResource = $this->manager->read($fullPath);
+            // Get file content from storage
+            $fileContent = Storage::disk('public')->get($imagePath);
             
-            // Generate thumbnail filename
+            // Load image from content
+            $imageResource = $this->manager->read($fileContent);
+            
+            // Generate unique thumbnail filename
             $pathInfo = pathinfo($imagePath);
-            $filename = $pathInfo['filename'] . '_thumb.' . $pathInfo['extension'];
+            $extension = $pathInfo['extension'] ?? 'jpg';
+            $timestamp = time();
+            $random = Str::random(8);
+            $filename = "thumb_{$timestamp}_{$random}.{$extension}";
             $thumbnailPath = $folder . '/' . $filename;
             
             // Create thumbnail with cover
@@ -243,7 +250,7 @@ switch ($extension) {
             return $thumbnailPath;
             
         } catch (\Exception $e) {
-            \Log::error('Thumbnail from path creation failed: ' . $e->getMessage());
+            Log::error('Thumbnail from path creation failed: ' . $e->getMessage());
             return null;
         }
     }

@@ -159,6 +159,8 @@ class ImageUploadServiceTest extends TestCase
         // First upload an image
         $file = UploadedFile::fake()->image('test.jpg', 800, 600);
         $originalPath = $this->imageService->upload($file, 'images');
+        
+        $this->assertNotNull($originalPath, 'Original image upload failed');
 
         // Then create thumbnail from the uploaded image
         $thumbnailPath = $this->imageService->createThumbnailFromPath(
@@ -168,7 +170,7 @@ class ImageUploadServiceTest extends TestCase
             200
         );
 
-        $this->assertNotNull($thumbnailPath);
+        $this->assertNotNull($thumbnailPath, 'Thumbnail creation failed');
         $this->assertStringStartsWith('thumbnails/', $thumbnailPath);
         $this->assertTrue(Storage::disk('public')->exists($thumbnailPath));
     }
@@ -201,7 +203,10 @@ class ImageUploadServiceTest extends TestCase
      */
     public function test_upload_handles_invalid_file_gracefully(): void
     {
-        $result = $this->imageService->upload(null, 'test');
+        // Create invalid UploadedFile (0 bytes)
+        $invalidFile = UploadedFile::fake()->create('invalid.jpg', 0);
+        
+        $result = $this->imageService->upload($invalidFile, 'test');
 
         $this->assertNull($result);
     }

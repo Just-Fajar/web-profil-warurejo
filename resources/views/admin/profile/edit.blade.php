@@ -5,86 +5,81 @@
 @section('breadcrumb')
     <li class="inline-flex items-center">
         <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-        <a href="{{ route('admin.profile.show') }}" class="text-sm font-medium text-gray-700 hover:text-primary-600">Profile</a>
+        <a href="{{ route('admin.profile.show') }}" class="text-sm font-medium text-gray-700 hover:text-primary-600">
+            Profile
+        </a>
     </li>
     <li class="inline-flex items-center">
         <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
-        <span class="text-sm font-medium text-gray-500
+        <span class="text-sm font-medium text-gray-500">Edit Profile</span>
     </li>
 @endsection
 
 @section('content')
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-edit text-primary mr-2"></i>
-                        Edit Profile
-                    </h5>
+<div class="max-w-4xl mx-auto px-4 py-8">
+
+    <div class="bg-white shadow-md rounded-lg border border-gray-200">
+        
+        <div class="border-b px-6 py-4">
+            <h2 class="text-lg font-semibold text-gray-700 flex items-center gap-2">
+                <i class="fas fa-user-edit text-primary-600"></i>
+                Edit Profile
+            </h2>
+        </div>
+
+        <div class="p-6">
+            <form action="{{ route('admin.profile.update') }}" method="POST" class="space-y-6">
+                @csrf
+                @method('PUT')
+
+                {{-- Nama --}}
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">
+                        Nama Lengkap <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text"
+                           name="name"
+                           value="{{ old('name', $admin->name) }}"
+                           required
+                           class="w-full px-4 py-3 border rounded-lg focus:ring focus:ring-primary-200 @error('name') border-red-500 @enderror">
+
+                    @error('name')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
-                <div class="card-body p-4">
-                    <form action="{{ route('admin.profile.update') }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="form-group mb-4">
-                            <label class="font-weight-bold">
-                                Nama Lengkap <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" 
-                                   name="name" 
-                                   class="form-control form-control-lg @error('name') is-invalid @enderror" 
-                                   value="{{ old('name', $admin->name) }}" 
-                                   required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
 
-                        <div class="form-group mb-4">
-                            <label class="font-weight-bold">
-                                Username <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" 
-                                   name="username" 
-                                   class="form-control form-control-lg @error('username') is-invalid @enderror" 
-                                   value="{{ old('username', $admin->username) }}" 
-                                   required>
-                            @error('username')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+                {{-- Email --}}
+                <div>
+                    <label class="block font-semibold text-gray-700 mb-1">
+                        Email <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email"
+                           name="email"
+                           value="{{ old('email', $admin->email) }}"
+                           required
+                           class="w-full px-4 py-3 border rounded-lg focus:ring focus:ring-primary-200 @error('email') border-red-500 @enderror">
 
-                        <div class="form-group mb-4">
-                            <label class="font-weight-bold">
-                                Email <span class="text-danger">*</span>
-                            </label>
-                            <input type="email" 
-                                   name="email" 
-                                   class="form-control form-control-lg @error('email') is-invalid @enderror" 
-                                   value="{{ old('email', $admin->email) }}" 
-                                   required>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="border-top pt-4 mt-4 d-flex justify-content-between">
-                            <a href="{{ route('admin.profile.show') }}" class="btn btn-outline-secondary btn-lg">
-                                <i class="fas fa-times mr-2"></i>
-                                Batal
-                            </a>
-                            <button type="submit" class="btn btn-primary btn-lg px-5">
-                                <i class="fas fa-save mr-2"></i>
-                                Simpan Perubahan
-                            </button>
-                        </div>
-                    </form>
+                    @error('email')
+                        <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
-            </div>
+
+                {{-- Button --}}
+                <div class="pt-6 border-t flex items-center justify-between">
+                    <a href="{{ route('admin.profile.show') }}"
+                       class="px-5 py-3 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-100 transition">
+                        <i class="fas fa-times mr-2"></i>Batal
+                    </a>
+
+                    <button type="submit"
+                            class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition shadow">
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                    </button>
+                </div>
+
+            </form>
         </div>
     </div>
+
 </div>
 @endsection

@@ -36,8 +36,8 @@ class GaleriPageTest extends TestCase
         $response = $this->get(route('galeri.index'));
 
         $response->assertStatus(200);
-        $response->assertViewHas('galeri');
-        
+        $response->assertViewHas('galeris');
+
         // Check if first galeri is displayed
         $response->assertSee($galeri->first()->judul);
     }
@@ -106,8 +106,8 @@ class GaleriPageTest extends TestCase
         $response = $this->get(route('galeri.index'));
 
         $response->assertStatus(200);
-        $response->assertViewHas('galeri', function ($galeri) {
-            return $galeri->hasPages();
+        $response->assertViewHas('galeris', function ($galeris) {
+            return $galeris->hasPages();
         });
     }
 
@@ -153,6 +153,6 @@ class GaleriPageTest extends TestCase
         $response = $this->get(route('galeri.index'));
 
         $response->assertStatus(200);
-        $response->assertViewHas('galeri');
+        $response->assertViewHas('galeris');
     }
 }

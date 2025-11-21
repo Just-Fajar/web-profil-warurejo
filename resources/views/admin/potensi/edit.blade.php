@@ -66,7 +66,7 @@
                                    value="{{ old('nama', $potensi->nama) }}"
                                    placeholder="Contoh: Pertanian Padi Organik"
                                    required
-                                   class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('nama') border-red-500 @enderror">
+                                   class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('nama') @enderror">
                             @error('nama')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -82,7 +82,7 @@
                                       maxlength="500"
                                       placeholder="Ringkasan singkat tentang potensi ini (max 500 karakter)"
                                       required
-                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('deskripsi_singkat') border-red-500 @enderror">{{ old('deskripsi_singkat', $potensi->deskripsi_singkat) }}</textarea>
+                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('deskripsi_singkat')  @enderror">{{ old('deskripsi_singkat', $potensi->deskripsi_singkat) }}</textarea>
                             @error('deskripsi_singkat')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -95,7 +95,7 @@
                             <textarea id="deskripsi"
                                       name="deskripsi"
                                       rows="15"
-                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('deskripsi') border-red-500 @enderror">{{ old('deskripsi', $potensi->deskripsi) }}</textarea>
+                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('deskripsi') @enderror">{{ old('deskripsi', $potensi->deskripsi) }}</textarea>
                             @error('deskripsi')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -108,7 +108,7 @@
                                       name="keunggulan"
                                       rows="4"
                                       placeholder="Keunggulan atau nilai tambah dari potensi ini"
-                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('keunggulan') border-red-500 @enderror">{{ old('keunggulan', $potensi->keunggulan) }}</textarea>
+                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('keunggulan')  @enderror">{{ old('keunggulan', $potensi->keunggulan) }}</textarea>
                             @error('keunggulan')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -136,7 +136,7 @@
                                    id="gambar"
                                    name="gambar"
                                    accept="image/*"
-                                   class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('gambar') border-red-500 @enderror">
+                                   class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('gambar')  @enderror">
                             @error('gambar')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -159,7 +159,7 @@
                         <!-- Kategori -->
                         <div>
                             <label for="kategori" class="block text-sm font-medium text-gray-700">Kategori <span class="text-red-600">*</span></label>
-                            <select id="kategori" name="kategori" required class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kategori') border-red-500 @enderror">
+                            <select id="kategori" name="kategori" required class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kategori')  @enderror">
                                 <option value="">-- Pilih Kategori --</option>
                                 <option value="pertanian" {{ old('kategori', $potensi->kategori) == 'pertanian' ? 'selected' : '' }}>Pertanian</option>
                                 <option value="peternakan" {{ old('kategori', $potensi->kategori) == 'peternakan' ? 'selected' : '' }}>Peternakan</option>
@@ -177,7 +177,7 @@
                         <!-- Lokasi -->
                         <div>
                             <label for="lokasi" class="block text-sm font-medium text-gray-700">Lokasi <span class="text-red-600">*</span></label>
-                            <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi', $potensi->lokasi) }}" placeholder="Contoh: Dusun Krajan" required class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('lokasi') border-red-500 @enderror">
+                            <input type="text" id="lokasi" name="lokasi" value="{{ old('lokasi', $potensi->lokasi) }}" placeholder="Contoh: Dusun Krajan" required class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('lokasi')  @enderror">
                             @error('lokasi')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -186,7 +186,7 @@
                         <!-- Kapasitas Produksi (Optional) -->
                         <div>
                             <label for="kapasitas_produksi" class="block text-sm font-medium text-gray-700">Kapasitas Produksi <span class="text-xs text-gray-500">(Opsional)</span></label>
-                            <input type="text" id="kapasitas_produksi" name="kapasitas_produksi" value="{{ old('kapasitas_produksi', $potensi->kapasitas_produksi) }}" placeholder="Contoh: 10 ton/tahun" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kapasitas_produksi') border-red-500 @enderror">
+                            <input type="text" id="kapasitas_produksi" name="kapasitas_produksi" value="{{ old('kapasitas_produksi', $potensi->kapasitas_produksi) }}" placeholder="Contoh: 10 ton/tahun" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kapasitas_produksi')  @enderror">
                             @error('kapasitas_produksi')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -195,7 +195,7 @@
                         <!-- Kontak (Optional) -->
                         <div>
                             <label for="kontak" class="block text-sm font-medium text-gray-700">Kontak <span class="text-xs text-gray-500">(Opsional)</span></label>
-                            <input type="text" id="kontak" name="kontak" value="{{ old('kontak', $potensi->kontak) }}" placeholder="Contoh: 08123456789 / email@example.com" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kontak') border-red-500 @enderror">
+                            <input type="text" id="kontak" name="kontak" value="{{ old('kontak', $potensi->kontak) }}" placeholder="Contoh: 08123456789 / email@example.com" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kontak')  @enderror">
                             @error('kontak')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
@@ -206,7 +206,7 @@
                             <label for="whatsapp" class="block text-sm font-medium text-gray-700">Nomor WhatsApp <span class="text-xs text-gray-500">(Opsional)</span></label>
                             <div class="flex">
                                 <span class="inline-flex items-center px-4 py-2 bg-gray-100 border border-r-0 border-gray-300 rounded-l-md text-gray-700">+62</span>
-                                <input type="text" id="whatsapp" name="whatsapp" value="{{ old('whatsapp', $potensi->whatsapp) }}" placeholder="8123456789" maxlength="15" pattern="[0-9]*" class="w-full px-4 py-2 border rounded-r-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsapp') border-red-500 @enderror">
+                                <input type="text" id="whatsapp" name="whatsapp" value="{{ old('whatsapp', $potensi->whatsapp) }}" placeholder="8123456789" maxlength="15" pattern="[0-9]*" class="w-full px-4 py-2 border rounded-r-md border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsapp')  @enderror">
                             </div>
                             @error('whatsapp')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -268,37 +268,40 @@
 @endsection
 
 @push('styles')
-<!-- TinyMCE -->
-<style>
-    .tox-tinymce {
-        border-radius: 0.25rem;
-    }
-</style>
 @endpush
 
 @push('scripts')
-<!-- TinyMCE -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- CKEditor 5 -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 
 <script>
 $(document).ready(function() {
-    // Initialize TinyMCE
-    tinymce.init({
-        selector: '#deskripsi',
-        height: 400,
-        menubar: false,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        language: 'id'
-    });
+    // Initialize CKEditor
+    let editorInstance;
+    ClassicEditor
+        .create(document.querySelector('#deskripsi'), {
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'blockQuote', 'insertTable', '|',
+                    'undo', 'redo'
+                ]
+            },
+            language: 'id',
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            }
+        })
+        .then(editor => {
+            editorInstance = editor;
+            editor.ui.view.editable.element.style.minHeight = '400px';
+            window.editorInstance = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     // Character counter for deskripsi_singkat
     $('#deskripsi_singkat').on('input', function() {
@@ -382,12 +385,14 @@ $(document).ready(function() {
 
     // Form Validation
     $('#potensiForm').on('submit', function(e) {
-        // Update TinyMCE content
-        tinymce.triggerSave();
+        // Update CKEditor content to textarea
+        if (window.editorInstance) {
+            $('#deskripsi').val(window.editorInstance.getData());
+        }
 
         // Validate required fields
         var nama = $('#nama').val().trim();
-        var deskripsi = $('#deskripsi').val().trim();
+        var deskripsi = window.editorInstance ? window.editorInstance.getData().trim() : '';
         var deskripsi_singkat = $('#deskripsi_singkat').val().trim();
         var kategori = $('#kategori').val();
         var lokasi = $('#lokasi').val().trim();

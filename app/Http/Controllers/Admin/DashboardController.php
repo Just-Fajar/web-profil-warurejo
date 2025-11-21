@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Berita;
 use App\Models\PotensiDesa;
 use App\Models\Galeri;
+use App\Models\Publikasi;
 use App\Services\VisitorStatisticsService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class DashboardController extends Controller
         $totalBerita = Berita::count();
         $totalPotensi = PotensiDesa::count();
         $totalGaleri = Galeri::count();
+        $totalPublikasi = Publikasi::count();
         
         // Visitor Statistics (Real Data)
         $pengunjungHariIni = $this->visitorService->getTodayVisitors();
@@ -51,6 +53,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
         
+        $recentPublikasi = Publikasi::orderBy('tanggal_publikasi', 'desc')
+            ->take(5)
+            ->get();
+        
         // Monthly Stats untuk Chart (content)
         $monthlyStats = $this->getMonthlyStats();
         
@@ -62,6 +68,7 @@ class DashboardController extends Controller
             'totalBerita',
             'totalPotensi',
             'totalGaleri',
+            'totalPublikasi',
             'pengunjungHariIni',
             'pengunjungMingguIni',
             'pengunjungBulanIni',
@@ -72,6 +79,7 @@ class DashboardController extends Controller
             'recentBerita',
             'recentPotensi',
             'recentGaleri',
+            'recentPublikasi',
             'monthlyStats',
             'beritaPublished',
             'beritaDraft'

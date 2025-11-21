@@ -37,6 +37,16 @@ class GaleriFactory extends Factory
     }
 
     /**
+     * Indicate that the galeri is active.
+     */
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => true,
+        ]);
+    }
+
+    /**
      * Indicate that the galeri is inactive.
      */
     public function inactive(): static

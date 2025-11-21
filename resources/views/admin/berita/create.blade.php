@@ -129,7 +129,7 @@
                     <textarea name="konten" 
                             id="konten"
                             rows="10"
-                            class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('konten') border-red-500 @enderror">{{ old('konten') }}</textarea>
+                            class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('konten') @enderror">{{ old('konten') }}</textarea>
 
                     @error('konten')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -200,24 +200,34 @@
 </div>
 
 @push('scripts')
-<!-- TinyMCE -->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<!-- CKEditor 5 -->
+<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
 <script>
-    // Initialize TinyMCE
-    tinymce.init({
-        selector: '#konten',
-        height: 500,
-        menubar: true,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        branding: false,
-        promotion: false
-    });
+    // Initialize CKEditor
+    let editorInstance;
+    ClassicEditor
+        .create(document.querySelector('#konten'), {
+            toolbar: {
+                items: [
+                    'heading', '|',
+                    'bold', 'italic', 'link', 'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'blockQuote', 'insertTable', '|',
+                    'undo', 'redo'
+                ]
+            },
+            language: 'id',
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            }
+        })
+        .then(editor => {
+            editorInstance = editor;
+            editor.ui.view.editable.element.style.minHeight = '500px';
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
     // Auto-generate slug from judul
     document.getElementById('judul').addEventListener('input', function() {
@@ -290,7 +300,7 @@
     // Client-side validation
     document.getElementById('beritaForm').addEventListener('submit', function(e) {
         const judul = document.getElementById('judul').value.trim();
-        const konten = tinymce.get('konten').getContent();
+        const konten = editorInstance ? editorInstance.getData() : '';
         
         if (!judul) {
             e.preventDefault();
@@ -299,10 +309,10 @@
             return false;
         }
         
-        if (!konten || konten === '') {
+        if (!konten || konten.trim() === '') {
             e.preventDefault();
             alert('Konten berita wajib diisi!');
-            tinymce.get('konten').focus();
+            editorInstance.focus();
             return false;
         }
     });

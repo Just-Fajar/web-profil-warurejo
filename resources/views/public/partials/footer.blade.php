@@ -72,12 +72,15 @@
                         </svg>
                     </a>
 
-                    {{-- Instagram --}}
+                                        {{-- Instagram --}}
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
-                       class="w-10 h-10 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 text-white rounded-full flex items-center justify-center hover:opacity-90 transition transform hover:scale-110 shadow-md"
-                       aria-label="Instagram">
+                    class="w-10 h-10 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 
+                            text-white rounded-full flex items-center justify-center 
+                            hover:opacity-90 transition transform hover:scale-110 shadow-md">
+                        
+                        <!-- LOGO BARU -->
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            <path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.25a1.25 1.25 0 11-.001 2.501A1.25 1.25 0 0116.5 8.75z"/>
                         </svg>
                     </a>
 
@@ -92,10 +95,12 @@
 
                     {{-- TikTok --}}
                     <a href="https://www.tiktok.com/@desa.warurejo" target="_blank" rel="noopener noreferrer" 
-                       class="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-black transition transform hover:scale-110 shadow-md"
-                       aria-label="TikTok">
+                    class="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center 
+                            hover:bg-black transition transform hover:scale-110 shadow-md">
+                        
+                        <!-- LOGO BARU -->
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12.5 2c.4 2.6 2.2 4.5 4.7 4.7v3.2c-1.6-.1-3-.6-4.3-1.4v6.6a6 6 0 1 1-6-6c.3 0 .7 0 1 .1v3.2a3 3 0 1 0 2 2.8V2h2.6z"/>
+                            <path d="M21 8.5a5.5 5.5 0 01-4-1.7v8.2a6 6 0 11-6-6c.3 0 .7 0 1 .1V12a3 3 0 102 2.8V2h3a5.5 5.5 0 004 1.7v4.8z"/>
                         </svg>
                     </a>
 

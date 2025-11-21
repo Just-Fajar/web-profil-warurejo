@@ -43,6 +43,16 @@ class PotensiDesaFactory extends Factory
     }
 
     /**
+     * Indicate that the potensi is active.
+     */
+    public function active(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => true,
+        ]);
+    }
+
+    /**
      * Indicate that the potensi is inactive.
      */
     public function inactive(): static

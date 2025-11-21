@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Galeri;
+use App\Models\GaleriImage;
 use App\Http\Requests\GaleriRequest;
 use App\Services\ImageUploadService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 class GaleriController extends Controller
 {
     protected $imageUploadService;
@@ -23,7 +25,7 @@ class GaleriController extends Controller
      */
     public function index()
     {
-        $galeri = Galeri::with('admin')->latest()->get(); // Eager load admin to prevent N+1
+        $galeri = Galeri::with(['admin', 'images'])->latest()->get(); // Eager load admin and images to prevent N+1
         return view('admin.galeri.index', compact('galeri'));
     }
 
@@ -41,18 +43,31 @@ class GaleriController extends Controller
     public function store(GaleriRequest $request)
     {
         try {
+            DB::beginTransaction();
+            
             $data = $request->validated();
             $data['admin_id'] = auth('admin')->id();
             
-            // Handle image upload
-            if ($request->hasFile('gambar')) {
-                $data['gambar'] = $this->imageUploadService->upload(
-                    $request->file('gambar'), 
-                    'galeri'
-                );
+            // Remove 'images' from data since it's handled separately
+            unset($data['images']);
+            
+            // Create galeri record
+            $galeri = Galeri::create($data);
+            
+            // Handle multiple images upload
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $index => $image) {
+                    $imagePath = $this->imageUploadService->upload($image, 'galeri');
+                    
+                    GaleriImage::create([
+                        'galeri_id' => $galeri->id,
+                        'image_path' => $imagePath,
+                        'urutan' => $index + 1,
+                    ]);
+                }
             }
             
-            Galeri::create($data);
+            DB::commit();
             
             // Clear cache
             Cache::forget('home.galeri');
@@ -61,55 +76,14 @@ class GaleriController extends Controller
             return redirect()
                 ->route('admin.galeri.index')
                 ->with('success', 'Galeri berhasil ditambahkan!');
+                
         } catch (\Exception $e) {
+            DB::rollBack();
+            
             return redirect()
                 ->back()
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Bulk upload multiple images
-     */
-    protected function bulkUpload(Request $request)
-    {
-        try {
-            $files = $request->file('files');
-            $kategori = $request->input('kategori', 'kegiatan');
-            $tanggal = $request->input('tanggal', now());
-            $is_active = $request->input('is_active', 1);
-            $uploadedCount = 0;
-
-            foreach ($files as $file) {
-                $fileName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                
-                $filePath = $this->imageUploadService->upload($file, 'galeri');
-                
-                Galeri::create([
-                    'admin_id' => auth('admin')->id(),
-                    'judul' => $fileName,
-                    'gambar' => $filePath,
-                    'kategori' => $kategori,
-                    'deskripsi' => '',
-                    'tanggal' => $tanggal,
-                    'is_active' => $is_active,
-                ]);
-                
-                $uploadedCount++;
-            }
-            
-            // Clear cache
-            Cache::forget('home.galeri');
-            Cache::forget('profil_desa');
-            
-            return redirect()
-                ->route('admin.galeri.index')
-                ->with('success', $uploadedCount . ' foto berhasil diunggah!');
-        } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Terjadi kesalahan saat bulk upload: ' . $e->getMessage());
         }
     }
 
