@@ -233,3 +233,404 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* ==========================================
+   NAVIGATION INTERACTIVE STYLES
+   ========================================== */
+
+/* Desktop Menu Link with Underline Animation */
+.nav-link {
+    position: relative;
+    padding-bottom: 4px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: currentColor;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+.nav-link:hover {
+    color: #16a34a; /* green-600 */
+}
+
+/* Active Link Style */
+.nav-link-active::after {
+    width: 100%;
+    background: #16a34a; /* green-600 */
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+    position: absolute;
+    left: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    min-width: 12rem;
+}
+
+.group:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Dropdown Item with Icon */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #374151; /* gray-700 */
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.dropdown-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #0ea5e9; /* primary-500 */
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: linear-gradient(to right, #f0f9ff, #ffffff); /* primary-50 to white */
+    color: #0284c7; /* primary-600 */
+    padding-left: 1.25rem;
+}
+
+.dropdown-item:hover::before {
+    transform: scaleY(1);
+}
+
+.dropdown-item-icon {
+    font-size: 1.125rem;
+    transition: transform 0.2s ease;
+}
+
+.dropdown-item:hover .dropdown-item-icon {
+    transform: scale(1.15);
+}
+
+/* Mobile Menu Item Styles */
+.mobile-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1rem;
+    color: #374151; /* gray-700 */
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+}
+
+.mobile-menu-item:hover {
+    background: linear-gradient(to right, #f0f9ff, #ffffff);
+    color: #0284c7; /* primary-600 */
+    border-left-color: #0ea5e9; /* primary-500 */
+    padding-left: 1.25rem;
+}
+
+.mobile-menu-item:active {
+    transform: scale(0.98);
+}
+
+/* Logo Animation Enhancement */
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+a.group:hover img {
+    animation: logoFloat 0.6s ease-in-out;
+}
+
+/* Mobile Menu Backdrop Blur Enhancement */
+@supports (backdrop-filter: blur(12px)) {
+    .mobile-menu-item {
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+    }
+}
+
+/* Smooth Scroll Behavior for Navigation */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Mobile Menu Scroll Enhancement */
+.mobile-menu-item::-webkit-scrollbar {
+    width: 4px;
+}
+
+.mobile-menu-item::-webkit-scrollbar-track {
+    background: #f3f4f6;
+}
+
+.mobile-menu-item::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 2px;
+}
+
+.mobile-menu-item::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Add subtle animation delay for dropdown items */
+.dropdown-menu .dropdown-item:nth-child(1) {
+    transition-delay: 0ms;
+}
+
+.dropdown-menu .dropdown-item:nth-child(2) {
+    transition-delay: 20ms;
+}
+
+.dropdown-menu .dropdown-item:nth-child(3) {
+    transition-delay: 40ms;
+}
+
+.dropdown-menu .dropdown-item:nth-child(4) {
+    transition-delay: 60ms;
+}
+
+.dropdown-menu .dropdown-item:nth-child(5) {
+    transition-delay: 80ms;
+}
+
+/* ==========================================
+   TRIBUTE CARD STYLES
+   ========================================== */
+
+/* Tribute Card Container */
+.tribute-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    max-width: 100%;
+    will-change: transform, box-shadow;
+}
+
+.tribute-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Tribute Image Wrapper */
+.tribute-image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.tribute-placeholder {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tribute-card:hover .tribute-placeholder {
+    transform: scale(1.02);
+}
+
+/* Hover Overlay Animation */
+.tribute-image-wrapper .group:hover img {
+    transform: scale(1.05);
+}
+
+/* Responsive Max Width */
+@media (min-width: 1024px) {
+    .tribute-card {
+        max-width: 300px;
+    }
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tribute-card:hover .tribute-body > * {
+    animation: fadeInUp 0.4s ease-out;
+}
+
+/* Tribute Header Gradient Enhancement */
+.tribute-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.tribute-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    transform: scale(0);
+    transition: transform 0.6s ease;
+}
+
+.tribute-card:hover .tribute-header::before {
+    transform: scale(1);
+}
+
+/* Achievement Badge Shine Effect */
+@keyframes shine {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.tribute-card:hover .bg-gradient-to-r.from-amber-50 {
+    background-size: 200% 100%;
+    animation: shine 2s ease-in-out;
+}
+
+/* Footer Subtle Fade */
+.tribute-footer {
+    transition: background-color 0.3s ease;
+}
+
+.tribute-card:hover .tribute-footer {
+    background-color: #f9fafb;
+}
+
+/* Icon Pulse Animation */
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.tribute-card:hover svg {
+    animation: iconPulse 1s ease-in-out infinite;
+}
+
+/* ==========================================
+   FOOTER HARMONY STYLES
+   ========================================== */
+
+.site-footer {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: white;
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #fff;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.footer-section:hover .footer-title::after {
+    width: 60px;
+}
+
+.footer-text {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+}
+
+.footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-list li {
+    margin-bottom: 0.75rem;
+    color: rgba(255, 255, 255, 0.85);
+    transition: transform 0.2s ease;
+}
+
+.footer-list li:hover {
+    transform: translateX(4px);
+}
+
+.footer-list a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-list a:hover {
+    color: #4CAF50;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 768px) {
+    .site-footer {
+        padding: 2rem 0 1rem;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
