@@ -21,8 +21,8 @@
             <div class="footer-section">
                 <h4 class="footer-title">Link Cepat</h4>
                 <ul class="footer-list">
-                    <li><a href="{{ route('beranda') }}">Beranda</a></li>
-                    <li><a href="{{ route('profil') }}">Profil</a></li>
+                    <li><a href="{{ route('home') }}">Beranda</a></li>
+                    <li><a href="{{ route('profil.index') }}">Profil</a></li>
                     <li><a href="{{ route('publikasi.index') }}">Publikasi</a></li>
                 </ul>
             </div>
