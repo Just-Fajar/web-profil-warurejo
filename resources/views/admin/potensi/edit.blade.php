@@ -101,20 +101,7 @@
                             @enderror
                         </div>
 
-                        <!-- Keunggulan (Optional) -->
-                        <div>
-                            <label for="keunggulan" class="block text-sm font-medium text-gray-700">Keunggulan <span class="text-xs text-gray-500">(Opsional)</span></label>
-                            <textarea id="keunggulan"
-                                      name="keunggulan"
-                                      rows="4"
-                                      placeholder="Keunggulan atau nilai tambah dari potensi ini"
-                                      class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('keunggulan')  @enderror">{{ old('keunggulan', $potensi->keunggulan) }}</textarea>
-                            @error('keunggulan')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
+                        
                     <!-- Right Column -->
                     <div class="space-y-6">
                         <!-- Gambar -->
@@ -183,19 +170,10 @@
                             @enderror
                         </div>
 
-                        <!-- Kapasitas Produksi (Optional) -->
-                        <div>
-                            <label for="kapasitas_produksi" class="block text-sm font-medium text-gray-700">Kapasitas Produksi <span class="text-xs text-gray-500">(Opsional)</span></label>
-                            <input type="text" id="kapasitas_produksi" name="kapasitas_produksi" value="{{ old('kapasitas_produksi', $potensi->kapasitas_produksi) }}" placeholder="Contoh: 10 ton/tahun" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kapasitas_produksi')  @enderror">
-                            @error('kapasitas_produksi')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-
                         <!-- Kontak (Optional) -->
                         <div>
-                            <label for="kontak" class="block text-sm font-medium text-gray-700">Kontak <span class="text-xs text-gray-500">(Opsional)</span></label>
-                            <input type="text" id="kontak" name="kontak" value="{{ old('kontak', $potensi->kontak) }}" placeholder="Contoh: 08123456789 / email@example.com" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kontak')  @enderror">
+                            <label for="kontak" class="block text-sm font-medium text-gray-700">Email<span class="text-xs text-gray-500">(Opsional)</span></label>
+                            <input type="text" id="kontak" name="kontak" value="{{ old('kontak', $potensi->kontak) }}" placeholder="Contoh: email@gmail.com" class="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('kontak')  @enderror">
                             @error('kontak')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror

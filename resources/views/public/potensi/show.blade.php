@@ -4,15 +4,15 @@
 
 @section('content')
 {{-- Breadcrumb --}}
-<section class="bg-gray-100 py-4">
-    <div class="container mx-auto px-4">
-        <div class="flex items-center text-sm text-gray-600">
-            <a href="{{ route('home') }}" class="hover:text-green-600">Beranda</a>
-            <svg class="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
+<section class="bg-gray-100 py-3 sm:py-4">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center text-xs sm:text-sm text-gray-600">
+            <a href="{{ route('home') }}" class="hover:text-green-600 shrink-0">Beranda</a>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mx-1.5 sm:mx-2 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
-            <a href="{{ route('potensi.index') }}" class="hover:text-green-600">Potensi Desa</a>
-            <svg class="w-4 h-4 mx-2" fill="currentColor" viewBox="0 0 20 20">
+            <a href="{{ route('potensi.index') }}" class="hover:text-green-600 shrink-0">Potensi Desa</a>
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 mx-1.5 sm:mx-2 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
             </svg>
             <span class="text-gray-800 font-semibold truncate">{{ Str::limit($potensi->nama, 50) }}</span>
@@ -21,15 +21,15 @@
 </section>
 
 {{-- Potensi Detail --}}
-<section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-4">
+<section class="py-6 sm:py-8 md:py-12 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl mx-auto">
             
             {{-- Main Content Card --}}
-            <article class="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+            <article class="bg-white rounded-lg shadow-lg overflow-hidden mb-6 sm:mb-8">
                 {{-- Featured Image --}}
                 @if($potensi->gambar_url)
-                    <div class="relative h-96 overflow-hidden">
+                    <div class="relative h-56 sm:h-64 md:h-80 lg:h-96 overflow-hidden">
                         <img 
                             src="{{ $potensi->gambar_url }}" 
                             alt="{{ $potensi->nama }}"
@@ -38,7 +38,7 @@
                         <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
                         
                         {{-- Category Badge --}}
-                        <div class="absolute top-6 right-6">
+                        <div class="absolute top-3 sm:top-4 md:top-6 right-3 sm:right-4 md:right-6">
                             @php
                                 $kategoriColors = [
                                     'pertanian' => 'bg-green-600',
@@ -49,16 +49,16 @@
                                 ];
                                 $bgColor = $kategoriColors[$potensi->kategori ?? 'lainnya'] ?? 'bg-gray-600';
                             @endphp
-                            <span class="px-4 py-2 {{ $bgColor }} text-white text-sm font-bold rounded-full uppercase shadow-lg">
+                            <span class="px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 {{ $bgColor }} text-white text-xs sm:text-sm font-bold rounded-full uppercase shadow-lg">
                                 {{ $potensi->kategori ?? 'Lainnya' }}
                             </span>
                         </div>
                     </div>
                 @endif
 
-                <div class="p-8">
+                <div class="p-4 sm:p-6 md:p-8">
                     {{-- Title --}}
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
                         {{ $potensi->nama }}
                     </h1>
 

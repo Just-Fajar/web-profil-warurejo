@@ -4,11 +4,11 @@
 
 @section('content')
 {{-- Hero Section --}}
-<section class="bg-linear-to-r from-green-600 to-green-800 text-white py-16">
-    <div class="container mx-auto px-4">
-        <div class="max-w-3xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">Potensi Desa</h1>
-            <p class="text-lg text-green-100">
+<section class="bg-linear-to-r from-green-600 to-green-800 text-white py-8 sm:py-12 md:py-16">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto text-center scroll-reveal">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">Potensi Desa</h1>
+            <p class="text-base sm:text-lg text-green-100 px-4">
                 Kekayaan dan Potensi yang Dimiliki Desa Warurejo
             </p>
         </div>
@@ -16,25 +16,26 @@
 </section>
 
 {{-- Potensi Content --}}
-<section class="py-16 bg-gray-50">
-    <div class="container mx-auto px-4">
+<section class="py-8 sm:py-12 md:py-16 bg-gray-50">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             
             {{-- Filter & Search --}}
-            <div class="mb-8 bg-white rounded-lg shadow-md p-6">
-                <form method="GET" action="{{ route('potensi.index') }}" class="flex flex-col md:flex-row gap-4">
+            <div class="mb-6 sm:mb-8 bg-white rounded-lg shadow-md p-4 sm:p-6 scroll-reveal">
+                <form method="GET" action="{{ route('potensi.index') }}" class="flex flex-col gap-3 sm:gap-4">
                     <div class="flex-1">
                         <input 
                             type="text" 
                             name="search" 
                             placeholder="Cari potensi desa..." 
                             value="{{ request('search') }}"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                            class="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-500 focus:border-green-500"
                         >
                     </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                     <select 
                         name="kategori" 
-                        class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        class="px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-500 focus:border-green-500"
                     >
                         <option value="">Semua Kategori</option>
                         <option value="pertanian" {{ request('kategori') == 'pertanian' ? 'selected' : '' }}>Pertanian</option>
@@ -43,25 +44,34 @@
                         <option value="wisata" {{ request('kategori') == 'wisata' ? 'selected' : '' }}>Wisata</option>
                         <option value="lainnya" {{ request('kategori') == 'lainnya' ? 'selected' : '' }}>Lainnya</option>
                     </select>
+                    <select 
+                        name="urutkan" 
+                        class="px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    >
+                        <option value="terbaru" {{ request('urutkan', 'terbaru') === 'terbaru' ? 'selected' : '' }}>Terbaru</option>
+                        <option value="terlama" {{ request('urutkan') === 'terlama' ? 'selected' : '' }}>Terlama</option>
+                        <option value="terpopuler" {{ request('urutkan') === 'terpopuler' ? 'selected' : '' }}>Terpopuler</option>
+                    </select>
                     <button 
                         type="submit" 
-                        class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold"
+                        class="px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition font-semibold text-sm sm:text-base"
                     >
-                        <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                         Cari
                     </button>
+                    </div>
                 </form>
             </div>
 
             {{-- Potensi List --}}
             @if(isset($potensi) && $potensi->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
                     @foreach($potensi as $item)
-                        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group">
+                        <article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition group scroll-reveal-stagger">
                             {{-- Gambar --}}
-                            <div class="relative overflow-hidden h-56">
+                            <div class="relative overflow-hidden h-44 sm:h-48 md:h-56">
                                 <img 
                                     src="{{ $item->gambar ? asset('storage/' . $item->gambar) : asset('images/default-potensi.jpg') }}" 
                                     alt="{{ $item->nama }}"
@@ -70,7 +80,7 @@
                                 >
                                 
                                 {{-- Category Badge --}}
-                                <div class="absolute top-3 right-3">
+                                <div class="absolute top-2 sm:top-3 right-2 sm:right-3">
                                     @php
                                         $kategoriColors = [
                                             'pertanian' => 'bg-green-600',
@@ -83,28 +93,28 @@
                                         ];
                                         $bgColor = $kategoriColors[$item->kategori ?? 'lainnya'] ?? 'bg-gray-600';
                                     @endphp
-                                    <span class="px-3 py-1 {{ $bgColor }} text-white text-xs font-semibold rounded-full uppercase">
+                                    <span class="px-2 sm:px-3 py-1 {{ $bgColor }} text-white text-xs font-semibold rounded-full uppercase">
                                         {{ ucfirst($item->kategori ?? 'Lainnya') }}
                                     </span>
                                 </div>
                             </div>
 
                             {{-- Content --}}
-                            <div class="p-6">
+                            <div class="p-4 sm:p-6">
                                 {{-- Title --}}
-                                <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-green-600 transition line-clamp-2">
+                                <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3 group-hover:text-green-600 transition line-clamp-2">
                                     {{ $item->nama }}
                                 </h3>
 
                                 {{-- Description --}}
-                                <p class="text-gray-600 mb-4 line-clamp-3">
+                                <p class="text-gray-600 mb-3 sm:mb-4 line-clamp-3 text-sm sm:text-base">
                                     {{ $item->deskripsi_singkat ?? Str::limit(strip_tags($item->deskripsi), 120) }}
                                 </p>
 
                                 {{-- Meta Info --}}
                                 @if($item->lokasi)
-                                    <div class="flex items-center text-sm text-gray-500 mb-4">
-                                        <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <div class="flex items-center text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4">
+                                        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                         </svg>
                                         <span>{{ $item->lokasi }}</span>
@@ -114,10 +124,10 @@
                                 {{-- Read More --}}
                                 <a 
                                     href="{{ route('potensi.show', $item->slug) }}" 
-                                    class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold"
+                                    class="inline-flex items-center text-green-600 hover:text-green-700 font-semibold text-sm sm:text-base"
                                 >
                                     Lihat Detail
-                                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-2 group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                     </svg>
                                 </a>
@@ -128,15 +138,15 @@
 
                 {{-- Pagination --}}
                 @if($potensi->hasPages())
-                    <div class="mt-12">
+                    <div class="mt-8 sm:mt-10 md:mt-12">
                         {{ $potensi->appends(request()->query())->links() }}
                     </div>
                 @endif
             @else
                 {{-- Empty State --}}
-                <div class="bg-white rounded-lg shadow-md p-12 text-center">
-                    <div class="inline-block p-6 bg-gray-100 rounded-full mb-6">
-                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="bg-white rounded-lg shadow-md p-6 sm:p-8 md:p-12 text-center">
+                    <div class="inline-block p-4 sm:p-6 bg-gray-100 rounded-full mb-4 sm:mb-6">
+                        <svg class="w-12 h-12 sm:w-16 sm:h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
                         </svg>
                     </div>
@@ -183,4 +193,53 @@
         </div>
     </div>
 </section>
+
+<style>
+/* Scroll-triggered animations */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal-stagger {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-reveal-stagger.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
+<script>
+// Scroll-triggered animation observer
+document.addEventListener('DOMContentLoaded', function() {
+    const observerOptions = {
+        root: null,
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements with scroll-reveal classes
+    document.querySelectorAll('.scroll-reveal, .scroll-reveal-stagger').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
 @endsection

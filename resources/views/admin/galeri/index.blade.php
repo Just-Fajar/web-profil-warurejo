@@ -242,16 +242,29 @@ document.addEventListener('DOMContentLoaded', function() {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const currentForm = this;
+            const galeriCard = currentForm.closest('.galeri-item');
+            const galeriTitle = galeriCard ? galeriCard.dataset.judul : 'galeri ini';
 
             Swal.fire({
                 title: 'Hapus Galeri?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
+                html: `Anda akan menghapus galeri:<br><strong class="text-red-600">${galeriTitle}</strong><br><br>Data yang dihapus tidak dapat dikembalikan!`,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Hapus!',
-                cancelButtonText: 'Batal'
+                confirmButtonColor: '#EF4444',
+                cancelButtonColor: '#6B7280',
+                confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus!',
+                cancelButtonText: 'Batal',
+                showClass: {
+                    popup: 'animate__animated animate__fadeInDown animate__faster'
+                },
+                hideClass: {
+                    popup: 'animate__animated animate__fadeOutUp animate__faster'
+                },
+                customClass: {
+                    popup: 'rounded-xl',
+                    confirmButton: 'rounded-lg px-4 py-2',
+                    cancelButton: 'rounded-lg px-4 py-2'
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     currentForm.submit();

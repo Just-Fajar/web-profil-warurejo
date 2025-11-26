@@ -25,7 +25,7 @@ class PotensiController extends Controller
      */
     public function index()
     {
-        $potensi = PotensiDesa::latest()->get();
+        $potensi = PotensiDesa::orderBy('created_at', 'desc')->get();
         return view('admin.potensi.index', compact('potensi'));
     }
 

@@ -1,4 +1,4 @@
-<footer class="bg-gray-800 text-white pt-12 pb-6">
+<footer class="bg-gray-800 text-white pt-12 pb-6 scroll-reveal-footer">
     <div class="container mx-auto px-6">
         <div class="grid grid-cols-1 md:grid-cols-5 items-start gap-8 mb-8">
 
@@ -32,7 +32,7 @@
                             <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
                             <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
                         </svg>
-                        <a href="mailto:galaxydigitalindonesia@gmail.com" class="hover:text-white transition">galaxydigitalindonesia@gmail.com</a>
+                        <a href="desawarurejo@gmail.com" class="hover:text-white transition">desawarurejo@gmail.com</a>
                     </li>
                 </ul>
             </div>
@@ -73,7 +73,7 @@
                     </a>
 
                                         {{-- Instagram --}}
-                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
+                    <a href="https://www.instagram.com/desawarurejo?igsh=Mjl6NHY0MXhvZXMw" target="_blank" rel="noopener noreferrer" 
                     class="w-10 h-10 bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 
                             text-white rounded-full flex items-center justify-center 
                             hover:opacity-90 transition transform hover:scale-110 shadow-md">
@@ -85,7 +85,7 @@
                     </a>
 
                     {{-- YouTube --}}
-                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
+                    <a href="https://youtube.com/@desawarurejo6792?si=H6HWG4FCIaxvzuXB" target="_blank" rel="noopener noreferrer" 
                        class="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center hover:bg-red-700 transition transform hover:scale-110 shadow-md"
                        aria-label="YouTube">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

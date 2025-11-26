@@ -163,9 +163,17 @@
             <!-- Avatar -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
 
-                <div class="mx-auto mb-4 flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-5xl font-bold shadow-md">
-                    {{ strtoupper(substr($admin->name, 0, 1)) }}
-                </div>
+                @if($admin->avatar)
+                    <div class="mx-auto mb-4 w-32 h-32">
+                        <img src="{{ asset('storage/' . $admin->avatar) }}" 
+                             alt="{{ $admin->name }}" 
+                             class="w-full h-full rounded-full object-cover shadow-md border-4 border-gray-100">
+                    </div>
+                @else
+                    <div class="mx-auto mb-4 flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-indigo-500 to-blue-600 text-white text-5xl font-bold shadow-md">
+                        {{ strtoupper(substr($admin->name, 0, 1)) }}
+                    </div>
+                @endif
 
                 <h3 class="text-lg font-semibold">{{ $admin->name }}</h3>
                 <p class="text-gray-500">Administrator</p>

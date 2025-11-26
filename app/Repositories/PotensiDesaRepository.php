@@ -18,7 +18,7 @@ class PotensiDesaRepository extends BaseRepository
     {
         return $this->model
             ->active()
-            ->ordered()
+            ->latest()
             ->paginate(12);
     }
 
@@ -30,7 +30,7 @@ class PotensiDesaRepository extends BaseRepository
         return $this->model
             ->active()
             ->byKategori($kategori)
-            ->ordered()
+            ->latest()
             ->paginate(12);
     }
 
@@ -122,5 +122,44 @@ class PotensiDesaRepository extends BaseRepository
             })
             ->ordered()
             ->get();
+    }
+    
+    /**
+     * Search with filters (search, kategori, sorting)
+     */
+    public function searchWithFilters(array $filters)
+    {
+        $query = $this->model->active();
+        
+        // Search by keyword
+        if (!empty($filters['search'])) {
+            $keyword = $filters['search'];
+            $query->where(function($q) use ($keyword) {
+                $q->where('nama', 'like', "%{$keyword}%")
+                  ->orWhere('deskripsi', 'like', "%{$keyword}%");
+            });
+        }
+        
+        // Filter by kategori
+        if (!empty($filters['kategori'])) {
+            $query->byKategori($filters['kategori']);
+        }
+        
+        // Sort by
+        $sortBy = $filters['urutkan'] ?? 'terbaru';
+        switch ($sortBy) {
+            case 'terpopuler':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'terlama':
+                $query->oldest();
+                break;
+            case 'terbaru':
+            default:
+                $query->latest();
+                break;
+        }
+        
+        return $query->paginate(12);
     }
 }

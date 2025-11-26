@@ -21,27 +21,37 @@ class GaleriController extends Controller
     {
         $search = $request->get('search');
         $kategori = $request->get('kategori');
+        $urutkan = $request->get('urutkan', 'terbaru'); // terbaru, terlama, terpopuler
         
         // Build query
-        if ($search || $kategori) {
-            $query = Galeri::with(['admin', 'images'])->published()->latest();
-            
-            if ($search) {
-                $query->where(function($q) use ($search) {
-                    $q->where('judul', 'like', "%{$search}%")
-                      ->orWhere('deskripsi', 'like', "%{$search}%");
-                });
-            }
-            
-            if ($kategori) {
-                $query->byKategori($kategori);
-            }
-            
-            $galeris = $query->paginate(24)->appends($request->query());
-        } else {
-            // Use published scope instead of active
-            $galeris = Galeri::with(['admin', 'images'])->published()->latest()->paginate(24);
+        $query = Galeri::with(['admin', 'images'])->published();
+        
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
         }
+        
+        if ($kategori) {
+            $query->byKategori($kategori);
+        }
+        
+        // Apply sorting
+        switch ($urutkan) {
+            case 'terpopuler':
+                $query->orderBy('views', 'desc');
+                break;
+            case 'terlama':
+                $query->oldest();
+                break;
+            case 'terbaru':
+            default:
+                $query->latest();
+                break;
+        }
+        
+        $galeris = $query->paginate(24)->appends($request->query());
         
         // SEO Data
         $title = 'Galeri Dokumentasi';
