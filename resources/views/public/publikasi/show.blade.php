@@ -87,7 +87,7 @@
             <!-- Sidebar -->
             <div class="lg:w-1/4">
                 <!-- Related Documents -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6 sticky top-6">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h3 class="text-lg font-bold text-gray-900 mb-4">Dokumen Terkait</h3>
                     
                     @if($relatedPublikasi->count() > 0)

@@ -165,18 +165,12 @@
                                    title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.publikasi.destroy', $item->id) }}" 
-                                      method="POST" 
-                                      class="inline delete-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" 
-                                            class="text-red-600 hover:text-red-800 transition"
-                                            title="Hapus"
-                                            onclick="return confirm('Yakin ingin menghapus publikasi ini?')">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                <button type="button"
+                                        onclick="deletePublikasi({{ $item->id }}, '{{ $item->judul }}')"
+                                        class="text-red-600 hover:text-red-800 transition"
+                                        title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -204,6 +198,14 @@
     @endif
 </div>
 
+<!-- Delete Form (Hidden) -->
+<form id="deleteForm" method="POST" class="hidden">
+    @csrf
+    @method('DELETE')
+</form>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 // Select All Checkbox
 document.getElementById('select-all').addEventListener('change', function() {
@@ -235,34 +237,116 @@ function bulkDelete() {
     const ids = Array.from(checkedBoxes).map(cb => cb.value);
     
     if (ids.length === 0) {
-        alert('Pilih publikasi yang ingin dihapus');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Tidak Ada Pilihan',
+            text: 'Silakan pilih publikasi yang ingin dihapus terlebih dahulu',
+            confirmButtonColor: '#3B82F6'
+        });
         return;
     }
     
-    if (!confirm(`Yakin ingin menghapus ${ids.length} publikasi?`)) {
-        return;
-    }
-    
-    fetch('{{ route("admin.publikasi.bulk-delete") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    Swal.fire({
+        title: 'Hapus Publikasi?',
+        html: `Anda akan menghapus <strong>${ids.length} publikasi</strong> yang dipilih.<br>Data yang dihapus tidak dapat dikembalikan!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus Semua!',
+        cancelButtonText: 'Batal',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
         },
-        body: JSON.stringify({ ids: ids })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            location.reload();
-        } else {
-            alert(data.message || 'Terjadi kesalahan');
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp animate__faster'
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat menghapus');
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Menghapus...',
+                html: 'Mohon tunggu sebentar',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            fetch('{{ route("admin.publikasi.bulk-delete") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil Dihapus!',
+                        text: `${ids.length} publikasi telah dihapus`,
+                        confirmButtonColor: '#10B981',
+                        showClass: {
+                            popup: 'animate__animated animate__bounceIn'
+                        }
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal!',
+                        text: data.message || 'Terjadi kesalahan saat menghapus',
+                        confirmButtonColor: '#EF4444'
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan saat menghapus',
+                    confirmButtonColor: '#EF4444'
+                });
+            });
+        }
+    });
+}
+
+// Single Delete
+function deletePublikasi(id, judul) {
+    Swal.fire({
+        title: 'Hapus Publikasi?',
+        html: `Anda akan menghapus publikasi:<br><strong class="text-red-600">${judul}</strong><br><br>Data yang dihapus tidak dapat dikembalikan!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp animate__faster'
+        },
+        customClass: {
+            popup: 'rounded-xl',
+            confirmButton: 'rounded-lg px-4 py-2',
+            cancelButton: 'rounded-lg px-4 py-2'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.getElementById('deleteForm');
+            form.action = `/admin/publikasi/${id}`;
+            form.submit();
+        }
     });
 }
 </script>
+@endpush
 @endsection

@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ProfileController extends Controller
 {
@@ -109,6 +112,92 @@ class ProfileController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'Terjadi kesalahan saat memperbarui password: ' . $e->getMessage());
+        }
+    }
+
+    public function updatePhoto(Request $request)
+    {
+        try {
+            /** @var \App\Models\Admin $admin */
+            $admin = auth()->guard('admin')->user();
+
+            $validated = $request->validate([
+                'photo' => 'required|image|mimes:jpeg,jpg,png|max:2048', // 2MB max
+            ], [
+                'photo.required' => 'Foto profil wajib diupload',
+                'photo.image' => 'File harus berupa gambar',
+                'photo.mimes' => 'Format foto harus jpeg, jpg, atau png',
+                'photo.max' => 'Ukuran foto maksimal 2MB',
+            ]);
+
+            // Delete old photo if exists
+            if ($admin->avatar && Storage::disk('public')->exists($admin->avatar)) {
+                Storage::disk('public')->delete($admin->avatar);
+            }
+
+            // Upload and process new photo
+            $file = $request->file('photo');
+            $filename = 'admin_' . $admin->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            
+            // Create image manager with GD driver
+            $manager = new ImageManager(new Driver());
+            
+            // Read and resize image to 400x400
+            $image = $manager->read($file);
+            $image->cover(400, 400);
+            
+            // Save to storage
+            $path = 'admins/photos/' . $filename;
+            Storage::disk('public')->put($path, (string) $image->encode());
+
+            // Update admin photo path
+            $admin->update(['avatar' => $path]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profil berhasil diupdate!',
+                'photo_url' => asset('storage/' . $path)
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating admin photo', [
+                'admin_id' => auth()->guard('admin')->id(),
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengupload foto: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deletePhoto()
+    {
+        try {
+            /** @var \App\Models\Admin $admin */
+            $admin = auth()->guard('admin')->user();
+
+            if ($admin->avatar && Storage::disk('public')->exists($admin->avatar)) {
+                Storage::disk('public')->delete($admin->avatar);
+            }
+
+            $admin->update(['avatar' => null]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Foto profil berhasil dihapus!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error deleting admin photo', [
+                'admin_id' => auth()->guard('admin')->id(),
+                'exception' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus foto: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

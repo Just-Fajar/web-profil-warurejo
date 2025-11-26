@@ -341,15 +341,30 @@
 
         Swal.fire({
             title: 'Hapus Potensi Terpilih?',
-            text: `Anda akan menghapus ${ids.length} potensi. Tindakan ini tidak dapat dibatalkan!`,
+            html: `Anda akan menghapus <strong>${ids.length} potensi</strong> yang dipilih.<br>Data yang dihapus tidak dapat dikembalikan!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
             cancelButtonColor: '#6B7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
+            confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus Semua!',
+            cancelButtonText: 'Batal',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp animate__faster'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Menghapus...',
+                    html: 'Mohon tunggu sebentar',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
                 bulkDelete(ids);
             }
         });
@@ -369,10 +384,12 @@
             if (data.success) {
                 Swal.fire({
                     icon: 'success',
-                    title: 'Berhasil!',
-                    text: data.message,
-                    timer: 2000,
-                    showConfirmButton: false
+                    title: 'Berhasil Dihapus!',
+                    text: `${ids.length} potensi telah dihapus`,
+                    confirmButtonColor: '#10B981',
+                    showClass: {
+                        popup: 'animate__animated animate__bounceIn'
+                    }
                 }).then(() => {
                     window.location.reload();
                 });
@@ -380,7 +397,8 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal!',
-                    text: data.message
+                    text: data.message,
+                    confirmButtonColor: '#EF4444'
                 });
             }
         })
@@ -388,7 +406,8 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Error!',
-                text: 'Terjadi kesalahan saat menghapus potensi.'
+                text: 'Terjadi kesalahan saat menghapus potensi.',
+                confirmButtonColor: '#EF4444'
             });
         });
     }
@@ -397,13 +416,24 @@
     function deletePotensi(id, nama) {
         Swal.fire({
             title: 'Hapus Potensi?',
-            html: `Anda akan menghapus potensi:<br><strong>${nama}</strong>`,
+            html: `Anda akan menghapus potensi:<br><strong class="text-red-600">${nama}</strong><br><br>Data yang dihapus tidak dapat dikembalikan!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#EF4444',
             cancelButtonColor: '#6B7280',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
+            confirmButtonText: '<i class="fas fa-trash mr-2"></i>Ya, Hapus!',
+            cancelButtonText: 'Batal',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown animate__faster'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp animate__faster'
+            },
+            customClass: {
+                popup: 'rounded-xl',
+                confirmButton: 'rounded-lg px-4 py-2',
+                cancelButton: 'rounded-lg px-4 py-2'
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 const form = document.getElementById('deleteForm');

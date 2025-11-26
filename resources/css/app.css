@@ -20,6 +20,30 @@
         font-family: system-ui, -apple-system, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        /* Subtle geometric pattern background */
+        background-color: #f8fafc;
+        background-image: 
+            radial-gradient(circle at 20% 50%, rgba(14, 165, 233, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.03) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(59, 130, 246, 0.02) 0%, transparent 50%);
+        background-attachment: fixed;
+        background-size: cover;
+        position: relative;
+    }
+    
+    /* Subtle dotted pattern overlay */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(circle, rgba(0, 0, 0, 0.015) 1px, transparent 1px);
+        background-size: 24px 24px;
+        pointer-events: none;
+        z-index: 0;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -542,95 +566,4 @@ html {
 
 .tribute-card:hover svg {
     animation: iconPulse 1s ease-in-out infinite;
-}
-
-/* ==========================================
-   FOOTER HARMONY STYLES
-   ========================================== */
-
-.site-footer {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    color: white;
-    padding: 3rem 0 1.5rem;
-    margin-top: 4rem;
-}
-
-.footer-content {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.footer-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #fff;
-    position: relative;
-    padding-bottom: 0.5rem;
-}
-
-.footer-title::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 40px;
-    height: 2px;
-    background: #4CAF50;
-    transition: width 0.3s ease;
-}
-
-.footer-section:hover .footer-title::after {
-    width: 60px;
-}
-
-.footer-text {
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.6;
-}
-
-.footer-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-list li {
-    margin-bottom: 0.75rem;
-    color: rgba(255, 255, 255, 0.85);
-    transition: transform 0.2s ease;
-}
-
-.footer-list li:hover {
-    transform: translateX(4px);
-}
-
-.footer-list a {
-    color: rgba(255, 255, 255, 0.85);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-list a:hover {
-    color: #4CAF50;
-}
-
-.footer-bottom {
-    text-align: center;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.7);
-}
-
-@media (max-width: 768px) {
-    .site-footer {
-        padding: 2rem 0 1rem;
-    }
-    
-    .footer-content {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
 }

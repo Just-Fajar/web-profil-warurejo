@@ -9,6 +9,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
+    <!-- Animate.css for SweetAlert2 animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
     <!-- Alpine.js dari CDN (dimuat dulu sebelum vite) -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
@@ -68,12 +71,6 @@
                         <i class="fas fa-building w-5 mr-3"></i>
                         <span>Profil Desa</span>
                     </a>
-
-                    <a href="{{ route('admin.settings.index') }}" 
-                       class="flex items-center px-6 py-3 text-gray-700 hover:bg-primary-50 hover:text-primary-600 transition-colors {{ request()->routeIs('admin.settings.*') ? 'bg-primary-50 text-primary-600 border-r-4 border-primary-600' : '' }}">
-                        <i class="fas fa-cog w-5 mr-3"></i>
-                        <span>Pengaturan</span>
-                    </a>
                 </nav>
 
                 <!-- User Info & Logout -->
@@ -123,9 +120,15 @@
                         <div class="relative">
                             <button @click="dropdownOpen = !dropdownOpen" 
                                     class="flex items-center space-x-2 text-gray-700 hover:text-primary-600 focus:outline-none">
-                                <div class="w-8 h-8 rounded-full bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
-                                    {{ substr(auth()->guard('admin')->user()->name, 0, 1) }}
-                                </div>
+                                @if(auth()->guard('admin')->user()->avatar)
+                                    <img src="{{ asset('storage/' . auth()->guard('admin')->user()->avatar) }}" 
+                                         alt="{{ auth()->guard('admin')->user()->name }}" 
+                                         class="w-8 h-8 rounded-full object-cover shadow-md border border-gray-200">
+                                @else
+                                    <div class="w-8 h-8 rounded-full bg-linear-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                        {{ substr(auth()->guard('admin')->user()->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <span class="text-sm font-medium">{{ auth()->guard('admin')->user()->name }}</span>
                                 <i class="fas fa-chevron-down text-xs"></i>
                             </button>
@@ -141,13 +144,9 @@
                                  x-transition:leave-end="transform opacity-0 scale-95"
                                  class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-1 z-50 border border-gray-200
                                  style="display: none;">
-                                <a href="{{ route('admin.profile.show') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
-                                    <i class="fas fa-user-circle w-5 mr-3"></i>
-                                    Profile
-                                </a>
-                                <a href="{{ route('admin.settings.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100
-                                    <i class="fas fa-cog w-5 mr-3"></i>
-                                    Settings
+                                <a href="{{ route('admin.profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user-edit w-5 mr-3"></i>
+                                    Edit Profil
                                 </a>
                                 <div class="border-t border-gray-200 my-1"></div>
                                 <form action="{{ route('admin.logout') }}" method="POST">
@@ -183,6 +182,10 @@
             </main>
         </div>
     </div>
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     @stack('scripts')
 </body>
 </html>

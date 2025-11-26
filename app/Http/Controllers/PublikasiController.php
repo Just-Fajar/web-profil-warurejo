@@ -14,6 +14,7 @@ class PublikasiController extends Controller
     {
         $kategori = $request->get('kategori', 'APBDes');
         $tahun = $request->get('tahun');
+        $urutkan = $request->get('urutkan', 'terbaru'); // terbaru, terlama, terpopuler
 
         // Get all available years
         $availableYears = Publikasi::published()
@@ -25,13 +26,27 @@ class PublikasiController extends Controller
             ->values();
 
         // Query publikasi
-        $publikasi = Publikasi::published()
+        $query = Publikasi::published()
             ->byKategori($kategori)
             ->when($tahun, function ($query, $tahun) {
                 return $query->byTahun($tahun);
-            })
-            ->latest()
-            ->paginate(10);
+            });
+        
+        // Apply sorting
+        switch ($urutkan) {
+            case 'terpopuler':
+                $query->orderBy('downloads', 'desc');
+                break;
+            case 'terlama':
+                $query->oldest();
+                break;
+            case 'terbaru':
+            default:
+                $query->latest();
+                break;
+        }
+        
+        $publikasi = $query->paginate(10);
 
         // Get sidebar publikasi (other categories)
         $sidebarPublikasi = Publikasi::published()

@@ -123,9 +123,11 @@
                     <div class="mt-8 pt-6 border-t border-gray-200 text-center">
                         <p class="text-sm text-gray-500">
                             Butuh bantuan? 
-                            <a href="mailto:admin@warurejo.desa.id" class="text-green-600 hover:text-green-700 font-semibold hover:underline">
-                                Hubungi Kami
-                            </a>
+                            <a href="https://wa.me/6283114796959" 
+   class="text-green-600 hover:text-green-700 font-semibold hover:underline">
+    Hubungi Kami
+</a>
+
                         </p>
                     </div>
                 </div>

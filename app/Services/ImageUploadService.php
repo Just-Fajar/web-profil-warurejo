@@ -25,9 +25,10 @@ class ImageUploadService
      * @param string $folder
      * @param int|null $maxWidth
      * @param int|null $maxHeight
+     * @param int $quality Quality for JPEG/WebP (0-100), default 85
      * @return string|null
      */
-    public function upload($image, $folder = 'uploads', $maxWidth = 1200, $maxHeight = null)
+    public function upload($image, $folder = 'uploads', $maxWidth = 1200, $maxHeight = null, $quality = 85)
     {
         if (!$image || !$image->isValid()) {
             return null;
@@ -43,29 +44,48 @@ class ImageUploadService
             // Read and process image
             $imageResource = $this->manager->read($image->getRealPath());
             
-            // Resize if needed
-            if ($maxWidth) {
-                $imageResource->scale(width: $maxWidth);
+            // Get original dimensions for aspect ratio calculation
+            $originalWidth = $imageResource->width();
+            $originalHeight = $imageResource->height();
+            
+            // Resize if needed (maintain aspect ratio)
+            if ($maxWidth && $originalWidth > $maxWidth) {
+                if ($maxHeight) {
+                    // Scale to fit within both dimensions
+                    $imageResource->scale(width: $maxWidth, height: $maxHeight);
+                } else {
+                    // Scale width only, height auto
+                    $imageResource->scale(width: $maxWidth);
+                }
             }
             
-            // Encode with quality
+            // Encode with quality optimization
             $extension = strtolower($image->getClientOriginalExtension());
 
-switch ($extension) {
-    case 'png':
-        $encoded = $imageResource->toPng();
-        break;
-    case 'webp':
-        $encoded = $imageResource->toWebp(quality: 85);
-        break;
-    default:
-        $encoded = $imageResource->toJpeg(quality: 85);
-        break;
-}
-
+            switch ($extension) {
+                case 'png':
+                    // PNG: use optimization level (0-9)
+                    $encoded = $imageResource->toPng();
+                    break;
+                case 'webp':
+                    // WebP: excellent compression with good quality
+                    $encoded = $imageResource->toWebp(quality: $quality);
+                    break;
+                case 'jpg':
+                case 'jpeg':
+                    // JPEG: standard compression
+                    $encoded = $imageResource->toJpeg(quality: $quality);
+                    break;
+                default:
+                    // Default to JPEG for unknown formats
+                    $encoded = $imageResource->toJpeg(quality: $quality);
+                    break;
+            }
             
             // Save to storage
             Storage::disk('public')->put($path, (string) $encoded);
+            
+            Log::info("Image uploaded successfully: {$path} (Original: {$originalWidth}x{$originalHeight}, Quality: {$quality})");
             
             return $path;
             
@@ -180,9 +200,10 @@ switch ($extension) {
      * @param string $folder
      * @param int $width
      * @param int $height
+     * @param int $quality
      * @return string|null
      */
-    public function createThumbnail($image, $folder = 'thumbnails', $width = 300, $height = 300)
+    public function createThumbnail($image, $folder = 'thumbnails', $width = 300, $height = 300, $quality = 80)
     {
         if (!$image || !$image->isValid()) {
             return null;
@@ -196,9 +217,13 @@ switch ($extension) {
             
             // Create thumbnail with cover (crop to fit)
             $imageResource->cover($width, $height);
-            $encoded = $imageResource->toJpeg(quality: 80);
+            
+            // Save as WebP for better compression
+            $encoded = $imageResource->toWebp(quality: $quality);
             
             Storage::disk('public')->put($path, (string) $encoded);
+            
+            Log::info("Thumbnail created successfully: {$path}");
             
             return $path;
             
@@ -215,9 +240,10 @@ switch ($extension) {
      * @param string $folder
      * @param int $width
      * @param int $height
+     * @param int $quality
      * @return string|null
      */
-    public function createThumbnailFromPath($imagePath, $folder = 'thumbnails', $width = 300, $height = 300)
+    public function createThumbnailFromPath($imagePath, $folder = 'thumbnails', $width = 300, $height = 300, $quality = 80)
     {
         try {
             // Try to get file content from Storage facade (works with fake storage in tests)
@@ -232,20 +258,20 @@ switch ($extension) {
             // Load image from content
             $imageResource = $this->manager->read($fileContent);
             
-            // Generate unique thumbnail filename
-            $pathInfo = pathinfo($imagePath);
-            $extension = $pathInfo['extension'] ?? 'jpg';
+            // Generate unique thumbnail filename (use WebP for better compression)
             $timestamp = time();
             $random = Str::random(8);
-            $filename = "thumb_{$timestamp}_{$random}.{$extension}";
+            $filename = "thumb_{$timestamp}_{$random}.webp";
             $thumbnailPath = $folder . '/' . $filename;
             
             // Create thumbnail with cover
             $imageResource->cover($width, $height);
-            $encoded = $imageResource->toJpeg(quality: 80);
+            $encoded = $imageResource->toWebp(quality: $quality);
             
             // Save thumbnail
             Storage::disk('public')->put($thumbnailPath, (string) $encoded);
+            
+            Log::info("Thumbnail created from path: {$thumbnailPath}");
             
             return $thumbnailPath;
             

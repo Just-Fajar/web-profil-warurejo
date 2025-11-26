@@ -59,6 +59,19 @@ class HomeController extends Controller
             return $this->galeriRepository->getLatest(6);
         });
 
+        // Total counts for statistics section
+        $totalBerita = Cache::remember('home.total_berita', 3600, function () {
+            return \App\Models\Berita::published()->count();
+        });
+
+        $totalPotensi = Cache::remember('home.total_potensi', 21600, function () {
+            return \App\Models\PotensiDesa::active()->count();
+        });
+
+        $totalGaleri = Cache::remember('home.total_galeri', 10800, function () {
+            return \App\Models\Galeri::published()->count();
+        });
+
         // Don't cache visitor stats (needs to be real-time)
         $totalVisitors = $this->visitorService->getTotalVisitors();
 
@@ -81,6 +94,9 @@ class HomeController extends Controller
             'latest_berita',
             'potensi',
             'galeri',
+            'totalBerita',
+            'totalPotensi',
+            'totalGaleri',
             'totalVisitors',
             'seoData',
             'structuredData'

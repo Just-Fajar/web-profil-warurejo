@@ -16,7 +16,6 @@ use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\ProfilDesaController;
 use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
-use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 use App\Http\Controllers\SitemapController;
 
 // SEO Routes
@@ -78,6 +77,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/visitor-chart', [DashboardController::class, 'getVisitorChartByYear'])->name('dashboard.visitor-chart');
+        Route::get('/dashboard/content-chart', [DashboardController::class, 'getContentChartByYear'])->name('dashboard.content-chart');
         
         // Berita Management
         Route::post('berita/bulk-delete', [AdminBeritaController::class, 'bulkDelete'])->name('berita.bulk-delete');
@@ -106,13 +107,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [AdminProfileController::class, 'show'])->name('show');
             Route::get('/edit', [AdminProfileController::class, 'edit'])->name('edit');
             Route::put('/update', [AdminProfileController::class, 'update'])->name('update');
+            Route::post('/photo', [AdminProfileController::class, 'updatePhoto'])->name('update-photo');
+            Route::delete('/photo', [AdminProfileController::class, 'deletePhoto'])->name('delete-photo');
             Route::put('/password', [AdminProfileController::class, 'updatePassword'])->name('update-password');
-        });
-        
-        // Admin Settings
-        Route::prefix('settings')->name('settings.')->group(function () {
-            Route::get('/', [AdminSettingsController::class, 'index'])->name('index');
-            Route::put('/update', [AdminSettingsController::class, 'update'])->name('update');
         });
     });
 });

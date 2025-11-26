@@ -36,8 +36,11 @@ class DashboardController extends Controller
         $pertumbuhanHariIni = $this->visitorService->getVisitorGrowth();
         $pageViewsHariIni = $this->visitorService->getTodayPageViews();
         
-        // Chart Data untuk Visitor Statistics (30 hari)
-        $visitorChartData = $this->visitorService->getChartData(30);
+        // Chart Data untuk Visitor Statistics
+        $currentYear = Carbon::now()->year;
+        $visitorChartData = $this->visitorService->getYearlyChartData($currentYear);
+        $availableYears = $this->visitorService->getAvailableYears();
+        $allTimeStats = $this->visitorService->getAllTimeStats();
         
         // Recent Activities
         $recentBerita = Berita::with('admin')
@@ -57,8 +60,10 @@ class DashboardController extends Controller
             ->take(5)
             ->get();
         
-        // Monthly Stats untuk Chart (content)
-        $monthlyStats = $this->getMonthlyStats();
+        // Monthly Stats untuk Chart (content) - yearly data
+        $currentContentYear = Carbon::now()->year;
+        $monthlyStats = $this->visitorService->getYearlyContentChartData($currentContentYear);
+        $contentAvailableYears = $this->visitorService->getContentAvailableYears();
         
         // Quick Stats
         $beritaPublished = Berita::where('status', 'published')->count();
@@ -76,14 +81,47 @@ class DashboardController extends Controller
             'pertumbuhanHariIni',
             'pageViewsHariIni',
             'visitorChartData',
+            'availableYears',
+            'currentYear',
+            'allTimeStats',
             'recentBerita',
             'recentPotensi',
             'recentGaleri',
             'recentPublikasi',
             'monthlyStats',
+            'contentAvailableYears',
+            'currentContentYear',
             'beritaPublished',
             'beritaDraft'
         ));
+    }
+    
+    /**
+     * AJAX: Get visitor chart data by year
+     */
+    public function getVisitorChartByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->year);
+        $chartData = $this->visitorService->getYearlyChartData($year);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $chartData
+        ]);
+    }
+    
+    /**
+     * AJAX: Get content chart data by year
+     */
+    public function getContentChartByYear(Request $request)
+    {
+        $year = $request->input('year', Carbon::now()->year);
+        $chartData = $this->visitorService->getYearlyContentChartData($year);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $chartData
+        ]);
     }
     
     /**

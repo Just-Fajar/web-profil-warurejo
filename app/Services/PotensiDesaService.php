@@ -138,6 +138,14 @@ class PotensiDesaService
     {
         return $this->potensiRepository->search($keyword);
     }
+    
+    /**
+     * Search with filters (search, kategori, sorting)
+     */
+    public function searchWithFilters(array $filters)
+    {
+        return $this->potensiRepository->searchWithFilters($filters);
+    }
 
     protected function uploadImage($image)
     {

@@ -144,8 +144,74 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Visitor Chart -->
         <div class="lg:col-span-2 bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Statistik Pengunjung (30 Hari)</h2>
-            <canvas id="visitorChart"></canvas>
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800">Statistik Pengunjung</h2>
+                    <p class="text-sm text-gray-500 mt-1">Data sepanjang tahun <span id="visitorYearLabel">{{ $currentYear }}</span></p>
+                </div>
+                
+                <!-- Year Picker with Navigation -->
+                <div class="flex items-center gap-2">
+                    <button type="button" id="visitorYearPrev" class="p-2 hover:bg-gray-100 rounded transition" title="Tahun Sebelumnya">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                    </button>
+                    <input type="number" id="yearFilter" value="{{ $currentYear }}" min="2000" max="2100"
+                           class="w-24 text-center form-input rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm font-semibold">
+                    <button type="button" id="visitorYearNext" class="p-2 hover:bg-gray-100 rounded transition" title="Tahun Berikutnya">
+                        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                    <button type="button" id="visitorYearReset" class="ml-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition" title="Kembali ke Tahun Ini">
+                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Tahun Ini
+                    </button>
+                </div>
+            </div>
+
+            <!-- All Time Stats Summary -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 p-4 bg-linear-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+                <div class="text-center">
+                    <p class="text-xs text-gray-600 mb-1">Total Unique Visitors</p>
+                    <p class="text-lg font-bold text-blue-600">{{ number_format($allTimeStats['total_unique_visitors']) }}</p>
+                    <p class="text-xs text-gray-500">All Time</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-600 mb-1">Total Page Views</p>
+                    <p class="text-lg font-bold text-indigo-600">{{ number_format($allTimeStats['total_page_views']) }}</p>
+                    <p class="text-xs text-gray-500">All Time</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-600 mb-1">Hari Aktif</p>
+                    <p class="text-lg font-bold text-purple-600">{{ number_format($allTimeStats['days_active']) }}</p>
+                    <p class="text-xs text-gray-500">Hari</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-600 mb-1">Sejak</p>
+                    <p class="text-sm font-bold text-gray-700">{{ $allTimeStats['first_visit_date'] }}</p>
+                    <p class="text-xs text-gray-500">First Visit</p>
+                </div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="chartLoading" style="display:none;" class="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center rounded-lg">
+                <div class="text-center">
+                    <svg class="animate-spin h-10 w-10 text-primary-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-sm text-gray-600">Loading data...</p>
+                </div>
+            </div>
+
+            <!-- Chart Canvas -->
+            <div class="relative">
+                <canvas id="visitorChart"></canvas>
+            </div>
         </div>
 
         <!-- Quick Actions -->
@@ -246,8 +312,49 @@
 
     <!-- Content Statistics Chart -->
     <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Statistik Konten (6 Bulan Terakhir)</h2>
-        <canvas id="contentChart"></canvas>
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800">Statistik Konten</h2>
+                <p class="text-sm text-gray-500 mt-1">Data konten tahun <span id="contentYearLabel">{{ $currentContentYear }}</span></p>
+            </div>
+            
+            <!-- Year Picker with Navigation -->
+            <div class="flex items-center gap-2">
+                <button type="button" id="contentYearPrev" class="p-2 hover:bg-gray-100 rounded transition" title="Tahun Sebelumnya">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <input type="number" id="contentYearFilter" value="{{ $currentContentYear }}" min="2000" max="2100"
+                       class="w-24 text-center form-input rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm font-semibold">
+                <button type="button" id="contentYearNext" class="p-2 hover:bg-gray-100 rounded transition" title="Tahun Berikutnya">
+                    <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <button type="button" id="contentYearReset" class="ml-2 px-3 py-2 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium rounded-lg transition" title="Kembali ke Tahun Ini">
+                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    Tahun Ini
+                </button>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <canvas id="contentChart"></canvas>
+            
+            <!-- Loading Overlay -->
+            <div id="contentChartLoading" class="absolute inset-0 bg-white bg-opacity-90 items-center justify-center" style="display:none;">
+                <div class="text-center">
+                    <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <p class="text-gray-600 text-sm">Memuat data...</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Recent Activities -->
@@ -632,109 +739,401 @@
 <!-- Chart.js Script -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Visitor Statistics Chart (30 days)
+    // Visitor Statistics Chart - with year filter
+    let visitorChart = null;
     const visitorCtx = document.getElementById('visitorChart').getContext('2d');
-    const visitorChart = new Chart(visitorCtx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($visitorChartData['labels']) !!},
-            datasets: [
-                {
-                    label: 'Unique Visitors',
-                    data: {!! json_encode($visitorChartData['visitors']) !!},
-                    borderColor: 'rgb(234, 179, 8)',
-                    backgroundColor: 'rgba(234, 179, 8, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    borderWidth: 2
-                },
-                {
-                    label: 'Page Views',
-                    data: {!! json_encode($visitorChartData['pageViews']) !!},
-                    borderColor: 'rgb(249, 115, 22)',
-                    backgroundColor: 'rgba(249, 115, 22, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    borderWidth: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                tooltip: {
+    
+    // Initialize chart with initial data
+    function initVisitorChart(chartData) {
+        if (visitorChart) {
+            visitorChart.destroy();
+        }
+        
+        visitorChart = new Chart(visitorCtx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [
+                    {
+                        label: 'Unique Visitors',
+                        data: chartData.visitors,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Page Views',
+                        data: chartData.pageViews,
+                        borderColor: 'rgb(249, 115, 22)',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(249, 115, 22)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: {
                     mode: 'index',
                     intersect: false,
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 13,
+                                weight: '600'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y.toLocaleString();
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 12
+                            },
+                            callback: function(value) {
+                                return value.toLocaleString();
+                            }
+                        }
                     }
                 }
             }
-        }
+        });
+    }
+    
+    // Initial chart load
+    const initialChartData = {
+        labels: {!! json_encode($visitorChartData['labels']) !!},
+        visitors: {!! json_encode($visitorChartData['visitors']) !!},
+        pageViews: {!! json_encode($visitorChartData['pageViews']) !!}
+    };
+    initVisitorChart(initialChartData);
+    
+    // Visitor Year Filter - function to load data
+    function loadVisitorChartByYear(year) {
+        const loadingOverlay = document.getElementById('chartLoading');
+        loadingOverlay.style.display = 'flex';
+        document.getElementById('visitorYearLabel').textContent = year;
+        
+        fetch(`/admin/dashboard/visitor-chart?year=${year}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                initVisitorChart(data.data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching chart data:', error);
+            alert('Gagal memuat data grafik. Silakan coba lagi.');
+        })
+        .finally(() => {
+            loadingOverlay.style.display = 'none';
+        });
+    }
+    
+    // Year filter input change event
+    document.getElementById('yearFilter').addEventListener('change', function() {
+        loadVisitorChartByYear(parseInt(this.value));
+    });
+    
+    // Previous year button
+    document.getElementById('visitorYearPrev').addEventListener('click', function() {
+        const yearInput = document.getElementById('yearFilter');
+        const newYear = parseInt(yearInput.value) - 1;
+        yearInput.value = newYear;
+        loadVisitorChartByYear(newYear);
+    });
+    
+    // Next year button
+    document.getElementById('visitorYearNext').addEventListener('click', function() {
+        const yearInput = document.getElementById('yearFilter');
+        const newYear = parseInt(yearInput.value) + 1;
+        yearInput.value = newYear;
+        loadVisitorChartByYear(newYear);
+    });
+    
+    // Reset to current year button
+    document.getElementById('visitorYearReset').addEventListener('click', function() {
+        const currentYear = {{ Carbon\Carbon::now()->year }};
+        document.getElementById('yearFilter').value = currentYear;
+        loadVisitorChartByYear(currentYear);
     });
 
-    // Content Statistics Chart (6 months)
-    const ctx = document.getElementById('contentChart').getContext('2d');
-    const contentChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($monthlyStats['months']) !!},
-            datasets: [
-                {
-                    label: 'Berita',
-                    data: {!! json_encode($monthlyStats['berita']) !!},
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'Potensi',
-                    data: {!! json_encode($monthlyStats['potensi']) !!},
-                    borderColor: 'rgb(34, 197, 94)',
-                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'Galeri',
-                    data: {!! json_encode($monthlyStats['galeri']) !!},
-                    borderColor: 'rgb(168, 85, 247)',
-                    backgroundColor: 'rgba(168, 85, 247, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: false
-                }
+    // Content Statistics Chart - with year filter
+    let contentChart = null;
+    const contentCtx = document.getElementById('contentChart').getContext('2d');
+    
+    // Initialize content chart with initial data
+    function initContentChart(chartData) {
+        if (contentChart) {
+            contentChart.destroy();
+        }
+        
+        contentChart = new Chart(contentCtx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [
+                    {
+                        label: 'Berita',
+                        data: chartData.berita,
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Potensi',
+                        data: chartData.potensi,
+                        borderColor: 'rgb(34, 197, 94)',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(34, 197, 94)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Galeri',
+                        data: chartData.galeri,
+                        borderColor: 'rgb(168, 85, 247)',
+                        backgroundColor: 'rgba(168, 85, 247, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(168, 85, 247)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    },
+                    {
+                        label: 'Publikasi',
+                        data: chartData.publikasi,
+                        borderColor: 'rgb(249, 115, 22)',
+                        backgroundColor: 'rgba(249, 115, 22, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: 'rgb(249, 115, 22)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }
+                ]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 15,
+                            font: {
+                                size: 13,
+                                weight: '600'
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.parsed.y + ' konten';
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 12
+                            }
+                        }
                     }
                 }
             }
-        }
+        });
+    }
+    
+    // Initial content chart load
+    const initialContentChartData = {
+        labels: {!! json_encode($monthlyStats['labels']) !!},
+        berita: {!! json_encode($monthlyStats['berita']) !!},
+        potensi: {!! json_encode($monthlyStats['potensi']) !!},
+        galeri: {!! json_encode($monthlyStats['galeri']) !!},
+        publikasi: {!! json_encode($monthlyStats['publikasi']) !!}
+    };
+    initContentChart(initialContentChartData);
+    
+    // Content Year Filter - function to load data
+    function loadContentChartByYear(year) {
+        const loadingOverlay = document.getElementById('contentChartLoading');
+        loadingOverlay.style.display = 'flex';
+        document.getElementById('contentYearLabel').textContent = year;
+        
+        fetch(`/admin/dashboard/content-chart?year=${year}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                initContentChart(data.data);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching content chart data:', error);
+            alert('Gagal memuat data grafik konten. Silakan coba lagi.');
+        })
+        .finally(() => {
+            loadingOverlay.style.display = 'none';
+        });
+    }
+    
+    // Content year filter input change event
+    document.getElementById('contentYearFilter').addEventListener('change', function() {
+        loadContentChartByYear(parseInt(this.value));
+    });
+    
+    // Previous year button
+    document.getElementById('contentYearPrev').addEventListener('click', function() {
+        const yearInput = document.getElementById('contentYearFilter');
+        const newYear = parseInt(yearInput.value) - 1;
+        yearInput.value = newYear;
+        loadContentChartByYear(newYear);
+    });
+    
+    // Next year button
+    document.getElementById('contentYearNext').addEventListener('click', function() {
+        const yearInput = document.getElementById('contentYearFilter');
+        const newYear = parseInt(yearInput.value) + 1;
+        yearInput.value = newYear;
+        loadContentChartByYear(newYear);
+    });
+    
+    // Reset to current year button
+    document.getElementById('contentYearReset').addEventListener('click', function() {
+        const currentYear = {{ Carbon\Carbon::now()->year }};
+        document.getElementById('contentYearFilter').value = currentYear;
+        loadContentChartByYear(currentYear);
     });
 </script>
 @endsection

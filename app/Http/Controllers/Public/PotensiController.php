@@ -19,9 +19,16 @@ class PotensiController extends Controller
     public function index(Request $request)
     {
         $kategori = $request->get('kategori');
+        $search = $request->get('search');
+        $urutkan = $request->get('urutkan', 'terbaru'); // terbaru, terlama, terpopuler
         
-        if ($kategori) {
-            $potensi = $this->potensiService->getPotensiByKategori($kategori);
+        // Build query with filters
+        if ($kategori || $search || $urutkan !== 'terbaru') {
+            $potensi = $this->potensiService->searchWithFilters([
+                'kategori' => $kategori,
+                'search' => $search,
+                'urutkan' => $urutkan
+            ]);
         } else {
             $potensi = $this->potensiService->getActivePotensi();
         }

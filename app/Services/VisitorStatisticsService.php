@@ -154,4 +154,185 @@ class VisitorStatisticsService
             ]
         );
     }
+
+    /**
+     * Get yearly chart data for specified year
+     * Returns monthly aggregated data for better visualization
+     */
+    public function getYearlyChartData(?int $year = null): array
+    {
+        $year = $year ?? Carbon::now()->year;
+        $startDate = Carbon::create($year, 1, 1)->toDateString();
+        $endDate = Carbon::create($year, 12, 31)->toDateString();
+        
+        // Get monthly data
+        $monthlyData = [];
+        for ($month = 1; $month <= 12; $month++) {
+            $monthStart = Carbon::create($year, $month, 1)->toDateString();
+            $monthEnd = Carbon::create($year, $month, 1)->endOfMonth()->toDateString();
+            
+            // Get data from DailyVisitorStat
+            $stats = DailyVisitorStat::whereBetween('date', [$monthStart, $monthEnd])->get();
+            
+            $uniqueVisitors = $stats->sum('unique_visitors');
+            $pageViews = $stats->sum('page_views');
+            
+            // If no daily stats, fallback to raw Visitor data
+            if ($uniqueVisitors == 0 && $pageViews == 0) {
+                $uniqueVisitors = Visitor::whereBetween('visit_date', [$monthStart, $monthEnd])
+                                         ->distinct('device_fingerprint')
+                                         ->count();
+                $pageViews = Visitor::whereBetween('visit_date', [$monthStart, $monthEnd])->count();
+            }
+            
+            $monthlyData[] = [
+                'month' => Carbon::create($year, $month, 1)->format('M'),
+                'unique_visitors' => $uniqueVisitors,
+                'page_views' => $pageViews,
+            ];
+        }
+        
+        return [
+            'labels' => array_column($monthlyData, 'month'),
+            'visitors' => array_column($monthlyData, 'unique_visitors'),
+            'pageViews' => array_column($monthlyData, 'page_views'),
+        ];
+    }
+
+    /**
+     * Get all years that have visitor data
+     * Returns array of years in descending order
+     */
+    public function getAvailableYears(): array
+    {
+        $years = Visitor::selectRaw('YEAR(visit_date) as year')
+                        ->distinct()
+                        ->orderByDesc('year')
+                        ->pluck('year')
+                        ->toArray();
+        
+        // If no data yet, return current year
+        if (empty($years)) {
+            return [Carbon::now()->year];
+        }
+        
+        return $years;
+    }
+
+    /**
+     * Get all-time statistics summary
+     */
+    public function getAllTimeStats(): array
+    {
+        $firstVisit = Visitor::min('visit_date');
+        $lastVisit = Visitor::max('visit_date');
+        
+        return [
+            'total_unique_visitors' => $this->getTotalVisitors(),
+            'total_page_views' => Visitor::count(),
+            'first_visit_date' => $firstVisit ? Carbon::parse($firstVisit)->format('d M Y') : '-',
+            'last_visit_date' => $lastVisit ? Carbon::parse($lastVisit)->format('d M Y') : '-',
+            'days_active' => $firstVisit ? Carbon::parse($firstVisit)->diffInDays(Carbon::today()) + 1 : 0,
+        ];
+    }
+
+    /**
+     * Get yearly content chart data (monthly aggregation)
+     */
+    public function getYearlyContentChartData(?int $year = null): array
+    {
+        $year = $year ?? Carbon::now()->year;
+        
+        // Get all models
+        $beritaModel = app(\App\Models\Berita::class);
+        $potensiModel = app(\App\Models\PotensiDesa::class);
+        $galeriModel = app(\App\Models\Galeri::class);
+        $publikasiModel = app(\App\Models\Publikasi::class);
+        
+        // Initialize arrays for 12 months
+        $months = [];
+        $beritaData = [];
+        $potensiData = [];
+        $galeriData = [];
+        $publikasiData = [];
+        
+        for ($month = 1; $month <= 12; $month++) {
+            $monthName = Carbon::create($year, $month, 1)->format('M');
+            $months[] = $monthName;
+            
+            // Count content for each category in this month
+            $beritaData[] = $beritaModel
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            
+            $potensiData[] = $potensiModel
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            
+            $galeriData[] = $galeriModel
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->count();
+            
+            $publikasiData[] = $publikasiModel
+                ->whereYear('tanggal_publikasi', $year)
+                ->whereMonth('tanggal_publikasi', $month)
+                ->count();
+        }
+        
+        return [
+            'labels' => $months,
+            'berita' => $beritaData,
+            'potensi' => $potensiData,
+            'galeri' => $galeriData,
+            'publikasi' => $publikasiData
+        ];
+    }
+
+    /**
+     * Get available years for content statistics
+     */
+    public function getContentAvailableYears(): array
+    {
+        $beritaModel = app(\App\Models\Berita::class);
+        $potensiModel = app(\App\Models\PotensiDesa::class);
+        $galeriModel = app(\App\Models\Galeri::class);
+        $publikasiModel = app(\App\Models\Publikasi::class);
+        
+        $years = [];
+        
+        // Get years from Berita
+        $beritaYears = $beritaModel->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->pluck('year')
+            ->toArray();
+        
+        // Get years from Potensi
+        $potensiYears = $potensiModel->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->pluck('year')
+            ->toArray();
+        
+        // Get years from Galeri
+        $galeriYears = $galeriModel->selectRaw('YEAR(created_at) as year')
+            ->distinct()
+            ->pluck('year')
+            ->toArray();
+        
+        // Get years from Publikasi
+        $publikasiYears = $publikasiModel->selectRaw('YEAR(tanggal_publikasi) as year')
+            ->whereNotNull('tanggal_publikasi')
+            ->distinct()
+            ->pluck('year')
+            ->toArray();
+        
+        // Merge and sort years
+        $years = array_unique(array_merge($beritaYears, $potensiYears, $galeriYears, $publikasiYears));
+        rsort($years); // Sort descending
+        
+        // If no years found, return current year
+        return empty($years) ? [Carbon::now()->year] : array_values($years);
+    }
 }
