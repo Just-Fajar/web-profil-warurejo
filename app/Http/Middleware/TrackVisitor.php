@@ -8,14 +8,22 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Models\Visitor;
 use App\Models\DailyVisitorStat;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class TrackVisitor
 {
     /**
-     * Handle an incoming request.
-     * Track visitor secara OTOMATIS tanpa user action apapun
-     * Tidak perlu login, tidak perlu registrasi, 100% background process
-     *
+     * Handle incoming request - Track visitor otomatis
+     * Middleware ini OTOMATIS track semua visitor tanpa user action:
+     * - Generate anonymous device fingerprint (SHA-256 hash)
+     * - Simpan ke database dengan anonymized IP
+     * - Update daily statistics
+     * - Anti spam: 1 visitor per device per hari
+     * - Skip route admin dan asset files
+     * - Silent fail: error tidak mengganggu user experience
+     * 
+     * PRIVACY: Tidak simpan data personal, hanya hash anonymous
+     * 
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
@@ -60,7 +68,7 @@ class TrackVisitor
             }
         } catch (\Exception $e) {
             // Silent fail - tidak mengganggu user experience
-            \Log::error('Visitor tracking error: ' . $e->getMessage());
+            Log::error('Visitor tracking error: ' . $e->getMessage());
         }
         
         // Lanjutkan request seperti biasa (user tidak tahu ada tracking)
@@ -68,7 +76,9 @@ class TrackVisitor
     }
     
     /**
-     * Generate anonymous fingerprint
+     * Generate anonymous device fingerprint untuk identify unique visitor
+     * Kombinasi: IP + User-Agent + Accept-Language
+     * Di-hash dengan SHA-256 (tidak bisa di-reverse)
      * TIDAK menyimpan data personal, hanya hash
      */
     private function generateFingerprint(Request $request): string
@@ -83,7 +93,8 @@ class TrackVisitor
     }
     
     /**
-     * Anonymize IP untuk privacy
+     * Anonymize IP address untuk privacy compliance (GDPR)
+     * Replace last octet dengan 0
      * Contoh: 192.168.1.100 → 192.168.1.0
      */
     private function anonymizeIp(?string $ip): string
@@ -101,7 +112,9 @@ class TrackVisitor
     }
     
     /**
-     * Update daily statistics
+     * Update daily visitor statistics
+     * Increment unique_visitors dan page_views untuk hari ini
+     * Untuk chart di dashboard admin
      */
     private function updateDailyStats(string $date): void
     {
@@ -114,7 +127,7 @@ class TrackVisitor
                 ]
             );
         } catch (\Exception $e) {
-            \Log::error('Daily stats update error: ' . $e->getMessage());
+            Log::error('Daily stats update error: ' . $e->getMessage());
         }
     }
 }

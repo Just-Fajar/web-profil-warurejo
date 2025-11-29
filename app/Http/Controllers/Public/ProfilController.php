@@ -4,10 +4,15 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProfilDesa;
+use App\Services\StrukturOrganisasiService;
 use App\Helpers\SEOHelper;
 
 class ProfilController extends Controller
 {
+    /**
+     * Tampilkan halaman profil desa overview
+     * Route: GET /profil
+     */
     public function index()
     {
         $profil = ProfilDesa::getInstance();
@@ -22,6 +27,10 @@ class ProfilController extends Controller
         return view('public.profil.index', compact('profil', 'seoData'));
     }
 
+    /**
+     * Tampilkan halaman visi dan misi desa
+     * Route: GET /profil/visi-misi
+     */
     public function visiMisi()
     {
         $profil = ProfilDesa::getInstance();
@@ -36,6 +45,10 @@ class ProfilController extends Controller
         return view('public.profil.visi-misi', compact('profil', 'seoData'));
     }
 
+    /**
+     * Tampilkan halaman sejarah desa
+     * Route: GET /profil/sejarah
+     */
     public function sejarah()
     {
         $profil = ProfilDesa::getInstance();
@@ -50,9 +63,18 @@ class ProfilController extends Controller
         return view('public.profil.sejarah', compact('profil', 'seoData'));
     }
 
-    public function strukturOrganisasi()
+    /**
+     * Tampilkan halaman struktur organisasi pemerintahan desa
+     * Load data terstruktur dengan hierarki (Kepala, Sekretaris, Kaur, Kasi)
+     * 
+     * Route: GET /profil/struktur-organisasi
+     */
+    public function strukturOrganisasi(StrukturOrganisasiService $strukturOrganisasiService)
     {
         $profil = ProfilDesa::getInstance();
+        
+        // Get structured data for display
+        $struktur = $strukturOrganisasiService->getStructuredData();
         
         $seoData = SEOHelper::generateMetaTags([
             'title' => 'Struktur Organisasi - Desa Warurejo',
@@ -61,6 +83,6 @@ class ProfilController extends Controller
             'type' => 'website'
         ]);
         
-        return view('public.profil.struktur-organisasi', compact('profil', 'seoData'));
+        return view('public.profil.struktur-organisasi', compact('profil', 'struktur', 'seoData'));
     }
 }

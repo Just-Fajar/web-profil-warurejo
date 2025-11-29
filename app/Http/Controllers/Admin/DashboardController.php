@@ -15,11 +15,23 @@ class DashboardController extends Controller
 {
     protected $visitorService;
 
+    /**
+     * Constructor - inject VisitorStatisticsService untuk handle statistik pengunjung
+     */
     public function __construct(VisitorStatisticsService $visitorService)
     {
         $this->visitorService = $visitorService;
     }
 
+    /**
+     * Menampilkan halaman dashboard admin dengan semua statistik dan data
+     * - Menghitung total konten (berita, potensi, galeri, publikasi)
+     * - Mengambil statistik pengunjung (hari ini, minggu, bulan, total)
+     * - Menyiapkan data chart untuk visitor dan content statistics
+     * - Mengambil recent activities dari semua konten
+     * 
+     * @return \Illuminate\View\View
+     */
     public function index()
     {
         // Statistik Cards
@@ -97,7 +109,11 @@ class DashboardController extends Controller
     }
     
     /**
-     * AJAX: Get visitor chart data by year
+     * AJAX: Mengambil data chart pengunjung berdasarkan tahun tertentu
+     * Digunakan saat user mengubah filter tahun di chart visitor statistics
+     * 
+     * @param Request $request - berisi parameter 'year'
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getVisitorChartByYear(Request $request)
     {
@@ -111,7 +127,11 @@ class DashboardController extends Controller
     }
     
     /**
-     * AJAX: Get content chart data by year
+     * AJAX: Mengambil data chart konten (berita, potensi, galeri) berdasarkan tahun
+     * Digunakan saat user mengubah filter tahun di chart content statistics
+     * 
+     * @param Request $request - berisi parameter 'year'
+     * @return \Illuminate\Http\JsonResponse
      */
     public function getContentChartByYear(Request $request)
     {
@@ -125,7 +145,10 @@ class DashboardController extends Controller
     }
     
     /**
-     * Get monthly statistics untuk chart
+     * Private method: Menghitung statistik konten per bulan untuk 6 bulan terakhir
+     * Menghasilkan data untuk chart content statistics (berita, potensi, galeri)
+     * 
+     * @return array - berisi labels (bulan) dan data per kategori konten
      */
     private function getMonthlyStats()
     {

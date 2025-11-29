@@ -35,7 +35,7 @@ class PublikasiController extends Controller
         // Apply sorting
         switch ($urutkan) {
             case 'terpopuler':
-                $query->orderBy('downloads', 'desc');
+                $query->orderBy('jumlah_download', 'desc');
                 break;
             case 'terlama':
                 $query->oldest();

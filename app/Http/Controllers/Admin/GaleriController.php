@@ -15,13 +15,19 @@ class GaleriController extends Controller
 {
     protected $imageUploadService;
 
+    /**
+     * Constructor - Inject ImageUploadService
+     * Controller untuk handle HTTP requests galeri/foto di admin panel
+     */
     public function __construct(ImageUploadService $imageUploadService)
     {
         $this->imageUploadService = $imageUploadService;
     }
 
     /**
-     * Display a listing of the resource.
+     * Tampilkan list semua galeri
+     * Eager load admin dan images untuk prevent N+1 query
+     * Route: GET /admin/galeri
      */
     public function index()
     {
@@ -30,7 +36,8 @@ class GaleriController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form create galeri baru
+     * Route: GET /admin/galeri/create
      */
     public function create()
     {
@@ -38,7 +45,12 @@ class GaleriController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan galeri baru dengan multiple images
+     * - Validate input via GaleriRequest
+     * - Upload semua gambar ke storage
+     * - Simpan path gambar ke tabel galeri_images
+     * - Gunakan DB transaction untuk rollback jika gagal
+     * Route: POST /admin/galeri
      */
     public function store(GaleriRequest $request)
     {
@@ -88,7 +100,8 @@ class GaleriController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail galeri dengan semua foto-fotonya
+     * Route: GET /admin/galeri/{id}
      */
     public function show(Galeri $galeri)
     {
@@ -96,7 +109,8 @@ class GaleriController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form edit galeri
+     * Route: GET /admin/galeri/{id}/edit
      */
     public function edit(Galeri $galeri)
     {
@@ -104,7 +118,10 @@ class GaleriController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update galeri yang sudah ada
+     * - Jika ada gambar baru, delete gambar lama lalu upload baru
+     * - Clear cache setelah update
+     * Route: PUT /admin/galeri/{id}
      */
     public function update(GaleriRequest $request, Galeri $galeri)
     {
@@ -143,7 +160,9 @@ class GaleriController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete galeri beserta gambarnya dari storage
+     * Clear cache setelah delete
+     * Route: DELETE /admin/galeri/{id}
      */
     public function destroy(Galeri $galeri)
     {
@@ -170,7 +189,10 @@ class GaleriController extends Controller
     }
 
     /**
-     * Bulk delete galeri
+     * Bulk delete multiple galeri sekaligus
+     * - Loop semua galeri dan delete gambarnya dari storage
+     * - Return JSON response untuk AJAX
+     * Route: POST /admin/galeri/bulk-delete
      */
     public function bulkDelete(Request $request)
     {
@@ -203,6 +225,37 @@ class GaleriController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => count($ids) . ' galeri berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Toggle status aktif/non-aktif galeri (soft hide)
+     * Untuk hide/show di public tanpa delete permanent
+     * Return JSON response untuk AJAX
+     * Route: POST /admin/galeri/{id}/toggle-active
+     */
+    public function toggleActive(Galeri $galeri)
+    {
+        try {
+            $galeri->is_active = !$galeri->is_active;
+            $galeri->save();
+            
+            // Clear cache
+            Cache::forget('home.galeri');
+            Cache::forget('profil_desa');
+            
+            $status = $galeri->is_active ? 'aktif' : 'non-aktif';
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Status galeri berhasil diubah menjadi {$status}",
+                'is_active' => $galeri->is_active
             ]);
         } catch (\Exception $e) {
             return response()->json([

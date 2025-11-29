@@ -6,13 +6,18 @@ use App\Models\PotensiDesa;
 
 class PotensiDesaRepository extends BaseRepository
 {
+    /**
+     * Constructor - Inject PotensiDesa model
+     * Repository untuk database queries potensi desa
+     */
     public function __construct(PotensiDesa $model)
     {
         parent::__construct($model);
     }
 
     /**
-     * Get active potensi
+     * Get hanya potensi aktif dengan pagination
+     * Untuk halaman list potensi di public
      */
     public function getActive()
     {
@@ -23,7 +28,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Get potensi by kategori
+     * Get potensi by kategori (Wisata, UMKM, Pertanian, dll)
+     * Untuk filter kategori di halaman potensi
      */
     public function getByKategori($kategori)
     {
@@ -35,7 +41,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Find potensi by slug
+     * Find potensi by slug untuk detail page (SEO-friendly URL)
+     * Throw 404 jika tidak ditemukan atau tidak aktif
      */
     public function findBySlug($slug)
     {
@@ -46,7 +53,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Get related potensi (same category)
+     * Get related potensi (same category, different ID)
+     * Untuk "Potensi Lainnya" di detail page
      */
     public function getRelated($potensi, $limit = 3)
     {
@@ -60,7 +68,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Get all categories with count
+     * Get daftar kategori beserta jumlah potensi per kategori
+     * Untuk navigation filter di halaman potensi
      */
     public function getCategoriesWithCount()
     {
@@ -72,7 +81,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Reorder potensi
+     * Reorder urutan tampilan potensi
+     * Array $order: [position => id], update kolom 'urutan'
      */
     public function reorder(array $order)
     {
@@ -86,7 +96,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Toggle active status
+     * Toggle status aktif/non-aktif potensi
+     * Untuk hide/show tanpa delete permanent
      */
     public function toggleActive($id)
     {
@@ -98,7 +109,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Get featured potensi (first N items)
+     * Get featured potensi (first N items by urutan)
+     * Untuk homepage showcase potensi unggulan
      */
     public function getFeatured($limit = 6)
     {
@@ -110,7 +122,8 @@ class PotensiDesaRepository extends BaseRepository
     }
 
     /**
-     * Search potensi by name or description
+     * Simple search potensi by nama atau deskripsi
+     * Return collection (tidak paginate) untuk autocomplete
      */
     public function search($keyword)
     {
@@ -125,7 +138,9 @@ class PotensiDesaRepository extends BaseRepository
     }
     
     /**
-     * Search with filters (search, kategori, sorting)
+     * Advanced search dengan multiple filters
+     * Filters: search (keyword), kategori, urutkan (terbaru/terpopuler/terlama)
+     * Untuk halaman pencarian dengan filter lengkap
      */
     public function searchWithFilters(array $filters)
     {

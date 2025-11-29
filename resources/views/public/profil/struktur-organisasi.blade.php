@@ -1,3 +1,86 @@
+{{--
+    PUBLIC PROFIL - STRUKTUR ORGANISASI
+    
+    Halaman struktur organisasi pemerintahan desa
+    
+    FEATURES:
+    - Hero section dengan primary gradient
+    - Hierarchical layout (5 levels)
+    - Photo cards untuk setiap anggota
+    - Kepala Desa prominent display (top)
+    - Grid layout per level
+    - Info box dengan penjelasan
+    - Responsive design
+    
+    HIERARCHY LEVELS:
+    1. Kepala Desa (Level 1): Single card, centered, prominent
+    2. Sekretaris & Kaur (Level 2): Grid 2-3 columns
+    3. Kasi (Level 3): Grid 3-4 columns
+    4. Kepala Dusun (Level 4): Grid 3-4 columns
+    5. Staff (Level 5): Grid 4-5 columns
+    
+    CARD CONTENT:
+    - Photo circular (rounded-full)
+    - Nama (uppercase, bold)
+    - Jabatan
+    - NIP (optional)
+    - Deskripsi (optional)
+    - Contact info (optional)
+    
+    KEPALA DESA:
+    - Blue gradient header
+    - Large photo (32x32)
+    - Centered layout
+    - Prominent display
+    - Special styling
+    
+    OTHER LEVELS:
+    - Green/Amber/Purple gradients
+    - Grid responsive layout
+    - Smaller photos (24x24)
+    - Hover effects
+    
+    INFO BOX:
+    - Blue-50 background
+    - Border-left accent
+    - Explanation text
+    - Peraturan Menteri reference
+    
+    EMPTY STATE:
+    - Yellow warning box
+    - "Data belum tersedia" message
+    - Per level or whole struktur
+    
+    RESPONSIVE:
+    - Mobile: 1-2 columns, smaller photos
+    - Tablet: 2-3 columns
+    - Desktop: 3-5 columns per level
+    
+    ANIMATIONS:
+    - scroll-reveal: Fade in per section
+    - Hover effects on cards
+    
+    DATA:
+    $struktur: Array grouped by level:
+    - 'kepala': Single StrukturOrganisasi (level 1)
+    - 'sekretaris': Collection (level 2)
+    - 'kasi': Collection (level 3)
+    - 'kadus': Collection (level 4)
+    - 'staff': Collection (level 5)
+    
+    PHOTO HANDLING:
+    - foto_url accessor dari model
+    - Fallback ke default-avatar.png
+    - Circular crop
+    
+    CONTENT MANAGEMENT:
+    Manage via: /admin/struktur-organisasi
+    CRUD operations per anggota
+    Controller: StrukturOrganisasiController
+    
+    Route: /profil/struktur-organisasi
+    Controller: Public\ProfilController@strukturOrganisasi
+--}}
 @extends('public.layouts.app')
 
 @section('title', 'Struktur Organisasi - Desa Warurejo')
@@ -37,178 +120,144 @@
 
 {{-- Kepala Desa --}}
 <div class="mb-8 sm:mb-12 scroll-reveal">
-    <div class="bg-white rounded-lg md:rounded-xl shadow-xl overflow-hidden">
-        <div class="bg-linear-to-r from-blue-600 to-blue-700 p-4 sm:p-6 text-center">
-            <h2 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">KEPALA DESA</h2>
-            <p class="text-blue-100 text-xs sm:text-sm">Pemimpin Pemerintahan Desa</p>
-        </div>
-        <div class="p-4 sm:p-6 md:p-8 text-center">
-            <div class="inline-block">
-                <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden">
-                    <img src="/images/kepala-desa.jpg" alt="SUNARTO" class="w-full h-full object-cover">
+    @if(isset($struktur['kepala']) && $struktur['kepala'])
+        <div class="bg-white rounded-lg md:rounded-xl shadow-xl overflow-hidden">
+            <div class="bg-linear-to-r from-blue-600 to-blue-700 p-4 sm:p-6 text-center">
+                <h2 class="text-xl sm:text-2xl font-bold text-white mb-1 sm:mb-2">KEPALA DESA</h2>
+                <p class="text-blue-100 text-xs sm:text-sm">Pemimpin Pemerintahan Desa</p>
+            </div>
+            <div class="p-4 sm:p-6 md:p-8 text-center">
+                <div class="inline-block">
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mx-auto mb-3 sm:mb-4 rounded-full overflow-hidden">
+                        <img src="{{ $struktur['kepala']->foto_url }}" alt="{{ $struktur['kepala']->nama }}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-1">{{ strtoupper($struktur['kepala']->nama) }}</h3>
+                    <p class="text-gray-600 mb-2 sm:mb-3 text-sm sm:text-base">{{ $struktur['kepala']->jabatan }}</p>
+                    @if($struktur['kepala']->deskripsi)
+                        <p class="text-gray-500 text-xs sm:text-sm mt-2">{{ $struktur['kepala']->deskripsi }}</p>
+                    @endif
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-1">SUNARTO</h3>
-                <p class="text-gray-600 mb-2 sm:mb-3 text-sm sm:text-base">Kepala Desa Warurejo</p>
             </div>
         </div>
-    </div>
+    @else
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
+            <p class="text-yellow-800">Data Kepala Desa belum tersedia</p>
+        </div>
+    @endif
 </div>
 
 {{-- Sekretaris Desa --}}
 <div class="mb-6 sm:mb-8 scroll-reveal">
-    <div class="bg-white rounded-lg md:rounded-xl shadow-lg overflow-hidden">
-        <div class="bg-linear-to-r from-green-600 to-green-700 p-3 sm:p-4 text-center">
-            <h3 class="text-lg sm:text-xl font-bold text-white">PLT. SEKRETARIS DESA</h3>
-        </div>
-        <div class="p-4 sm:p-6 text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-2 sm:mb-3 rounded-full overflow-hidden">
-                <img src="/images/sekretaris-desa.jpg" alt="HAYYUN JOKO IRAWAN" class="w-full h-full object-cover">
+    @if(isset($struktur['sekretaris']) && $struktur['sekretaris'])
+        <div class="bg-white rounded-lg md:rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-linear-to-r from-green-600 to-green-700 p-3 sm:p-4 text-center">
+                <h3 class="text-lg sm:text-xl font-bold text-white">{{ strtoupper($struktur['sekretaris']->jabatan) }}</h3>
             </div>
-            <h4 class="text-lg sm:text-xl font-bold text-gray-800">HAYYUN JOKO IRAWAN</h4>
-            <p class="text-gray-600 text-sm sm:text-base">Sekretaris Desa</p>
+            <div class="p-4 sm:p-6 text-center">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-2 sm:mb-3 rounded-full overflow-hidden">
+                    <img src="{{ $struktur['sekretaris']->foto_url }}" alt="{{ $struktur['sekretaris']->nama }}" class="w-full h-full object-cover">
+                </div>
+                <h4 class="text-lg sm:text-xl font-bold text-gray-800">{{ strtoupper($struktur['sekretaris']->nama) }}</h4>
+                <p class="text-gray-600 text-sm sm:text-base">{{ $struktur['sekretaris']->jabatan }}</p>
+                @if($struktur['sekretaris']->deskripsi)
+                    <p class="text-gray-500 text-xs sm:text-sm mt-2">{{ $struktur['sekretaris']->deskripsi }}</p>
+                @endif
+            </div>
         </div>
-    </div>
+    @endif
 </div>
 
 {{-- Kaur dan Staff --}}
 <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 text-center scroll-reveal">Kepala Urusan</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 scroll-reveal">
-
-    {{-- Kaur Keuangan --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-yellow-100">
-                <img src="/images/kaur-keuangan.jpg" alt="PARTINI" class="w-full h-full object-cover">
+@if(isset($struktur['kaur']) && count($struktur['kaur']) > 0)
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 scroll-reveal">
+        @foreach($struktur['kaur'] as $kaur)
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
+                <div class="text-center">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-yellow-100">
+                        <img src="{{ $kaur->foto_url }}" alt="{{ $kaur->nama }}" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">{{ strtoupper($kaur->nama) }}</h4>
+                    <p class="text-gray-600 text-sm sm:text-base mb-2">{{ $kaur->jabatan }}</p>
+                    @if($kaur->deskripsi)
+                        <p class="text-gray-500 text-xs mb-2">{{ Str::limit($kaur->deskripsi, 60) }}</p>
+                    @endif
+                    <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">{{ $kaur->level_label }}</span>
+                </div>
             </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">PARTINI</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kaur Keuangan</p>
-            <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">Keuangan</span>
-        </div>
+        @endforeach
     </div>
-
-    {{-- Kaur Perencanaan --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-red-100">
-                <img src="/images/kaur-perencanaan.jpg" alt="JOKO MARSENO" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">JOKO MARSENO</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kaur Perencanaan</p>
-            <span class="inline-block px-3 py-1 bg-red-100 text-red-800 rounded-full text-xs font-semibold">Perencanaan</span>
-        </div>
-    </div>
-
-    {{-- Kaur Tata Usaha & Umum --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-purple-100">
-                <img src="/images/kaur-tata-usaha.jpg" alt="PUJIATI" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">PUJIATI</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kaur Tata Usaha & Umum</p>
-            <span class="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">Administrasi</span>
-        </div>
-    </div>
-</div>
+@endif
 
 {{-- Staff Kaur --}}
-<h3 class="text-lg sm:text-xl font-bold text-gray-700 mb-4 text-center scroll-reveal">Staff Kepala Urusan</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 scroll-reveal">
-
-    {{-- Staff Kaur Keuangan --}}
-    <div class="bg-linear-to-br from-yellow-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-yellow-500">
-        <div class="text-center">
-            <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-yellow-200">
-                <img src="/images/staff-keuangan.jpg" alt="SETIYO PARYONO" class="w-full h-full object-cover">
+@if(isset($struktur['staff_kaur']) && count($struktur['staff_kaur']) > 0)
+    <h3 class="text-lg sm:text-xl font-bold text-gray-700 mb-4 text-center scroll-reveal">Staff Kepala Urusan</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 scroll-reveal">
+        @foreach($struktur['staff_kaur'] as $staff)
+            <div class="bg-linear-to-br from-yellow-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-yellow-500">
+                <div class="text-center">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-yellow-200">
+                        <img src="{{ $staff->foto_url }}" alt="{{ $staff->nama }}" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">{{ strtoupper($staff->nama) }}</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ $staff->jabatan }}</p>
+                    @if($staff->atasan)
+                        <p class="text-yellow-700 text-xs font-medium">dibawah {{ $staff->atasan->jabatan }}</p>
+                    @endif
+                    @if($staff->deskripsi)
+                        <p class="text-gray-500 text-xs mt-1">{{ Str::limit($staff->deskripsi, 50) }}</p>
+                    @endif
+                </div>
             </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">SETIYO PARYONO</h4>
-            <p class="text-gray-600 text-xs sm:text-sm mb-1">Staff Keuangan</p>
-            <p class="text-yellow-700 text-xs font-medium">dibawah Kaur Keuangan</p>
-        </div>
+        @endforeach
     </div>
-
-    {{-- Staff Kaur Perencanaan --}}
-    <div class="bg-linear-to-br from-red-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-red-500">
-        <div class="text-center">
-            <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-red-200">
-                <img src="/images/staff-perencanaan.jpg" alt="RATNA ROSIANA" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">RATNA ROSIANA</h4>
-            <p class="text-gray-600 text-xs sm:text-sm mb-1">Staff Perencanaan</p>
-            <p class="text-red-700 text-xs font-medium">dibawah Kaur Perencanaan</p>
-        </div>
-    </div>
-
-    {{-- Staff Kaur Tata Usaha --}}
-    <div class="bg-linear-to-br from-purple-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-purple-500">
-        <div class="text-center">
-            <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-purple-200">
-                <img src="/images/staff-tata-usaha.jpg" alt="ELLY MITA PURNAMASARI" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">ELLY MITA PURNAMASARI</h4>
-            <p class="text-gray-600 text-xs sm:text-sm mb-1">Staff Tata Usaha & Umum</p>
-            <p class="text-purple-700 text-xs font-medium">dibawah Kaur Tata Usaha</p>
-        </div>
-    </div>
-</div>
+@endif
 
 {{-- Kasi dan Staff --}}
 <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 mt-8 sm:mt-12 text-center scroll-reveal">Kepala Seksi</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 scroll-reveal">
-
-    {{-- Kasi Pemerintahan --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-blue-100">
-                <img src="/images/kasi-pemerintahan.jpg" alt="BUDI PURWANTO" class="w-full h-full object-cover">
+@if(isset($struktur['kasi']) && count($struktur['kasi']) > 0)
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 scroll-reveal">
+        @foreach($struktur['kasi'] as $kasi)
+            <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
+                <div class="text-center">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-blue-100">
+                        <img src="{{ $kasi->foto_url }}" alt="{{ $kasi->nama }}" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">{{ strtoupper($kasi->nama) }}</h4>
+                    <p class="text-gray-600 text-sm sm:text-base mb-2">{{ $kasi->jabatan }}</p>
+                    @if($kasi->deskripsi)
+                        <p class="text-gray-500 text-xs mb-2">{{ Str::limit($kasi->deskripsi, 60) }}</p>
+                    @endif
+                    <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">{{ $kasi->level_label }}</span>
+                </div>
             </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">BUDI PURWANTO</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kasi Pemerintahan</p>
-            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">Pemerintahan</span>
-        </div>
+        @endforeach
     </div>
-
-    {{-- Kasi Kesejahteraan --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-green-100">
-                <img src="/images/kasi-kesejahteraan.jpg" alt="BADRUT TAMAM" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">BADRUT TAMAM</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kasi Kesejahteraan</p>
-            <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">Kesejahteraan</span>
-        </div>
-    </div>
-
-    {{-- Kasi Pelayanan --}}
-    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6">
-        <div class="text-center">
-            <div class="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-3 rounded-full overflow-hidden ring-4 ring-indigo-100">
-                <img src="/images/kasi-pelayanan.jpg" alt="MUJIONO" class="w-full h-full object-cover">
-            </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-base sm:text-lg">MUJIONO</h4>
-            <p class="text-gray-600 text-sm sm:text-base mb-2">Kasi Pelayanan</p>
-            <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">Pelayanan</span>
-        </div>
-    </div>
-</div>
+@endif
 
 {{-- Staff Kasi --}}
-<h3 class="text-lg sm:text-xl font-bold text-gray-700 mb-4 text-center scroll-reveal">Staff Kepala Seksi</h3>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 scroll-reveal">
-
-    {{-- Staff Kasi Kesejahteraan --}}
-    <div class="bg-linear-to-br from-green-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-green-500">
-        <div class="text-center">
-            <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-green-200">
-                <img src="/images/staff-kesejahteraan.jpg" alt="ABI NANGGALA SAKTI JR" class="w-full h-full object-cover">
+@if(isset($struktur['staff_kasi']) && count($struktur['staff_kasi']) > 0)
+    <h3 class="text-lg sm:text-xl font-bold text-gray-700 mb-4 text-center scroll-reveal">Staff Kepala Seksi</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 scroll-reveal">
+        @foreach($struktur['staff_kasi'] as $staff)
+            <div class="bg-linear-to-br from-green-50 to-white rounded-lg shadow-md hover:shadow-xl transition p-4 sm:p-6 border-l-4 border-green-500">
+                <div class="text-center">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 rounded-full overflow-hidden ring-2 ring-green-200">
+                        <img src="{{ $staff->foto_url }}" alt="{{ $staff->nama }}" class="w-full h-full object-cover">
+                    </div>
+                    <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">{{ strtoupper($staff->nama) }}</h4>
+                    <p class="text-gray-600 text-xs sm:text-sm mb-1">{{ $staff->jabatan }}</p>
+                    @if($staff->atasan)
+                        <p class="text-green-700 text-xs font-medium">dibawah {{ $staff->atasan->jabatan }}</p>
+                    @endif
+                    @if($staff->deskripsi)
+                        <p class="text-gray-500 text-xs mt-1">{{ Str::limit($staff->deskripsi, 50) }}</p>
+                    @endif
+                </div>
             </div>
-            <h4 class="font-bold text-gray-800 mb-1 text-sm sm:text-base">ABI NANGGALA SAKTI JR</h4>
-            <p class="text-gray-600 text-xs sm:text-sm mb-1">Staff Kesejahteraan</p>
-            <p class="text-green-700 text-xs font-medium">dibawah Kasi Kesejahteraan</p>
-        </div>
+        @endforeach
     </div>
-</div>
+@endif
 
             {{-- Catatan --}}
             <div class="bg-amber-50 border-l-4 border-amber-500 p-4 sm:p-6 rounded-lg md:rounded-xl mb-8 sm:mb-12 scroll-reveal">

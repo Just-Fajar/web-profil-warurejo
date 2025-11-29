@@ -10,7 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminAuthenticate
 {
     /**
-     * Handle an incoming request.
+     * Middleware untuk protect route admin
+     * Cek apakah user sudah login dengan guard 'admin'
+     * Jika belum, redirect ke halaman login
+     * 
+     * Usage: Route::middleware('admin.auth')
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */

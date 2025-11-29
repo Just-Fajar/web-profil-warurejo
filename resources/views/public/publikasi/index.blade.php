@@ -1,3 +1,86 @@
+{{--
+    PUBLIC PUBLIKASI INDEX
+    
+    Halaman list dokumen publikasi desa (APBDes, RPJMDes, RKPDes)
+    
+    FEATURES:
+    - Hero section dengan gradient
+    - Kategori filter dropdown (APBDes/RPJMDes/RKPDes/Lainnya)
+    - Tahun filter buttons (clickable years)
+    - Sort options (Terbaru/Terlama/Terpopuler)
+    - Document list dengan details
+    - Download counter per dokumen
+    - Sidebar dengan recent downloads
+    - Pagination (10 items per page)
+    
+    FILTER SYSTEM:
+    - Kategori: Main filter, changes document type
+    - Tahun: Filter by publication year
+    - Urutkan: Sort by date or popularity
+    - All filters persist in URL params
+    
+    DOCUMENT CARD:
+    - PDF icon atau kategori badge
+    - Judul dokumen (bold)
+    - Kategori & tahun badges
+    - Deskripsi excerpt (jika ada)
+    - Tanggal terbit
+    - Download counter dengan icon
+    - File size info
+    - "Lihat Detail" button
+    - Direct download link
+    
+    SIDEBAR (Desktop):
+    - "Dokumen Terbaru" section
+    - Recent 5 downloads
+    - Mini cards dengan:
+      * Judul (truncated)
+      * Kategori badge
+      * Download link
+    
+    KATEGORI:
+    - APBDes: Anggaran Pendapatan Belanja Desa
+    - RPJMDes: Rencana Pembangunan Jangka Menengah
+    - RKPDes: Rencana Kerja Pemerintah Desa
+    - Lainnya: Dokumen lain-lain
+    
+    TAHUN FILTER:
+    - Dynamic year list dari available data
+    - "Semua Tahun" button
+    - Active state styling
+    - URL parameter based
+    
+    EMPTY STATE:
+    - Friendly message
+    - Illustration icon
+    - "Tidak ada dokumen" text
+    - Suggestion untuk filter lain
+    
+    RESPONSIVE:
+    - Mobile: Full-width cards, no sidebar
+    - Tablet: 2 columns untuk some sections
+    - Desktop: Main + sidebar layout (3/4 + 1/4)
+    
+    SEO:
+    - Dynamic title: Publikasi - {kategori}
+    - Meta description per kategori
+    - Structured data (Document schema)
+    
+    DATA:
+    $publikasi: Paginated collection
+    $kategori: Current kategori filter
+    $categories: Available categories
+    $availableYears: Years dengan documents
+    $recentDownloads: 5 latest (sidebar)
+    
+    REQUEST PARAMS:
+    - kategori: string (default 'Semua')
+    - tahun: integer (optional)
+    - urutkan: string (terbaru/terlama/terpopuler)
+    
+    Route: /publikasi
+    Controller: PublikasiController@index
+--}}
 @extends('public.layouts.app')
 
 @section('title', 'Publikasi - ' . $kategori)

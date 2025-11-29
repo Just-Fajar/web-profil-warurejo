@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\URL;
 class SEOHelper
 {
     /**
-     * Generate meta tags for a page
+     * Generate meta tags untuk SEO dan Open Graph
+     * - Merge dengan default values dari profil desa
+     * - Support Open Graph untuk social media sharing
+     * - Support Twitter Card
+     * Return array yang bisa dipakai di view untuk render meta tags
      * 
-     * @param array $data
-     * @return array
+     * @param array $data - custom meta tags (title, description, keywords, image, dll)
+     * @return array - complete meta tags data
      */
     public static function generateMetaTags(array $data = []): array
     {
@@ -34,9 +38,12 @@ class SEOHelper
     }
     
     /**
-     * Generate structured data (JSON-LD) for Organization
+     * Generate structured data (JSON-LD) untuk Organization schema
+     * Type: GovernmentOrganization (khusus untuk organisasi pemerintahan)
+     * Include: name, logo, contact info, address, geo coordinates
+     * Untuk ditampilkan di Google Knowledge Panel
      * 
-     * @return array
+     * @return array - JSON-LD schema
      */
     public static function getOrganizationSchema(): array
     {
@@ -82,10 +89,13 @@ class SEOHelper
     }
     
     /**
-     * Generate structured data for Article (Berita)
+     * Generate structured data untuk Article/NewsArticle schema
+     * Khusus untuk halaman detail berita
+     * Include: headline, description, image, dates, author, publisher
+     * Untuk rich snippets di Google Search (tampil dengan thumbnail)
      * 
-     * @param object $berita
-     * @return array
+     * @param object $berita - Berita model instance
+     * @return array - JSON-LD schema
      */
     public static function getArticleSchema($berita): array
     {
@@ -119,10 +129,13 @@ class SEOHelper
     }
     
     /**
-     * Generate structured data for Place (Potensi Desa)
+     * Generate structured data untuk Place schema
+     * Khusus untuk halaman detail potensi desa (wisata, tempat, dll)
+     * Include: name, description, image, address, contact
+     * Untuk rich snippets di Google Maps dan Search
      * 
-     * @param object $potensi
-     * @return array
+     * @param object $potensi - PotensiDesa model instance
+     * @return array - JSON-LD schema
      */
     public static function getPlaceSchema($potensi): array
     {
@@ -146,10 +159,12 @@ class SEOHelper
     }
     
     /**
-     * Generate breadcrumb structured data
+     * Generate breadcrumb structured data (JSON-LD)
+     * Untuk tampilkan breadcrumb navigation di Google Search results
+     * Format: Home > Category > Current Page
      * 
-     * @param array $items [['name' => 'Home', 'url' => '/'], ...]
-     * @return array
+     * @param array $items - [['name' => 'Home', 'url' => '/'], ...]
+     * @return array - JSON-LD BreadcrumbList schema
      */
     public static function getBreadcrumbSchema(array $items): array
     {

@@ -30,13 +30,20 @@ class Berita extends Model
         'views' => 'integer',
     ];
 
-    // Relationships
+    /**
+     * Relationship: Berita belongs to Admin (author)
+     * Untuk tau siapa yang buat berita ini
+     */
     public function admin()
     {
         return $this->belongsTo(Admin::class);
     }
 
-    // Accessors
+    /**
+     * Accessor: Get full URL gambar utama
+     * Auto return default image jika gambar_utama null
+     * Usage: $berita->gambar_utama_url
+     */
     public function getGambarUtamaUrlAttribute()
     {
         return $this->gambar_utama 
@@ -44,6 +51,12 @@ class Berita extends Model
             : asset('images/logo-web-desa.jpg');
     }
 
+    /**
+     * Accessor: Get excerpt/ringkasan berita
+     * Jika ringkasan ada, return ringkasan
+     * Jika tidak, auto generate dari 150 karakter pertama konten
+     * Usage: $berita->excerpt
+     */
     public function getExcerptAttribute()
     {
         return $this->ringkasan 
@@ -51,6 +64,11 @@ class Berita extends Model
             : Str::limit(strip_tags($this->konten), 150);
     }
 
+    /**
+     * Accessor: Get tanggal formatted (dd MMMM yyyy)
+     * Prioritas: published_at, fallback ke created_at
+     * Usage: $berita->formatted_date
+     */
     public function getFormattedDateAttribute()
     {
         return $this->published_at 
@@ -58,7 +76,13 @@ class Berita extends Model
             : $this->created_at->format('d F Y');
     }
 
-    // Scopes
+    /**
+     * Scope: Get hanya berita published
+     * - Status = 'published'
+     * - published_at tidak null
+     * - published_at <= now (tidak tampilkan scheduled post)
+     * Usage: Berita::published()->get()
+     */
     public function scopePublished($query)
     {
         return $query->where('status', 'published')
@@ -66,25 +90,40 @@ class Berita extends Model
             ->where('published_at', '<=', now());
     }
 
+    /**
+     * Scope: Get hanya berita draft
+     * Usage: Berita::draft()->get()
+     */
     public function scopeDraft($query)
     {
         return $query->where('status', 'draft');
     }
 
+    /**
+     * Scope: Sort by published_at descending, fallback ke created_at
+     * Usage: Berita::latest()->get()
+     */
     public function scopeLatest($query)
     {
         return $query->orderBy('published_at', 'desc')
             ->orderBy('created_at', 'desc');
     }
 
-    // Mutators
+    /**
+     * Mutator: Auto-generate slug saat set judul
+     * Slug akan di-generate otomatis dari judul
+     */
     public function setJudulAttribute($value)
     {
         $this->attributes['judul'] = $value;
         $this->attributes['slug'] = Str::slug($value);
     }
 
-    // Boot method for auto-generating slug
+    /**
+     * Boot method: Auto-generate unique slug saat create
+     * Jika slug kosong, generate dari judul
+     * Jika slug sudah ada, tambahkan suffix -1, -2, dst
+     */
     protected static function boot()
     {
         parent::boot();

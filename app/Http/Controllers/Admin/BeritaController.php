@@ -12,22 +12,41 @@ class BeritaController extends Controller
 {
     protected $beritaService;
 
+    /**
+     * Constructor - Inject BeritaService
+     * Controller untuk handle HTTP requests berita di admin panel
+     */
     public function __construct(BeritaService $beritaService)
     {
         $this->beritaService = $beritaService;
     }
 
+    /**
+     * Tampilkan list semua berita dengan pagination
+     * Route: GET /admin/berita
+     */
     public function index()
     {
         $berita = $this->beritaService->getPaginatedBerita(10);
         return view('admin.berita.index', compact('berita'));
     }
 
+    /**
+     * Tampilkan form create berita baru
+     * Route: GET /admin/berita/create
+     */
     public function create()
     {
         return view('admin.berita.create');
     }
 
+    /**
+     * Simpan berita baru ke database
+     * - Validate input via BeritaRequest
+     * - Set admin_id dari user yang login
+     * - Clear cache homepage dan profil desa
+     * Route: POST /admin/berita
+     */
     public function store(BeritaRequest $request)
     {
         try {
@@ -51,18 +70,33 @@ class BeritaController extends Controller
         }
     }
 
+    /**
+     * Tampilkan detail berita (preview)
+     * Route: GET /admin/berita/{id}
+     */
     public function show($id)
     {
         $berita = $this->beritaService->getBeritaById($id);
         return view('admin.berita.show', compact('berita'));
     }
 
+    /**
+     * Tampilkan form edit berita
+     * Route: GET /admin/berita/{id}/edit
+     */
     public function edit($id)
     {
         $berita = $this->beritaService->getBeritaById($id);
         return view('admin.berita.edit', compact('berita'));
     }
 
+    /**
+     * Update berita yang sudah ada
+     * - Validate input via BeritaRequest
+     * - Handle image upload/delete di service layer
+     * - Clear cache setelah update
+     * Route: PUT /admin/berita/{id}
+     */
     public function update(BeritaRequest $request, $id)
     {
         try {
@@ -84,6 +118,11 @@ class BeritaController extends Controller
         }
     }
 
+    /**
+     * Delete berita beserta gambarnya
+     * Clear cache setelah delete
+     * Route: DELETE /admin/berita/{id}
+     */
     public function destroy($id)
     {
         try {
@@ -104,7 +143,11 @@ class BeritaController extends Controller
     }
 
     /**
-     * Bulk delete berita
+     * Bulk delete multiple berita sekaligus
+     * - Terima array ids dari request
+     * - Delete satu per satu (include gambar)
+     * - Return JSON response untuk AJAX
+     * Route: POST /admin/berita/bulk-delete
      */
     public function bulkDelete(Request $request)
     {

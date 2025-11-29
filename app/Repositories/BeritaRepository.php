@@ -6,13 +6,18 @@ use App\Models\Berita;
 
 class BeritaRepository extends BaseRepository
 {
+    /**
+     * Constructor - Inject Berita model
+     * Repository layer untuk database queries berita
+     */
     public function __construct(Berita $model)
     {
         parent::__construct($model);
     }
 
     /**
-     * Get published berita with pagination
+     * Get published berita dengan pagination untuk halaman public
+     * Eager load admin untuk prevent N+1 query
      */
     public function getPublished($perPage = 10)
     {
@@ -24,7 +29,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Get latest berita
+     * Get berita terbaru untuk homepage atau sidebar
+     * Limited untuk performance
      */
     public function getLatest($limit = 5)
     {
@@ -37,7 +43,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Find berita by slug
+     * Find berita by slug untuk detail page (SEO-friendly URL)
+     * Throw 404 jika tidak ditemukan atau belum published
      */
     public function findBySlug($slug)
     {
@@ -49,7 +56,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Increment views counter
+     * Increment views counter untuk tracking popularitas
+     * Direct DB query untuk performance (tidak load full model)
      */
     public function incrementViews($id)
     {
@@ -59,7 +67,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Get berita by status
+     * Get berita by status (published/draft) untuk admin list
+     * Sort: published by latest, draft by created_at
      */
     public function getByStatus($status, $perPage = 15)
     {
@@ -77,7 +86,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Search berita
+     * Simple search berita by keyword di judul, ringkasan, atau konten
+     * Hanya published untuk public
      */
     public function search($keyword, $perPage = 10)
     {
@@ -94,7 +104,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Get popular berita by views
+     * Get berita populer berdasarkan jumlah views
+     * Untuk widget "Berita Populer" di sidebar
      */
     public function getPopular($limit = 5)
     {
@@ -107,7 +118,8 @@ class BeritaRepository extends BaseRepository
     }
 
     /**
-     * Get berita by admin
+     * Get berita by admin tertentu (all status)
+     * Untuk filter "Berita Saya" di admin
      */
     public function getByAdmin($adminId, $perPage = 15)
     {
@@ -119,7 +131,9 @@ class BeritaRepository extends BaseRepository
     }
     
     /**
-     * Advanced search with multiple filters
+     * Advanced search dengan multiple filters
+     * Filters: keyword, date_from, date_to, sort (latest/popular/oldest)
+     * Untuk halaman pencarian dengan filter lengkap
      */
     public function advancedSearch(array $filters, $perPage = 12)
     {
@@ -163,7 +177,8 @@ class BeritaRepository extends BaseRepository
     }
     
     /**
-     * Get search suggestions for autocomplete
+     * Get search suggestions untuk autocomplete dropdown
+     * Return array dengan title dan URL untuk quick navigation
      */
     public function getSearchSuggestions($query, $limit = 5)
     {

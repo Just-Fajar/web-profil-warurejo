@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\GaleriController as AdminGaleriController;
 use App\Http\Controllers\Admin\ProfilDesaController;
 use App\Http\Controllers\Admin\PublikasiController as AdminPublikasiController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\StrukturOrganisasiController;
 use App\Http\Controllers\SitemapController;
 
 // SEO Routes
@@ -90,11 +91,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Galeri Management
         Route::post('galeri/bulk-delete', [AdminGaleriController::class, 'bulkDelete'])->name('galeri.bulk-delete');
+        Route::post('galeri/{galeri}/toggle-active', [AdminGaleriController::class, 'toggleActive'])->name('galeri.toggle-active');
         Route::resource('galeri', AdminGaleriController::class);
         
         // Publikasi Management
         Route::post('publikasi/bulk-delete', [AdminPublikasiController::class, 'bulkDelete'])->name('publikasi.bulk-delete');
         Route::resource('publikasi', AdminPublikasiController::class);
+        
+        // Struktur Organisasi Management
+        Route::post('struktur-organisasi/bulk-delete', [StrukturOrganisasiController::class, 'bulkDelete'])->name('struktur-organisasi.bulk-delete');
+        Route::resource('struktur-organisasi', StrukturOrganisasiController::class);
         
         // Profil Desa Management
         Route::prefix('profil-desa')->name('profil-desa.')->group(function () {

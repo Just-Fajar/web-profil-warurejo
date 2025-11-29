@@ -1,3 +1,33 @@
+{{--
+    ADMIN BERITA INDEX
+    
+    Halaman list semua berita dengan fitur CRUD
+    
+    FEATURES:
+    - Statistics cards (Total/Published/Draft)
+    - Search filter (judul/kategori/status)
+    - Sorting (terbaru/terlama/A-Z)
+    - Pagination (10 items per page)
+    - Delete confirmation (SweetAlert2)
+    - Quick view excerpt + thumbnail
+    - Status badges (Published=green, Draft=yellow)
+    
+    SEARCH & FILTER:
+    - Keyword: Search di judul
+    - Kategori: Dropdown (Pengumuman/Event/Berita)
+    - Status: Dropdown (Published/Draft)
+    - Sort: Dropdown (Terbaru/Terlama/A-Z/Z-A)
+    
+    ACTIONS:
+    - Edit: Navigate ke admin.berita.edit
+    - Delete: POST ke admin.berita.destroy dengan confirmation
+    
+    DATA:
+    $berita: Paginated collection dari BeritaRepository
+    
+    Route: /admin/berita
+    Controller: App\Http\Controllers\Admin\BeritaController@index
+--}}
 @extends('admin.layouts.app')
 
 
@@ -189,14 +219,15 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
-                                    <button type="button" 
-                                            onclick="deleteBerita({{ $item->id }}, '{{ $item->judul }}')"
-                                            class="text-red-600 hover:text-red-900"
-                                            title="Hapus">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
+                                    <form action="{{ route('admin.berita.destroy', $item->id) }}" method="POST" class="inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="text-red-600 hover:text-red-900 delete-btn" title="Hapus">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -369,7 +400,9 @@
         });
     }
 
-    // Single Delete
+    // Note: Single delete now handled by global delete-form script in app.blade.php
+    // Keeping deleteBerita function commented for reference
+    /*
     function deleteBerita(id, judul) {
         Swal.fire({
             title: 'Hapus Berita?',

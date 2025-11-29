@@ -8,6 +8,27 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminSeeder extends Seeder
 {
+    /**
+     * Seed admin default untuk login pertama kali
+     * 
+     * KREDENSIAL DEFAULT:
+     * Email: desawarurejo@gmail.com
+     * Password: sholawatlah
+     * 
+     * PENTING:
+     * 1. WAJIB GANTI PASSWORD setelah login pertama!
+     * 2. Ganti email ke email resmi desa
+     * 3. Update phone number ke nomor aktif
+     * 
+     * CARA GANTI PASSWORD:
+     * 1. Login ke admin panel
+     * 2. Masuk menu Profil
+     * 3. Update password dan data lainnya
+     * 
+     * SECURITY WARNING:
+     * Jangan commit kredensial production ke Git!
+     * Password ini hanya untuk development/testing.
+     */
     public function run(): void
     {
         Admin::create([

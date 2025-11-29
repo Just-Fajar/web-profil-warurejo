@@ -14,6 +14,12 @@ class BeritaService
     protected $imageUploadService;
     protected $htmlSanitizer;
 
+    /**
+     * Constructor - inject dependencies untuk handle berita operations
+     * @param BeritaRepository $beritaRepository - untuk database operations
+     * @param ImageUploadService $imageUploadService - untuk handle upload & resize image
+     * @param HtmlSanitizerService $htmlSanitizer - untuk sanitize HTML content
+     */
     public function __construct(
         BeritaRepository $beritaRepository,
         ImageUploadService $imageUploadService,
@@ -24,26 +30,51 @@ class BeritaService
         $this->htmlSanitizer = $htmlSanitizer;
     }
 
+    /**
+     * Mengambil semua berita tanpa filter
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getAllBerita()
     {
         return $this->beritaRepository->all();
     }
 
+    /**
+     * Mengambil berita dengan pagination untuk halaman admin
+     * @param int $perPage - jumlah item per halaman (default: 15)
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     public function getPaginatedBerita($perPage = 15)
     {
         return $this->beritaRepository->paginate($perPage);
     }
 
+    /**
+     * Mengambil berita yang sudah published untuk halaman public
+     * @param int $perPage - jumlah item per halaman (default: 10)
+     * @return \Illuminate\Pagination\LengthAwarePaginator
+     */
     public function getPublishedBerita($perPage = 10)
     {
         return $this->beritaRepository->getPublished($perPage);
     }
 
+    /**
+     * Mengambil satu berita berdasarkan ID
+     * @param int $id - ID berita
+     * @return \App\Models\Berita
+     */
     public function getBeritaById($id)
     {
         return $this->beritaRepository->find($id);
     }
 
+    /**
+     * Mengambil berita berdasarkan slug untuk halaman detail public
+     * Otomatis increment views count saat berita dilihat
+     * @param string $slug - slug berita
+     * @return \App\Models\Berita
+     */
     public function getBeritaBySlug($slug)
     {
         $berita = $this->beritaRepository->findBySlug($slug);
@@ -51,6 +82,17 @@ class BeritaService
         return $berita;
     }
 
+    /**
+     * Membuat berita baru
+     * - Sanitize HTML content untuk keamanan
+     * - Upload dan resize gambar utama
+     * - Generate thumbnail untuk performa loading
+     * - Set published_at jika status published
+     * - Clear cache terkait
+     * 
+     * @param array $data - data berita dari form
+     * @return \App\Models\Berita
+     */
     public function createBerita(array $data)
     {
         // Sanitize HTML content
@@ -84,6 +126,19 @@ class BeritaService
         return $berita;
     }
 
+    /**
+     * Update berita yang sudah ada
+     * - Sanitize HTML content
+     * - Handle remove image (hapus gambar lama jika checkbox di centang)
+     * - Handle upload gambar baru (hapus lama, upload baru, generate thumbnail)
+     * - Jika tidak ada perubahan gambar, tetap gunakan gambar lama
+     * - Set published_at jika status berubah ke published
+     * - Clear cache terkait
+     * 
+     * @param int $id - ID berita yang akan diupdate
+     * @param array $data - data berita dari form
+     * @return \App\Models\Berita
+     */
     public function updateBerita($id, array $data)
     {
         $berita = $this->beritaRepository->find($id);
@@ -146,6 +201,16 @@ class BeritaService
         return $updatedBerita;
     }
 
+    /**
+     * Hapus berita beserta file gambar dan thumbnail nya
+     * - Delete gambar utama dari storage
+     * - Delete thumbnail dari storage
+     * - Delete record dari database
+     * - Clear cache terkait
+     * 
+     * @param int $id - ID berita yang akan dihapus
+     * @return bool
+     */
     public function deleteBerita($id)
     {
         $berita = $this->beritaRepository->find($id);
@@ -170,13 +235,21 @@ class BeritaService
         return $deleted;
     }
 
+    /**
+     * Mengambil berita terbaru untuk homepage atau widget
+     * @param int $limit - jumlah berita yang diambil (default: 5)
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getLatestBerita($limit = 5)
     {
         return $this->beritaRepository->getLatest($limit);
     }
 
     /**
-     * Search berita by title or content
+     * Search berita berdasarkan keyword di judul atau konten
+     * @param string $keyword - kata kunci pencarian
+     * @param int $perPage - jumlah item per halaman
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function searchBerita($keyword, $perPage = 12)
     {
@@ -184,7 +257,10 @@ class BeritaService
     }
     
     /**
-     * Advanced search with multiple filters
+     * Advanced search dengan multiple filters (kategori, status, tanggal, dll)
+     * @param array $filters - array filter yang akan diaplikasikan
+     * @param int $perPage - jumlah item per halaman
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function searchWithFilters(array $filters, $perPage = 12)
     {
@@ -192,7 +268,10 @@ class BeritaService
     }
     
     /**
-     * Get search suggestions for autocomplete
+     * Mendapatkan saran pencarian untuk autocomplete
+     * @param string $query - partial keyword dari user
+     * @param int $limit - jumlah saran maksimal
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getSearchSuggestions($query, $limit = 5)
     {
@@ -200,8 +279,13 @@ class BeritaService
     }
 
     /**
-     * Upload image menggunakan ImageUploadService
-     * dengan resize dan optimization
+     * Protected: Upload dan optimize gambar berita
+     * - Resize ke max width 1200px untuk performa
+     * - Compress dan optimize gambar
+     * - Simpan ke folder berita di storage
+     * 
+     * @param \Illuminate\Http\UploadedFile $image - file gambar dari form
+     * @return string - path gambar yang tersimpan
      */
     protected function uploadImage($image)
     {
@@ -217,8 +301,13 @@ class BeritaService
     }
 
     /**
-     * Generate thumbnail dari image path
-     * Thumbnail disimpan di folder thumbnails/berita
+     * Protected: Generate thumbnail dari gambar yang sudah diupload
+     * - Buat versi kecil (400x300) untuk card/preview
+     * - Simpan di folder thumbnails/berita
+     * - Return null jika gagal (tidak critical)
+     * 
+     * @param string $imagePath - path gambar utama
+     * @return string|null - path thumbnail atau null jika gagal
      */
     protected function generateThumbnail($imagePath)
     {

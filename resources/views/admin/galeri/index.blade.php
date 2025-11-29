@@ -1,3 +1,43 @@
+{{--
+    ADMIN GALERI INDEX
+    
+    List semua galeri dengan management features
+    
+    FEATURES:
+    - Grid view galeri dengan thumbnails
+    - Statistics cards (Total/Aktif/Tidak Aktif)
+    - Search filter (judul)
+    - Kategori filter dropdown
+    - Status filter (Aktif/Tidak Aktif)
+    - Sort options (Terbaru/Terlama/A-Z/Z-A)
+    - Pagination (12 items per page)
+    - Quick toggle active status (AJAX)
+    - Bulk delete dengan checkbox selection
+    - View counter display
+    
+    GRID LAYOUT:
+    - Responsive cards (1/2/3/4 columns)
+    - Thumbnail image preview
+    - Category badge dengan color coding
+    - Active/Inactive status badge
+    - Quick actions (Edit/Delete/Toggle)
+    
+    BULK ACTIONS:
+    - Select all checkbox
+    - Bulk delete selected items
+    - Confirmation modal (SweetAlert2)
+    
+    AJAX FEATURES:
+    - Toggle active status tanpa reload
+    - Delete confirmation
+    - Success/error toasts
+    
+    DATA:
+    $galeri: Paginated collection dari GaleriRepository
+    
+    Route: /admin/galeri
+    Controller: AdminGaleriController@index
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Kelola Galeri')
@@ -140,6 +180,14 @@
 
         <!-- Footer -->
         <div class="border-t p-3 flex gap-2">
+            {{-- Toggle Active Button --}}
+            <button type="button"
+                    onclick="toggleActive({{ $item->id }}, this)"
+                    class="flex-1 {{ $item->is_active ? 'bg-green-600 hover:bg-green-700' : 'bg-gray-500 hover:bg-gray-600' }} text-white py-2 rounded text-sm transition-colors"
+                    title="{{ $item->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
+                <i class="fas fa-{{ $item->is_active ? 'eye' : 'eye-slash' }}"></i>
+            </button>
+
             <a href="{{ route('admin.galeri.edit', $item->id) }}" 
                class="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded text-center text-sm">
                 <i class="fas fa-edit"></i>
@@ -282,5 +330,85 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 5000);
 });
+
+// Toggle Active Function
+function toggleActive(galeriId, button) {
+    const currentCard = button.closest('.galeri-item');
+    const statusBadge = currentCard.querySelector('.text-white.text-xs.px-2.py-1.rounded.bg-green-600, .text-white.text-xs.px-2.py-1.rounded.bg-gray-500');
+    const currentStatus = currentCard.dataset.status === '1';
+    
+    Swal.fire({
+        title: currentStatus ? 'Nonaktifkan Galeri?' : 'Aktifkan Galeri?',
+        text: currentStatus ? 'Galeri tidak akan ditampilkan di website' : 'Galeri akan ditampilkan di website',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: currentStatus ? '#6B7280' : '#10B981',
+        cancelButtonColor: '#6B7280',
+        confirmButtonText: currentStatus ? '<i class="fas fa-eye-slash mr-2"></i>Ya, Nonaktifkan' : '<i class="fas fa-eye mr-2"></i>Ya, Aktifkan',
+        cancelButtonText: 'Batal',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown animate__faster'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp animate__faster'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/admin/galeri/${galeriId}/toggle-active`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button style and icon
+                    if (data.is_active) {
+                        button.classList.remove('bg-gray-500', 'hover:bg-gray-600');
+                        button.classList.add('bg-green-600', 'hover:bg-green-700');
+                        button.innerHTML = '<i class="fas fa-eye"></i>';
+                        button.title = 'Nonaktifkan';
+                    } else {
+                        button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                        button.classList.add('bg-gray-500', 'hover:bg-gray-600');
+                        button.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                        button.title = 'Aktifkan';
+                    }
+                    
+                    // Update status badge
+                    if (statusBadge) {
+                        statusBadge.textContent = data.is_active ? 'Aktif' : 'Non-Aktif';
+                        if (data.is_active) {
+                            statusBadge.classList.remove('bg-gray-500');
+                            statusBadge.classList.add('bg-green-600');
+                        } else {
+                            statusBadge.classList.remove('bg-green-600');
+                            statusBadge.classList.add('bg-gray-500');
+                        }
+                    }
+                    
+                    // Update data attribute for filter
+                    currentCard.dataset.status = data.is_active ? '1' : '0';
+                    
+                    Swal.fire({
+                        title: 'Berhasil!',
+                        text: data.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                } else {
+                    Swal.fire('Error!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('Error!', 'Terjadi kesalahan saat mengubah status', 'error');
+            });
+        }
+    });
+}
 </script>
 @endpush

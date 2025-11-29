@@ -15,13 +15,19 @@ class PotensiController extends Controller
 {
     protected $imageUploadService;
 
+    /**
+     * Constructor - Inject ImageUploadService
+     * Controller untuk handle HTTP requests potensi desa di admin panel
+     */
     public function __construct(ImageUploadService $imageUploadService)
     {
         $this->imageUploadService = $imageUploadService;
     }
 
     /**
-     * Display a listing of the resource.
+     * Tampilkan list semua potensi desa
+     * Sort by created_at descending (terbaru dulu)
+     * Route: GET /admin/potensi
      */
     public function index()
     {
@@ -30,7 +36,8 @@ class PotensiController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form create potensi baru
+     * Route: GET /admin/potensi/create
      */
     public function create()
     {
@@ -38,7 +45,12 @@ class PotensiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan potensi baru ke database
+     * - Auto-generate slug dari nama
+     * - Handle checkbox is_active (default 0 jika unchecked)
+     * - Upload gambar jika ada
+     * - Clear cache homepage
+     * Route: POST /admin/potensi
      */
     public function store(PotensiRequest $request)
     {
@@ -77,7 +89,8 @@ class PotensiController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail potensi (preview)
+     * Route: GET /admin/potensi/{id}
      */
     public function show(PotensiDesa $potensi)
     {
@@ -85,7 +98,8 @@ class PotensiController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form edit potensi
+     * Route: GET /admin/potensi/{id}/edit
      */
     public function edit(PotensiDesa $potensi)
     {
@@ -93,7 +107,12 @@ class PotensiController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update potensi yang sudah ada
+     * - Handle checkbox is_active
+     * - Update slug jika nama berubah
+     * - Jika ada gambar baru, delete lama lalu upload baru
+     * - Clear cache setelah update
+     * Route: PUT /admin/potensi/{id}
      */
     public function update(PotensiRequest $request, PotensiDesa $potensi)
     {
@@ -140,7 +159,9 @@ class PotensiController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete potensi beserta gambarnya dari storage
+     * Clear cache setelah delete
+     * Route: DELETE /admin/potensi/{id}
      */
     public function destroy(PotensiDesa $potensi)
     {
@@ -167,7 +188,10 @@ class PotensiController extends Controller
     }
 
     /**
-     * Bulk delete potensi
+     * Bulk delete multiple potensi sekaligus
+     * - Loop semua dan delete gambarnya dari storage
+     * - Return JSON response untuk AJAX
+     * Route: POST /admin/potensi/bulk-delete
      */
     public function bulkDelete(Request $request)
     {

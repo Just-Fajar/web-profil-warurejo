@@ -1,3 +1,44 @@
+{{--
+    ADMIN POTENSI CREATE
+    
+    Form tambah potensi desa (ekonomi, wisata, UMKM)
+    
+    FEATURES:
+    - Rich form dengan TinyMCE editor
+    - Image upload dengan preview
+    - Kategori selection (7 kategori)
+    - Auto slug generation dari nama
+    - Contact info fields (telepon, WhatsApp)
+    - Order priority (urutan)
+    - Active/draft toggle
+    
+    FORM FIELDS:
+    - nama: Nama potensi (auto-generate slug)
+    - kategori: Dropdown (pertanian/peternakan/perikanan/umkm/wisata/kerajinan/lainnya)
+    - deskripsi: Rich text editor (TinyMCE)
+    - gambar: Image upload (max 5MB, JPG/PNG/WEBP)
+    - lokasi: Alamat/lokasi potensi
+    - kontak: Nomor telepon
+    - whatsapp: Nomor WhatsApp untuk quick contact
+    - urutan: Order priority (default auto-increment)
+    - is_active: Boolean toggle (default true)
+    
+    VALIDATION:
+    - Nama required, max 255 chars
+    - Slug unique (auto-check)
+    - Kategori must be in enum
+    - Gambar max 5MB, image format
+    - WhatsApp numeric only
+    
+    JAVASCRIPT:
+    - TinyMCE initialization
+    - Image preview before upload
+    - Auto-format phone numbers
+    - Form validation
+    
+    Route: POST /admin/potensi/store
+    Controller: AdminPotensiController@store
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Tambah Potensi Desa')
@@ -293,15 +334,6 @@
         </a>
 
         <div class="flex gap-3">
-
-            <!-- Simpan sebagai Draft -->
-            <button type="submit"
-                    name="action"
-                    value="draft"
-                    class="px-5 py-2 border border-blue-500 text-blue-600 rounded-lg
-                           hover:bg-blue-50 transition flex items-center gap-2">
-                <i class="fas fa-save"></i> Simpan sebagai Draft
-            </button>
 
             <!-- Simpan & Publikasikan -->
             <button type="submit"

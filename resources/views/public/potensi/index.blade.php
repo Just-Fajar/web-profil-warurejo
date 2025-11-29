@@ -1,3 +1,55 @@
+{{--
+    PUBLIC POTENSI INDEX
+    
+    Halaman list potensi desa untuk pengunjung
+    
+    FEATURES:
+    - Hero section dengan green gradient
+    - Search filter (nama potensi)
+    - Kategori filter (pertanian/peternakan/umkm/wisata/lainnya)
+    - Sort options (Terbaru/Terlama/Terpopuler)
+    - Grid layout responsive (1/2/3 columns)
+    - Card dengan image, kategori badge, excerpt
+    - View counter display
+    - Contact info (telepon/WhatsApp)
+    - Pagination (12 items per page)
+    
+    KATEGORI POTENSI:
+    - Pertanian: Padi, sayuran, buah-buahan
+    - Peternakan: Sapi, kambing, ayam
+    - Perikanan: Ikan, udang, kolam
+    - UMKM: Usaha kecil menengah
+    - Wisata: Destinasi wisata desa
+    - Kerajinan: Produk kerajinan lokal
+    - Lainnya: Potensi lain
+    
+    CARD CONTENT:
+    - Featured image (fallback default-potensi.jpg)
+    - Kategori badge dengan color coding
+    - Nama potensi
+    - Excerpt (150 chars, strip HTML)
+    - Lokasi (jika ada)
+    - Contact info (telepon/WhatsApp clickable)
+    - Views counter
+    - "Lihat Detail" button
+    
+    RESPONSIVE:
+    - Mobile: 1 column, full-width cards
+    - Tablet: 2 columns
+    - Desktop: 3 columns grid
+    
+    SEO:
+    - Title: Potensi Desa - Desa Warurejo
+    - Meta description: Kekayaan dan potensi desa
+    - Slug-based URLs (/potensi/{slug})
+    
+    DATA:
+    $potensi: Paginated collection dari PotensiDesaRepository
+    Request params: search, kategori, urutkan
+    
+    Route: /potensi
+    Controller: Public\PotensiController@index
+--}}
 @extends('public.layouts.app')
 
 @section('title', 'Potensi Desa - Desa Warurejo')
