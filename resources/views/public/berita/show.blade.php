@@ -1,3 +1,53 @@
+{{--
+    PUBLIC BERITA DETAIL
+    
+    Halaman detail artikel berita dengan full content
+    
+    FEATURES:
+    - Breadcrumb navigation (Home > Berita > Judul)
+    - Featured image full-width (responsive height)
+    - Category & date badges
+    - Author info (admin name)
+    - Full HTML content (sanitized dari TinyMCE)
+    - View counter increment
+    - Social share buttons (Facebook, Twitter, WhatsApp)
+    - Related articles (3 berita terkait)
+    - Back to list button
+    
+    CONTENT RENDERING:
+    - {!! $berita->konten !!} - Raw HTML dari TinyMCE
+    - Already sanitized di BeritaService dengan HTMLPurifier
+    - Support images, videos, tables, formatted text
+    
+    SEO OPTIMIZATION:
+    - Dynamic title: {judul} - Desa Warurejo
+    - Meta description dari excerpt
+    - Open Graph tags untuk social sharing
+    - Article structured data (JSON-LD)
+    - Canonical URL
+    
+    SOCIAL SHARING:
+    - Facebook: Share dengan title + URL
+    - Twitter: Tweet dengan title + URL + hashtags
+    - WhatsApp: Share message dengan title + URL
+    
+    RELATED ARTICLES:
+    - Same kategori berita
+    - Exclude current article
+    - Limit 3 articles
+    - Random or latest
+    
+    TRACKING:
+    - View counter auto-increment via BeritaService
+    - Analytics tracking (visitor stats)
+    
+    DATA:
+    $berita: Berita model with relationships (admin, category)
+    $relatedBerita: Collection of related articles
+    
+    Route: /berita/{slug}
+    Controller: Public\BeritaController@show
+--}}
 @extends('public.layouts.app')
 
 @section('title', $berita->judul . ' - Desa Warurejo')

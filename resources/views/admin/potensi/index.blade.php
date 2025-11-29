@@ -1,3 +1,45 @@
+{{--
+    ADMIN POTENSI INDEX
+    
+    List management potensi desa
+    
+    FEATURES:
+    - Statistics cards (Total/Aktif/Per Kategori)
+    - Search filter (nama)
+    - Kategori filter (7 kategori)
+    - Status filter (Aktif/Tidak Aktif)
+    - Sort options (Urutan/Terbaru/Terlama/A-Z)
+    - Pagination (10 items per page)
+    - Drag & drop reorder (sortable)
+    - Bulk delete dengan checkbox
+    - Quick view preview
+    
+    TABLE COLUMNS:
+    - Urutan (sortable handle)
+    - Gambar thumbnail
+    - Nama potensi
+    - Kategori badge
+    - Kontak (telepon/WhatsApp)
+    - Views counter
+    - Status badge
+    - Actions (Edit/Delete)
+    
+    SORTABLE FEATURE:
+    - Drag & drop rows untuk ubah urutan
+    - AJAX save urutan baru
+    - Visual feedback saat drag
+    
+    BULK ACTIONS:
+    - Select all checkbox
+    - Bulk delete confirmation
+    
+    DATA:
+    $potensi: Paginated collection dari PotensiDesaRepository
+    $totalByKategori: Array count per kategori
+    
+    Route: /admin/potensi
+    Controller: AdminPotensiController@index
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Kelola Potensi Desa')
@@ -232,14 +274,15 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
-                                    <button type="button" 
-                                            onclick="deletePotensi({{ $item->id }}, '{{ $item->nama }}')"
-                                            class="text-red-600 hover:text-red-900"
-                                            title="Hapus">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                        </svg>
-                                    </button>
+                                    <form action="{{ route('admin.potensi.destroy', $item->id) }}" method="POST" class="inline delete-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="text-red-600 hover:text-red-900 delete-btn" title="Hapus">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

@@ -1,3 +1,34 @@
+{{--
+    ADMIN DASHBOARD
+    
+    Halaman utama admin panel dengan statistik dan overview
+    
+    SECTIONS:
+    1. Welcome Message: Greeting dengan nama admin
+    2. Statistics Cards: Total berita/potensi/galeri/publikasi/struktur
+    3. Visitor Charts: Line chart (daily) + Pie chart (sources)
+    4. Recent Activity: Latest berita & potensi
+    
+    DATA DARI CONTROLLER:
+    - $totalBerita, $beritaPublished, $beritaDraft
+    - $totalPotensi, $totalGaleri, $totalPublikasi, $totalStruktur
+    - $visitorStatsJson: JSON untuk Chart.js
+    - $latestBerita, $latestPotensi: Collection
+    
+    CHARTS:
+    - Chart.js library (loaded via CDN)
+    - visitorChart: Line chart (7 hari terakhir)
+    - sourceChart: Doughnut chart (Direct/Referral/Social)
+    
+    FEATURES:
+    - Real-time statistics counts
+    - Publish/Draft breakdown
+    - Responsive grid layout (1/2/5 columns)
+    - Quick links ke management pages
+    
+    Route: /admin/dashboard
+    Controller: App\Http\Controllers\Admin\DashboardController@index
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Dashboard')
@@ -293,19 +324,24 @@
                     </div>
                 </a>
 
-                <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-lg opacity-50 cursor-not-allowed">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                            </svg>
+                <a href="{{ route('admin.struktur-organisasi.index') }}" class="block">
+                    <div class="flex items-center justify-between p-4 bg-yellow-50 hover:bg-yellow-100 rounded-lg cursor-pointer transition group">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800 group-hover:text-yellow-600">Kelola Struktur Organisasi</p>
+                                <p class="text-xs text-gray-500">Manajemen anggota struktur</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="font-semibold text-gray-800">Edit Profil Desa</p>
-                            <p class="text-xs text-gray-500">Coming soon</p>
-                        </div>
+                        <svg class="w-5 h-5 text-gray-400 group-hover:text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </div>
@@ -419,13 +455,13 @@
 
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div class="flex items-center justify-end gap-3">
-                                <a href="{{ route('admin.berita.edit', $berita->id) }}" class="text-blue-600 hover:text-blue-900">
+                                <a href="{{ route('admin.berita.edit', $berita->id) }}" class="text-blue-600 hover:text-blue-900 transition-colors">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
+                                <form action="{{ route('admin.berita.destroy', $berita->id) }}" method="POST" class="inline delete-form">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900">
+                                    <button type="button" class="text-red-600 hover:text-red-900 transition-colors delete-btn">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
@@ -513,13 +549,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a href="{{ route('admin.potensi.edit', $potensi->id) }}" class="text-blue-600 hover:text-blue-900">
+                                    <a href="{{ route('admin.potensi.edit', $potensi->id) }}" class="text-blue-600 hover:text-blue-900 transition-colors">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.potensi.destroy', $potensi->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus potensi ini?');">
+                                    <form action="{{ route('admin.potensi.destroy', $potensi->id) }}" method="POST" class="inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                        <button type="button" class="text-red-600 hover:text-red-900 transition-colors delete-btn">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -567,8 +603,10 @@
                                 <div class="flex items-center">
                                     <div class="shrink-0 h-10 w-10">
                                         @if($galeri->gambar)
-                                            <img class="h-10 w-10 rounded object-cover" src="{{ asset('storage/' . $galeri->gambar) }}" alt="">
-                                        @else
+                                                <img src="{{ asset('storage/' . $galeri->gambar) }}" class="h-10 w-10 rounded object-cover">
+                                            @elseif($galeri->images->first())
+                                                <img src="{{ asset('storage/' . $galeri->images->first()->image_path) }}" class="h-10 w-10 rounded object-cover">
+                                            @else
                                             <div class="h-10 w-10 rounded bg-gray-200 flex items-center justify-center">
                                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
@@ -588,13 +626,13 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($galeri->status === 'published')
+                                @if($galeri->is_active)
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                        Published
+                                        Aktif
                                     </span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                        Draft
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                                        Tidak Aktif
                                     </span>
                                 @endif
                             </td>
@@ -607,13 +645,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a href="{{ route('admin.galeri.edit', $galeri->id) }}" class="text-blue-600 hover:text-blue-900">
+                                    <a href="{{ route('admin.galeri.edit', $galeri->id) }}" class="text-blue-600 hover:text-blue-900 transition-colors">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.galeri.destroy', $galeri->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus galeri ini?');">
+                                    <form action="{{ route('admin.galeri.destroy', $galeri->id) }}" method="POST" class="inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                        <button type="button" class="text-red-600 hover:text-red-900 transition-colors delete-btn">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -705,13 +743,13 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex items-center justify-end gap-3">
-                                    <a href="{{ route('admin.publikasi.edit', $publikasi->id) }}" class="text-blue-600 hover:text-blue-900">
+                                    <a href="{{ route('admin.publikasi.edit', $publikasi->id) }}" class="text-blue-600 hover:text-blue-900 transition-colors">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.publikasi.destroy', $publikasi->id) }}" method="POST" class="inline" onsubmit="return confirm('Yakin ingin menghapus publikasi ini?');">
+                                    <form action="{{ route('admin.publikasi.destroy', $publikasi->id) }}" method="POST" class="inline delete-form">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                        <button type="button" class="text-red-600 hover:text-red-900 transition-colors delete-btn">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

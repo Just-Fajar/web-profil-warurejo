@@ -11,11 +11,22 @@ class PotensiController extends Controller
 {
     protected $potensiService;
 
+    /**
+     * Constructor - Inject PotensiDesaService
+     * Controller untuk handle halaman potensi desa public
+     */
     public function __construct(PotensiDesaService $potensiService)
     {
         $this->potensiService = $potensiService;
     }
 
+    /**
+     * Tampilkan list semua potensi dengan filter
+     * Filter: kategori, search, urutkan (terbaru/terlama/terpopuler)
+     * Include SEO meta tags
+     * 
+     * Route: GET /potensi
+     */
     public function index(Request $request)
     {
         $kategori = $request->get('kategori');
@@ -45,6 +56,16 @@ class PotensiController extends Controller
         return view('public.potensi.index', compact('potensi', 'kategori', 'seoData'));
     }
 
+    /**
+     * Tampilkan detail potensi by slug
+     * - Load related potensi (3 item same category)
+     * - Generate SEO meta tags dengan Open Graph
+     * - Generate structured data (Place schema)
+     * - Generate breadcrumb schema
+     * - Throw 404 jika tidak ditemukan
+     * 
+     * Route: GET /potensi/{slug}
+     */
     public function show($slug)
     {
         try {

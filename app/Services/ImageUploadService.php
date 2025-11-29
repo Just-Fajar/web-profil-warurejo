@@ -12,6 +12,10 @@ class ImageUploadService
 {
     protected $manager;
 
+    /**
+     * Constructor - Initialize Intervention Image dengan GD driver
+     * GD driver lebih ringan dan tersedia di hampir semua PHP installation
+     */
     public function __construct()
     {
         // Initialize ImageManager with GD driver (or Imagick if available)
@@ -19,14 +23,18 @@ class ImageUploadService
     }
 
     /**
-     * Upload image dengan resize dan optimization
-     *
-     * @param \Illuminate\Http\UploadedFile $image
-     * @param string $folder
-     * @param int|null $maxWidth
-     * @param int|null $maxHeight
-     * @param int $quality Quality for JPEG/WebP (0-100), default 85
-     * @return string|null
+     * Upload dan optimize image dengan resize otomatis
+     * - Generate unique filename untuk prevent conflict
+     * - Resize sesuai maxWidth/maxHeight (maintain aspect ratio)
+     * - Optimize berdasarkan format (JPEG/PNG/WebP)
+     * - Simpan ke storage Laravel
+     * 
+     * @param \Illuminate\Http\UploadedFile $image - file gambar dari form
+     * @param string $folder - folder tujuan di storage (default: 'uploads')
+     * @param int|null $maxWidth - lebar maksimal pixel (default: 1200)
+     * @param int|null $maxHeight - tinggi maksimal pixel (default: null = auto)
+     * @param int $quality - kualitas JPEG/WebP 0-100 (default: 85)
+     * @return string|null - path file yang tersimpan atau null jika gagal
      */
     public function upload($image, $folder = 'uploads', $maxWidth = 1200, $maxHeight = null, $quality = 85)
     {
@@ -96,11 +104,13 @@ class ImageUploadService
     }
 
     /**
-     * Upload multiple images
-     *
-     * @param array $images
-     * @param string $folder
-     * @return array
+     * Upload multiple images sekaligus
+     * Berguna untuk galeri dengan banyak foto
+     * Jika ada gambar yang gagal, gambar lain tetap diproses
+     * 
+     * @param array $images - array of UploadedFile objects
+     * @param string $folder - folder tujuan
+     * @return array - array of paths yang berhasil di-upload
      */
     public function uploadMultiple(array $images, $folder = 'uploads')
     {
@@ -117,10 +127,12 @@ class ImageUploadService
     }
 
     /**
-     * Delete image from storage
-     *
-     * @param string|null $path
-     * @return bool
+     * Delete image dari storage
+     * Safe delete - cek dulu apakah file exist sebelum dihapus
+     * Biasanya dipanggil saat update/delete content
+     * 
+     * @param string|null $path - path file relatif dari storage/app/public
+     * @return bool - true jika berhasil dihapus, false jika gagal atau file tidak ada
      */
     public function delete($path)
     {
@@ -140,10 +152,12 @@ class ImageUploadService
     }
 
     /**
-     * Delete multiple images
-     *
-     * @param array $paths
-     * @return int
+     * Delete multiple images sekaligus
+     * Berguna untuk hapus semua foto galeri atau cleanup
+     * Tidak stop jika ada file yang gagal dihapus
+     * 
+     * @param array $paths - array of file paths
+     * @return int - jumlah file yang berhasil dihapus
      */
     public function deleteMultiple(array $paths)
     {
@@ -159,10 +173,12 @@ class ImageUploadService
     }
 
     /**
-     * Generate unique filename
-     *
+     * Generate unique filename untuk prevent conflict
+     * Format: timestamp_random10karakter.extension
+     * Contoh: 1703145234_aBcDeFgHiJ.jpg
+     * 
      * @param \Illuminate\Http\UploadedFile $image
-     * @return string
+     * @return string - nama file yang unik
      */
     protected function generateFilename($image)
     {
@@ -174,11 +190,12 @@ class ImageUploadService
     }
 
     /**
-     * Get image URL from path
-     *
-     * @param string|null $path
-     * @param string|null $default
-     * @return string
+     * Get public URL dari image path untuk ditampilkan di view
+     * Cek dulu apakah file exist, jika tidak return default placeholder
+     * 
+     * @param string|null $path - path relatif dari storage/app/public
+     * @param string|null $default - URL gambar default jika file tidak ada
+     * @return string - full public URL yang bisa diakses browser
      */
     public function getUrl($path, $default = null)
     {
@@ -194,14 +211,17 @@ class ImageUploadService
     }
 
     /**
-     * Create thumbnail
-     *
+     * Create thumbnail dari uploaded file (untuk preview/listing)
+     * - Crop to fit (cover) agar tidak ada whitespace
+     * - Always save as WebP untuk ukuran lebih kecil
+     * - Default 300x300 dengan quality 80
+     * 
      * @param \Illuminate\Http\UploadedFile $image
-     * @param string $folder
-     * @param int $width
-     * @param int $height
-     * @param int $quality
-     * @return string|null
+     * @param string $folder - folder tujuan (default: 'thumbnails')
+     * @param int $width - lebar thumbnail pixel
+     * @param int $height - tinggi thumbnail pixel
+     * @param int $quality - kualitas WebP 0-100
+     * @return string|null - path thumbnail atau null jika gagal
      */
     public function createThumbnail($image, $folder = 'thumbnails', $width = 300, $height = 300, $quality = 80)
     {
@@ -234,14 +254,16 @@ class ImageUploadService
     }
 
     /**
-     * Create thumbnail from existing file path
-     *
-     * @param string $imagePath Path relative to storage/app/public
-     * @param string $folder
-     * @param int $width
-     * @param int $height
-     * @param int $quality
-     * @return string|null
+     * Create thumbnail dari file yang sudah tersimpan di storage
+     * Berguna saat regenerate thumbnail atau batch processing
+     * Cek dulu apakah source file exist, baru buat thumbnail
+     * 
+     * @param string $imagePath - path file sumber relatif dari storage/app/public
+     * @param string $folder - folder tujuan thumbnail
+     * @param int $width - lebar thumbnail
+     * @param int $height - tinggi thumbnail
+     * @param int $quality - kualitas WebP
+     * @return string|null - path thumbnail baru atau null jika gagal
      */
     public function createThumbnailFromPath($imagePath, $folder = 'thumbnails', $width = 300, $height = 300, $quality = 80)
     {

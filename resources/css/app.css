@@ -1,6 +1,56 @@
+/**
+ * Main Application Stylesheet
+ * 
+ * Framework: Tailwind CSS v4 dengan custom theme
+ * Build: Vite + PostCSS
+ * Output: public/build/assets/app-[hash].css
+ * 
+ * STRUKTUR FILE:
+ * 1. Theme Configuration - Custom color palette
+ * 2. Base Layer - Global styles (body, headings)
+ * 3. Components Layer - Reusable UI components
+ * 4. Utilities Layer - Helper classes
+ * 5. Custom Animations - Keyframes dan transitions
+ * 6. Navigation Styles - Header menu interactions
+ * 7. Tribute Card Styles - Special component styles
+ * 
+ * CUSTOM THEME:
+ * - Primary colors: Sky blue palette (#0ea5e9)
+ * - Base font: System UI (native look)
+ * - Background: Subtle gradient + dot pattern
+ * 
+ * USAGE:
+ * Class utility components bisa dipakai di semua Blade templates:
+ * - .btn-primary, .btn-secondary, .btn-danger
+ * - .form-input, .form-label, .form-error
+ * - .card, .card-header, .card-body
+ * - .alert-success, .alert-error, .alert-warning
+ * - .badge-primary, .badge-success
+ * 
+ * Build Commands:
+ * - npm run dev: Development dengan hot reload
+ * - npm run build: Production build (minified, optimized)
+ */
+
 @import "tailwindcss";
 
-/* Custom Theme Colors */
+/* ==========================================
+   CUSTOM THEME COLORS
+   ========================================== 
+   
+   Primary Color Palette: Sky Blue
+   Digunakan untuk:
+   - Primary buttons
+   - Links dan navigation active state
+   - Focus rings di form inputs
+   - Badges dan status indicators
+   
+   Cara pakai di Tailwind:
+   - bg-primary-500: Background primary
+   - text-primary-600: Text primary
+   - border-primary-400: Border primary
+   - hover:bg-primary-700: Hover state
+   ========================================== */
 @theme {
     --color-primary-50: #f0f9ff;
     --color-primary-100: #e0f2fe;
@@ -14,7 +64,21 @@
     --color-primary-900: #0c4a6e;
 }
 
-/* Custom Styles */
+/* ==========================================
+   BASE LAYER - Global Styles
+   ========================================== 
+   
+   Apply ke semua halaman (admin + public)
+   
+   Body Background:
+   - Subtle gradient overlay (sky + green + blue)
+   - Dotted pattern untuk texture
+   - Fixed attachment untuk parallax effect
+   
+   Headings:
+   - Font weight 700 untuk semua h1-h6
+   - Consistent typography hierarchy
+   ========================================== */
 @layer base {
     body {
         font-family: system-ui, -apple-system, sans-serif;
@@ -51,6 +115,45 @@
     }
 }
 
+/* ==========================================
+   COMPONENTS LAYER - Reusable UI Components
+   ========================================== 
+   
+   Ready-to-use component classes:
+   
+   BUTTONS:
+   - .btn-primary: Main action (blue)
+   - .btn-secondary: Secondary action (gray)
+   - .btn-danger: Delete/remove (red)
+   - .btn-success: Success action (green)
+   
+   FORMS:
+   - .form-input: Text input with focus ring
+   - .form-label: Bold label text
+   - .form-error: Red error message
+   
+   CARDS:
+   - .card: White box with shadow
+   - .card-header: Top section with border
+   - .card-body: Main content area
+   - .card-footer: Bottom section (gray bg)
+   
+   ALERTS:
+   - .alert-success: Green notification
+   - .alert-error: Red error message
+   - .alert-warning: Yellow warning
+   - .alert-info: Blue info message
+   
+   TABLES:
+   - .table: Full-width responsive table
+   - Auto hover effect pada rows
+   
+   BADGES:
+   - .badge-primary: Blue badge
+   - .badge-success: Green badge
+   - .badge-danger: Red badge
+   - .badge-warning: Yellow badge
+   ========================================== */
 @layer components {
     /* Button Styles */
     .btn {
@@ -172,6 +275,24 @@
     }
 }
 
+/* ==========================================
+   UTILITIES LAYER - Helper Classes
+   ========================================== 
+   
+   LINE CLAMP:
+   - .line-clamp-1: Truncate ke 1 baris + ...
+   - .line-clamp-2: Truncate ke 2 baris + ...
+   - .line-clamp-3: Truncate ke 3 baris + ...
+   Cross-browser compatible (Chrome, Firefox, Safari)
+   
+   SCROLLBAR:
+   - .no-scrollbar: Hide scrollbar (all browsers)
+   - Fallback untuk browser lama
+   
+   Usage contoh:
+   <p class="line-clamp-2">Long text here...</p>
+   <div class="overflow-auto no-scrollbar">Scrollable</div>
+   ========================================== */
 @layer utilities {
     /* Line Clamp - Cross-browser compatible */
     .line-clamp-1 {
@@ -221,7 +342,26 @@
     }
 }
 
-/* Custom Animations */
+/* ==========================================
+   CUSTOM ANIMATIONS
+   ========================================== 
+   
+   FADE IN ANIMATION:
+   - Smooth entrance dari bottom ke top
+   - Duration: 0.3s
+   - Easing: ease-out
+   Usage: <div class="animate-fadeIn">Content</div>
+   
+   IMAGE ZOOM:
+   - Hover effect untuk gambar
+   - Scale 1.1x dengan smooth transition
+   Usage: <div class="img-zoom"><img src="..."></div>
+   
+   GRADIENT TEXT:
+   - Text dengan gradient color (blue)
+   - Webkit compatible
+   Usage: <h1 class="gradient-text">Title</h1>
+   ========================================== */
 @keyframes fadeIn {
     from {
         opacity: 0;

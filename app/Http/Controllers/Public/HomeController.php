@@ -18,6 +18,10 @@ class HomeController extends Controller
     protected $galeriRepository;
     protected $visitorService;
 
+    /**
+     * Constructor - Inject services untuk homepage
+     * Controller untuk handle halaman homepage public
+     */
     public function __construct(
         BeritaService $beritaService,
         PotensiDesaService $potensiService,
@@ -30,6 +34,19 @@ class HomeController extends Controller
         $this->visitorService = $visitorService;
     }
 
+    /**
+     * Tampilkan halaman homepage dengan cache strategy
+     * Cache duration:
+     * - Profil desa: 1 hari (jarang berubah)
+     * - Berita: 1 jam (sering update)
+     * - Potensi: 6 jam
+     * - Galeri: 3 jam
+     * - Total counts: 1-6 jam
+     * - Visitor stats: real-time (no cache)
+     * - SEO data: 1 hari
+     * 
+     * Route: GET /
+     */
     public function index()
     {
         // Cache profil desa for 1 day (86400 seconds)

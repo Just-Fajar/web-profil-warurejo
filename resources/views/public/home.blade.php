@@ -1,3 +1,39 @@
+{{--
+    PUBLIC HOMEPAGE
+    
+    Landing page website desa dengan overview lengkap
+    
+    SECTIONS:
+    1. Hero: Full-screen banner dengan background image desa
+    2. Stats: Animated counter (Potensi/Berita/Galeri/Struktur)
+    3. Latest News: 3 berita terbaru dengan card layout
+    4. Village Potential: Grid showcase potensi desa
+    5. Photo Gallery: Masonry grid foto-foto desa
+    6. Organization Structure: Leadership display
+    7. Contact: Map + contact info
+    
+    ANIMATIONS:
+    - scroll-reveal: Fade in saat scroll ke section
+    - scroll-reveal-stagger: Sequential animation items
+    - count animation: Increment numbers dari 0 ke target
+    
+    DATA DARI CONTROLLER:
+    - $profil: ProfilDesa model (nama_desa, visi, misi)
+    - $totalPotensi, $totalBerita, $totalGaleri, $totalStruktur
+    - $latestBerita: 3 berita terbaru
+    - $potensiList: Potensi desa items
+    - $galeriList: Galeri photos
+    - $strukturList: Struktur organisasi
+    
+    INTERACTIVE ELEMENTS:
+    - Hover effects di cards
+    - Smooth scroll navigation
+    - Lightbox untuk gallery images
+    - WhatsApp FAB (from layout)
+    
+    Route: /
+    Controller: App\Http\Controllers\Public\HomeController@index
+--}}
 @extends('public.layouts.app')
 
 @section('title', 'Beranda')

@@ -1,3 +1,55 @@
+{{--
+    ERROR 404 - PAGE NOT FOUND
+    
+    Custom error page untuk halaman tidak ditemukan
+    
+    DESIGN:
+    - Split layout (2 columns)
+    - Left: Error info dengan green gradient
+    - Right: Navigation options
+    - Responsive: Stack to 1 column on mobile
+    
+    LEFT SECTION:
+    - Logo desa dengan branding
+    - Large 404 number dengan float animation
+    - Error explanation (halaman tidak ditemukan)
+    - Stats badges (tahun, layanan 24/7)
+    
+    RIGHT SECTION:
+    - Map icon dengan pulse animation
+    - "Ayo Kembali ke Jalur!" message
+    - Navigation buttons:
+      * Kembali ke Beranda (primary green)
+      * Lihat Berita Desa (outline)
+      * Potensi Desa (outline)
+      * Galeri Desa (outline)
+    - Help text dengan contact link
+    
+    ANIMATIONS:
+    - float: 404 number moves up/down (3s infinite)
+    - pulse-soft: Icon opacity animation (2s infinite)
+    - Background gradient decorations
+    
+    BUTTONS:
+    - Gradient green primary button
+    - White outline hover buttons
+    - Transform hover effect (lift -0.5px)
+    - Icon + text combination
+    
+    SEO:
+    - meta robots: noindex, nofollow (don't index error pages)
+    - Proper title: 404 - Halaman Tidak Ditemukan
+    
+    USAGE:
+    Laravel automatically shows this when:
+    - Route not found
+    - Model not found (404 abort)
+    - Resource deleted
+    
+    CUSTOMIZATION:
+    Edit text, colors, links as needed
+    Maintain consistent branding
+--}}
 <!DOCTYPE html>
 <html lang="id">
 <head>

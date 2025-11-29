@@ -1,3 +1,34 @@
+{{--
+    ADMIN POTENSI EDIT
+    
+    Form edit potensi desa existing
+    
+    FEATURES:
+    - Pre-filled form dengan data existing
+    - Update gambar (optional, keep existing if not changed)
+    - Preview current image
+    - Change kategori & kontak info
+    - Toggle active status
+    - View counter display (read-only)
+    
+    FORM FIELDS:
+    Same as create, pre-filled dengan $potensi data
+    
+    SLUG HANDLING:
+    - Slug editable (unique validation exclude current ID)
+    - Auto-update jika nama berubah
+    
+    IMAGE HANDLING:
+    - Display current image preview
+    - Optional new upload (akan replace existing)
+    - Keep old image jika tidak upload baru
+    
+    VALIDATION:
+    Same as create, gambar optional di edit
+    
+    Route: PUT /admin/potensi/{id}/update
+    Controller: AdminPotensiController@update
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Edit Potensi Desa')
@@ -52,9 +83,7 @@
         <div class="p-6">
             <form action="{{ route('admin.potensi.update', $potensi->id) }}" method="POST" enctype="multipart/form-data" id="potensiForm">
                 @csrf
-                @method('PUT')
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                @method('PUT')                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Left Column -->
                     <div class="lg:col-span-2 space-y-6">
                         <!-- Nama Potensi -->
@@ -178,7 +207,7 @@
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
-
+dr
                         <!-- WhatsApp -->
                         <div>
                             <label for="whatsapp" class="block text-sm font-medium text-gray-700">Nomor WhatsApp <span class="text-xs text-gray-500">(Opsional)</span></label>
@@ -231,9 +260,6 @@
                     </a>
 
                     <div class="flex gap-3">
-                        <button type="submit" name="action" value="draft" class="inline-flex items-center px-5 py-2 border border-blue-500 text-blue-600 rounded hover:bg-blue-50 transition">
-                            <i class="fas fa-save me-2"></i> Simpan sebagai Draft
-                        </button>
                         <button type="submit" name="action" value="publish" class="inline-flex items-center px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                             <i class="fas fa-check me-2"></i> Perbarui & Publikasikan
                         </button>

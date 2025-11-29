@@ -8,6 +8,24 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * 
+     * CARA PAKAI:
+     * 1. Fresh install: php artisan migrate:fresh --seed
+     * 2. Re-seed only: php artisan db:seed
+     * 3. Specific seeder: php artisan db:seed --class=BeritaSeeder
+     * 
+     * STRUKTUR SEEDING:
+     * 1. Data utama (WAJIB):
+     *    - AdminSeeder: Admin default untuk login pertama
+     * 
+     * 2. Data dummy (OPTIONAL - untuk development/testing):
+     *    - BeritaSeeder: 20 sample berita
+     *    - PotensiSeeder: 15 sample potensi desa
+     *    - GaleriSeeder: 30 sample galeri (foto + video)
+     * 
+     * CATATAN PRODUCTION:
+     * Comment out data dummy seeders di production!
+     * Hanya jalankan AdminSeeder untuk create admin pertama.
      */
     public function run(): void
     {

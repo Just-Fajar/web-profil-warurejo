@@ -10,11 +10,25 @@ use App\Models\Admin;
 
 class AuthController extends Controller
 {
+    /**
+     * Tampilkan form login admin
+     * Route: GET /admin/login
+     */
     public function showLoginForm()
     {
         return view('admin.auth.login');
     }
 
+    /**
+     * Handle login process admin
+     * - Validate email dan password
+     * - Attempt login dengan guard 'admin'
+     * - Support remember me checkbox
+     * - Regenerate session untuk security
+     * - Redirect ke dashboard jika berhasil
+     * 
+     * Route: POST /admin/login
+     */
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -42,6 +56,14 @@ class AuthController extends Controller
             ]);
     }
 
+    /**
+     * Handle logout admin
+     * - Logout dari guard 'admin'
+     * - Invalidate session
+     * - Regenerate token untuk security (prevent CSRF)
+     * 
+     * Route: POST /admin/logout
+     */
     public function logout(Request $request)
     {
         Auth::guard('admin')->logout();

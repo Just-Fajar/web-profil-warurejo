@@ -9,10 +9,13 @@ return [
     | Default Database Connection Name
     |--------------------------------------------------------------------------
     |
-    | Here you may specify which of the database connections below you wish
-    | to use as your default connection for database operations. This is
-    | the connection which will be utilized unless another connection
-    | is explicitly specified when you execute a query / statement.
+    | PENTING: Set di .env file untuk production
+    | Development: sqlite (lebih mudah setup)
+    | Production: mysql atau mariadb (lebih robust)
+    | 
+    | Pastikan DB_CONNECTION di .env sesuai dengan environment:
+    | - Local development: sqlite
+    | - Production server: mysql
     |
     */
 
@@ -43,6 +46,22 @@ return [
             'transaction_mode' => 'DEFERRED',
         ],
 
+        /**
+         * MySQL Connection - Untuk Production Server
+         * 
+         * SETUP:
+         * 1. Buat database: CREATE DATABASE nama_database;
+         * 2. Set di .env:
+         *    DB_CONNECTION=mysql
+         *    DB_HOST=127.0.0.1 (atau IP server)
+         *    DB_PORT=3306
+         *    DB_DATABASE=nama_database
+         *    DB_USERNAME=root (atau user lain)
+         *    DB_PASSWORD=password_aman
+         * 3. Run: php artisan migrate
+         * 
+         * SECURITY: Jangan gunakan user root di production!
+         */
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DB_URL'),

@@ -12,11 +12,24 @@ class GaleriController extends Controller
 {
     protected $galeriRepository;
 
+    /**
+     * Constructor - Inject GaleriRepository
+     * Controller untuk handle halaman galeri public
+     */
     public function __construct(GaleriRepository $galeriRepository)
     {
         $this->galeriRepository = $galeriRepository;
     }
 
+    /**
+     * Tampilkan list semua galeri published dengan filter
+     * Filter: search, kategori, urutkan (terbaru/terlama/terpopuler)
+     * Eager load admin dan images untuk prevent N+1
+     * Pagination 24 items per page
+     * Include SEO meta tags
+     * 
+     * Route: GET /galeri
+     */
     public function index(Request $request)
     {
         $search = $request->get('search');

@@ -8,16 +8,19 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Berita;
 use App\Models\Galeri;
 use App\Models\PotensiDesa;
+use App\Models\StrukturOrganisasi;
 
 // Repositories
 use App\Repositories\BeritaRepository;
 use App\Repositories\GaleriRepository;
 use App\Repositories\PotensiDesaRepository;
+use App\Repositories\StrukturOrganisasiRepository;
 
 // Services
 use App\Services\BeritaService;
 use App\Services\GaleriService;
 use App\Services\PotensiDesaService;
+use App\Services\StrukturOrganisasiService;
 use App\Services\ImageUploadService;
 use App\Services\HtmlSanitizerService;
 
@@ -39,6 +42,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(PotensiDesaRepository::class, function ($app) {
             return new PotensiDesaRepository(new PotensiDesa());
+        });
+
+        $this->app->singleton(StrukturOrganisasiRepository::class, function ($app) {
+            return new StrukturOrganisasiRepository(new StrukturOrganisasi());
         });
 
         // Register ImageUploadService
@@ -65,7 +72,17 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(PotensiDesaService::class, function ($app) {
-            return new PotensiDesaService($app->make(PotensiDesaRepository::class));
+            return new PotensiDesaService(
+                $app->make(PotensiDesaRepository::class),
+                $app->make(HtmlSanitizerService::class)
+            );
+        });
+
+        $this->app->singleton(StrukturOrganisasiService::class, function ($app) {
+            return new StrukturOrganisasiService(
+                $app->make(StrukturOrganisasiRepository::class),
+                $app->make(ImageUploadService::class)
+            );
         });
     }
 

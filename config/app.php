@@ -59,9 +59,9 @@ return [
     | Application Timezone
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the default timezone for your application, which
-    | will be used by the PHP date and date-time functions. The timezone
-    | is set to "UTC" by default as it is suitable for most use cases.
+    | PENTING: Timezone diset ke 'Asia/Jakarta' (WIB) untuk project desa Indonesia
+    | Semua waktu di database dan tampilan akan menggunakan zona waktu ini
+    | Jangan ubah ke UTC kecuali untuk server internasional
     |
     */
 

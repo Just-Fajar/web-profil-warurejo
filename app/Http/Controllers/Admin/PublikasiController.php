@@ -11,7 +11,10 @@ use Illuminate\Support\Facades\Cache;
 class PublikasiController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Tampilkan list semua publikasi dengan filter
+     * Filter available: search, kategori, status, tahun
+     * Sort by tanggal_publikasi descending
+     * Route: GET /admin/publikasi
      */
     public function index(Request $request)
     {
@@ -46,7 +49,9 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Tampilkan form create publikasi baru
+     * Publikasi: APBDes, RPJMDes, RKPDes (dokumen desa)
+     * Route: GET /admin/publikasi/create
      */
     public function create()
     {
@@ -54,7 +59,12 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Simpan publikasi baru dengan file PDF dan thumbnail
+     * - Validate: PDF max 10MB, thumbnail image max 2MB
+     * - Upload file dokumen ke storage/publikasi
+     * - Upload thumbnail optional ke storage/publikasi/thumbnails
+     * - Clear cache homepage
+     * Route: POST /admin/publikasi
      */
     public function store(Request $request)
     {
@@ -92,7 +102,8 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Tampilkan detail publikasi (preview)
+     * Route: GET /admin/publikasi/{id}
      */
     public function show(string $id)
     {
@@ -101,7 +112,8 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Tampilkan form edit publikasi
+     * Route: GET /admin/publikasi/{id}/edit
      */
     public function edit(string $id)
     {
@@ -110,7 +122,11 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update publikasi yang sudah ada
+     * - Jika ada file baru, delete file lama lalu upload baru
+     * - Jika ada thumbnail baru, delete thumbnail lama lalu upload baru
+     * - Clear cache setelah update
+     * Route: PUT /admin/publikasi/{id}
      */
     public function update(Request $request, string $id)
     {
@@ -158,7 +174,9 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Delete publikasi beserta file PDF dan thumbnail
+     * Clear cache setelah delete
+     * Route: DELETE /admin/publikasi/{id}
      */
     public function destroy(string $id)
     {
@@ -183,7 +201,10 @@ class PublikasiController extends Controller
     }
 
     /**
-     * Bulk delete publikasi
+     * Bulk delete multiple publikasi sekaligus
+     * - Loop semua dan delete file PDF + thumbnail
+     * - Return JSON response untuk AJAX
+     * Route: POST /admin/publikasi/bulk-delete
      */
     public function bulkDelete(Request $request)
     {

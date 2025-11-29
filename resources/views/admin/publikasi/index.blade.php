@@ -1,3 +1,47 @@
+{{--
+    ADMIN PUBLIKASI INDEX
+    
+    List management dokumen publikasi desa
+    
+    FEATURES:
+    - Statistics cards (Total/Per Kategori)
+    - Search filter (judul)
+    - Kategori filter (APBDes/RPJMDes/RKPDes/Lainnya)
+    - Tahun filter (dropdown years)
+    - Status filter (Aktif/Tidak Aktif)
+    - Sort options (Terbaru/Terlama/A-Z)
+    - Pagination (10 items per page)
+    - Bulk delete dengan checkbox
+    - Download counter per dokumen
+    
+    TABLE COLUMNS:
+    - Judul dokumen
+    - Kategori badge (color coded)
+    - Tahun
+    - File info (size, format)
+    - Downloads counter
+    - Tanggal terbit
+    - Status badge
+    - Actions (View/Download/Edit/Delete)
+    
+    QUICK ACTIONS:
+    - View PDF (new tab)
+    - Download PDF (force download)
+    - Edit dokumen
+    - Delete dengan confirmation
+    
+    BULK ACTIONS:
+    - Select all checkbox
+    - Bulk delete selected
+    - Confirmation modal
+    
+    DATA:
+    $publikasi: Paginated collection
+    $totalByKategori: Statistics per kategori
+    
+    Route: /admin/publikasi
+    Controller: AdminPublikasiController@index
+--}}
 @extends('admin.layouts.app')
 
 @section('title', 'Kelola Publikasi')
@@ -165,12 +209,13 @@
                                    title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <button type="button"
-                                        onclick="deletePublikasi({{ $item->id }}, '{{ $item->judul }}')"
-                                        class="text-red-600 hover:text-red-800 transition"
-                                        title="Hapus">
-                                    <i class="fas fa-trash"></i>
-                                </button>
+                                <form action="{{ route('admin.publikasi.destroy', $item->id) }}" method="POST" class="inline delete-form">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" class="text-red-600 hover:text-red-800 transition delete-btn" title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

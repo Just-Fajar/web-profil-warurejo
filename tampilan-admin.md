@@ -273,12 +273,12 @@
 - [ ] Edit sejarah dari tampilan publik (admin only)
 
 ### CRUD Profil Desa - Struktur Organisasi
-- [ ] Form tambah anggota struktur
-- [ ] Upload foto anggota
-- [ ] Tampilkan struktur organisasi
-- [ ] Edit anggota struktur
-- [ ] Hapus anggota struktur
-- [ ] Edit struktur dari tampilan publik (admin only)
+- [x] Form tambah anggota struktur ✅
+- [x] Upload foto anggota ✅
+- [x] Tampilkan struktur organisasi ✅
+- [x] Edit anggota struktur ✅
+- [x] Hapus anggota struktur ✅
+- [x] Edit struktur dari tampilan publik (admin only) ✅
 
 ### UI/UX Enhancement
 - [ ] Implementasi color scheme yang konsisten

@@ -11,11 +11,24 @@ class BeritaController extends Controller
 {
     protected $beritaService;
 
+    /**
+     * Constructor - Inject BeritaService
+     * Controller untuk handle halaman berita public
+     */
     public function __construct(BeritaService $beritaService)
     {
         $this->beritaService = $beritaService;
     }
 
+    /**
+     * Tampilkan list semua berita published dengan filter
+     * Filter available: search, date_from, date_to, sort (latest/popular/oldest)
+     * Jika ada filter aktif, gunakan searchWithFilters
+     * Jika tidak ada filter, ambil semua published berita
+     * Include SEO meta tags
+     * 
+     * Route: GET /berita
+     */
     public function index(Request $request)
     {
         $perPage = 12;
@@ -50,7 +63,11 @@ class BeritaController extends Controller
     }
     
     /**
-     * API endpoint for search autocomplete suggestions
+     * API endpoint untuk search autocomplete suggestions
+     * Return JSON array dengan title dan URL berita
+     * Minimum 2 karakter untuk trigger search
+     * 
+     * Route: GET /berita/autocomplete?q=keyword
      */
     public function autocomplete(Request $request)
     {
@@ -65,6 +82,17 @@ class BeritaController extends Controller
         return response()->json($suggestions);
     }
 
+    /**
+     * Tampilkan detail berita by slug
+     * - Auto increment views counter
+     * - Load related berita (4 terbaru)
+     * - Generate SEO meta tags dengan Open Graph
+     * - Generate structured data (Article schema)
+     * - Generate breadcrumb schema untuk Google
+     * - Throw 404 jika berita tidak ditemukan
+     * 
+     * Route: GET /berita/{slug}
+     */
     public function show($slug)
     {
         try {

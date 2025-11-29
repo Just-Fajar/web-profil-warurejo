@@ -29,10 +29,14 @@ class HtmlSanitizerService
     ];
 
     /**
-     * Sanitize HTML content
-     *
-     * @param string|null $html
-     * @return string|null
+     * Sanitize HTML content untuk prevent XSS attack
+     * - Remove script, iframe, form, dll (dangerous tags)
+     * - Remove event handlers (onclick, onerror, dll)
+     * - Remove javascript: dan data: protocol
+     * - Keep hanya allowed tags untuk rich text editor
+     * 
+     * @param string|null $html - content dari TinyMCE/rich text editor
+     * @return string|null - clean HTML yang aman disimpan ke database
      */
     public function sanitize(?string $html): ?string
     {
@@ -53,10 +57,12 @@ class HtmlSanitizerService
     }
 
     /**
-     * Remove dangerous HTML tags
-     *
+     * Remove dangerous HTML tags yang bisa execute code
+     * Tag berbahaya: script, iframe, object, form, dll
+     * Hapus opening, closing, dan content-nya sekalian
+     * 
      * @param string $html
-     * @return string
+     * @return string - HTML tanpa tag berbahaya
      */
     protected function removeDangerousTags(string $html): string
     {
@@ -77,10 +83,14 @@ class HtmlSanitizerService
     }
 
     /**
-     * Remove dangerous attributes from HTML
-     *
+     * Remove dangerous attributes dari HTML tags
+     * - Event handlers: onclick, onload, onerror, dll
+     * - javascript: protocol di href/src
+     * - data: protocol (bisa untuk XSS)
+     * - style attribute (bisa contain javascript)
+     * 
      * @param string $html
-     * @return string
+     * @return string - HTML dengan attributes aman saja
      */
     protected function removeDangerousAttributes(string $html): string
     {
@@ -100,10 +110,12 @@ class HtmlSanitizerService
     }
 
     /**
-     * Clean and validate allowed tags
-     *
+     * Clean dan validate allowed tags
+     * Hanya keep tags yang ada di $allowedTags (p, h1-h6, a, img, dll)
+     * Lalu bersihkan lagi link dan image tags untuk keamanan
+     * 
      * @param string $html
-     * @return string
+     * @return string - HTML dengan tags yang diizinkan saja
      */
     protected function cleanAllowedTags(string $html): string
     {
@@ -121,10 +133,12 @@ class HtmlSanitizerService
     }
 
     /**
-     * Clean and validate anchor tags
-     *
+     * Clean dan validate anchor tags untuk security
+     * Jika link buka tab baru (target="_blank"), otomatis tambah:
+     * rel="noopener noreferrer" untuk prevent tabnabbing attack
+     * 
      * @param string $html
-     * @return string
+     * @return string - HTML dengan link yang aman
      */
     protected function cleanLinkTags(string $html): string
     {
@@ -164,10 +178,12 @@ class HtmlSanitizerService
     }
 
     /**
-     * Clean and validate image tags
-     *
+     * Clean dan validate image tags
+     * - Auto tambah alt="" jika tidak ada (untuk accessibility)
+     * - Auto tambah loading="lazy" untuk lazy load (performance)
+     * 
      * @param string $html
-     * @return string
+     * @return string - HTML dengan image tags yang SEO-friendly
      */
     protected function cleanImageTags(string $html): string
     {
@@ -196,11 +212,15 @@ class HtmlSanitizerService
     }
 
     /**
-     * Sanitize for preview (more strict)
-     *
+     * Sanitize untuk preview/excerpt yang lebih ketat
+     * - Strip semua HTML tags (jadi plain text)
+     * - Decode HTML entities (&nbsp; jadi spasi, dll)
+     * - Limit panjang karakter untuk preview
+     * Berguna untuk meta description atau card preview
+     * 
      * @param string|null $html
-     * @param int $length
-     * @return string|null
+     * @param int $length - max karakter (default: 200)
+     * @return string|null - plain text untuk preview
      */
     public function sanitizeForPreview(?string $html, int $length = 200): ?string
     {
@@ -224,10 +244,12 @@ class HtmlSanitizerService
     }
 
     /**
-     * Check if HTML contains dangerous content
-     *
+     * Check apakah HTML mengandung content berbahaya
+     * Cek keberadaan: script, event handlers, javascript:, iframe
+     * Berguna untuk additional validation sebelum save
+     * 
      * @param string|null $html
-     * @return bool
+     * @return bool - true jika berbahaya, false jika aman
      */
     public function isDangerous(?string $html): bool
     {
