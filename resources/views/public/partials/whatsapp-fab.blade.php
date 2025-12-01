@@ -69,7 +69,7 @@
     @endif
 --}}
 {{-- WhatsApp Floating Action Button --}}
-<a href="https://wa.me/6283114796959?text=Halo%20Admin%20Desa%20Warurejo,%20saya%20ingin%20bertanya" 
+<a href="https://wa.me/62085168687700?text=Halo%20Admin%20Desa%20Warurejo,%20saya%20ingin%20bertanya" 
    target="_blank" 
    rel="noopener noreferrer"
    class="whatsapp-fab"

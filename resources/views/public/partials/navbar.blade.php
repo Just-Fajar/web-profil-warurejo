@@ -146,7 +146,7 @@
                             <span class="dropdown-item-icon"></span>
                             Peta Desa
                         </a>
-                        <a href="https://wa.me/6283114796959" class="dropdown-item">
+                        <a href="https://wa.me/62085168687700" class="dropdown-item">
                             <span class="dropdown-item-icon"></span>
                             Tanya Jawab & Pengaduan
                         </a>
@@ -279,7 +279,7 @@
                         <span class="text-lg"></span>
                         Peta Desa
                     </a>
-                    <a href="https://wa.me/6283114796959" 
+                    <a href="https://wa.me/62085168687700" 
                        class="mobile-menu-item pl-10"
                        @click="mobileMenuOpen = false">
                         <span class="text-lg"></span>

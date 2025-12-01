@@ -233,7 +233,7 @@
                 Hubungi kami untuk informasi lebih lanjut mengenai potensi dan kerjasama
             </p>
             <a 
-                href="https://wa.me/6283114796959?text=Halo,%20saya%20ingin%20mengetahui%20lebih%20lanjut%20tentang%20potensi%20desa" 
+                href="https://wa.me/62085168687700?text=Halo,%20saya%20ingin%20mengetahui%20lebih%20lanjut%20tentang%20potensi%20desa" 
                 target="_blank"
                 class="inline-flex items-center px-8 py-4 bg-white text-green-600 rounded-lg hover:bg-green-50 transition font-bold text-lg shadow-lg"
             >

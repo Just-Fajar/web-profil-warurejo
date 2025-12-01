@@ -102,90 +102,252 @@
 
                     {{-- Content --}}
                     <div class="p-4 sm:p-6 md:p-8">
-                        @if($profil->sejarah)
-                            <div class="prose prose-lg max-w-none">
-                                {{-- Timeline Icon --}}
-                                <div class="flex items-start mb-6">
+                        <div class="space-y-8 sm:space-y-10 md:space-y-12">
+                            
+                            {{-- 1. Asal Usul Nama dan Pembentukan --}}
+                            <div class="scroll-reveal">
+                                <div class="flex items-start mb-4">
                                     <div class="shrink-0 w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center mr-4">
                                         <svg class="w-6 h-6 text-amber-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Asal Usul Nama dan Pembentukan</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative pl-8 sm:pl-12 md:pl-16">
+                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-amber-200"></div>
+                                    
+                                    <div class="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                                        <p>Nama desa <strong class="text-amber-700">Warurejo</strong> kemungkinan besar berasal dari kombinasi dua kata dalam bahasa Jawa:</p>
+                                        
+                                        <div class="bg-amber-50 rounded-lg p-4 space-y-3 border-l-4 border-amber-400">
+                                            <div>
+                                                <span class="font-bold text-amber-800">Waru:</span>
+                                                <span class="ml-2">Merujuk pada Pohon Waru (<em>Hibiscus tiliaceus</em>) yang mungkin dahulu banyak tumbuh atau menjadi penanda wilayah. Pohon Waru sering dikaitkan dengan tempat teduh dan pertemuan.</span>
+                                            </div>
+                                            <div>
+                                                <span class="font-bold text-amber-800">Rejo:</span>
+                                                <span class="ml-2">Memiliki arti ramai, makmur, atau subur.</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="italic text-amber-900 bg-amber-50 p-4 rounded-lg border border-amber-200">
+                                            Dengan demikian, <strong>Warurejo</strong> dapat diartikan sebagai <strong>"Tempat yang ramai/makmur yang ditandai dengan adanya Pohon Waru"</strong> atau <strong>"Kawasan yang dibuka menjadi subur di mana pohon waru banyak ditemukan"</strong>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- 2. Periode Awal dan Pembukaan Lahan --}}
+                            <div class="scroll-reveal">
+                                <div class="flex items-start mb-4">
+                                    <div class="shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                                         </svg>
                                     </div>
                                     <div class="flex-1">
-                                        <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">Awal Mula</h3>
+                                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Periode Awal dan Pembukaan Lahan</h3>
                                     </div>
                                 </div>
-
-                                {{-- Sejarah Text dengan styling --}}
+                                
                                 <div class="relative pl-8 sm:pl-12 md:pl-16">
-                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-amber-200"></div>
+                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-green-200"></div>
                                     
-                                    <div class="text-sm sm:text-base text-gray-700 leading-relaxed space-y-3 sm:space-y-4">
-                                        {!! nl2br(e($profil->sejarah)) !!}
+                                    <div class="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                                        <p>Seperti desa-desa di sekitar Balerejo (yang dikenal sebagai daerah dataran rendah dan persawahan yang subur), Warurejo diperkirakan dibuka pada masa-masa:</p>
+                                        
+                                        <div class="space-y-3">
+                                            <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-400">
+                                                <h4 class="font-bold text-green-800 mb-2">Masa Kerajaan Mataram Islam</h4>
+                                                <p>Ketika pengaruh Mataram meluas ke wilayah timur, terjadi pembukaan lahan baru untuk pemukiman dan pertanian.</p>
+                                            </div>
+                                            
+                                            <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-400">
+                                                <h4 class="font-bold text-green-800 mb-2">Awal Kolonial</h4>
+                                                <p>Pembukaan lahan semakin intensif seiring kebutuhan komoditas pertanian.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <p>Penduduk pertama Warurejo kemungkinan besar adalah para pendatang atau kelompok yang diutus untuk membuka hutan (atau <em>babat alas</em>) menjadi lahan sawah dan tempat tinggal. Mereka mencari lokasi yang dekat dengan sumber air, yang di wilayah Balerejo banyak dilintasi oleh anak-anak Sungai Madiun.</p>
                                     </div>
                                 </div>
                             </div>
-                        @else
-                            <div class="text-center py-12">
-                                <svg class="w-20 h-20 mx-auto text-gray-400 mb-4" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                                </svg>
-                                <p class="text-gray-500 text-lg">Sejarah desa belum tersedia</p>
-                                <p class="text-gray-400 text-sm mt-2">Silakan hubungi admin untuk informasi lebih lanjut</p>
+
+                            {{-- 3. Perkembangan Masa Kolonial hingga Kemerdekaan --}}
+                            <div class="scroll-reveal">
+                                <div class="flex items-start mb-4">
+                                    <div class="shrink-0 w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Perkembangan Masa Kolonial hingga Kemerdekaan</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative pl-8 sm:pl-12 md:pl-16">
+                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-blue-200"></div>
+                                    
+                                    <div class="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                                        <div class="space-y-3">
+                                            <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                                                <h4 class="font-bold text-blue-800 mb-2">Basis Pertanian</h4>
+                                                <p>Wilayah Warurejo dan sekitarnya berkembang menjadi basis utama pertanian, terutama padi.</p>
+                                            </div>
+                                            
+                                            <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                                                <h4 class="font-bold text-blue-800 mb-2">Organisasi Pemerintahan</h4>
+                                                <p>Pembentukan struktur desa modern dimulai pada masa Kolonial Belanda (periode <em>Inlandsche Gemeente Ordonnantie</em>), di mana batas-batas desa mulai diresmikan dan pemimpin desa (Kepala Desa/Lurah) mulai ditunjuk atau dipilih.</p>
+                                            </div>
+                                            
+                                            <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
+                                                <h4 class="font-bold text-blue-800 mb-2">Peristiwa Madiun</h4>
+                                                <p>Sebagai bagian dari Kabupaten Madiun, desa ini kemungkinan juga merasakan dampak dari peristiwa-peristiwa penting di sekitar tahun 1948, termasuk mobilisasi penduduk atau pergerakan militer.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
 
-            {{-- Info Box Tambahan --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12 scroll-reveal">
-                {{-- Warisan Budaya --}}
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 border-t-4 border-purple-500">
-                    <div class="flex items-start">
-                        <div class="bg-purple-100 rounded-full p-2.5 sm:p-3 mr-3 sm:mr-4 shrink-0">
-                            <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 mb-2 text-base sm:text-lg">Warisan Budaya</h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Desa Warurejo memiliki kekayaan budaya dan tradisi yang terus dilestarikan dari generasi ke generasi.
-                            </p>
-                        </div>
-                    </div>
-                </div>
+                            {{-- 4. Perkembangan Perekonomian dan Sosial --}}
+                            <div class="scroll-reveal">
+                                <div class="flex items-start mb-4">
+                                    <div class="shrink-0 w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Perkembangan Perekonomian dan Sosial</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative pl-8 sm:pl-12 md:pl-16">
+                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-purple-200"></div>
+                                    
+                                    <div class="space-y-4 text-sm sm:text-base text-gray-700 leading-relaxed">
+                                        <p>Hingga kini, Desa Warurejo memiliki ciri-ciri umum desa di Madiun:</p>
+                                        
+                                        <div class="space-y-3">
+                                            <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-400">
+                                                <h4 class="font-bold text-purple-800 mb-2">Ekonomi</h4>
+                                                <p>Mayoritas penduduk bergerak di sektor pertanian atau jasa/buruh.</p>
+                                            </div>
+                                            
+                                            <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-400">
+                                                <h4 class="font-bold text-purple-800 mb-2">Sosial</h4>
+                                                <p>Komunitas yang erat, dengan nilai-nilai gotong royong yang kuat (sesuai dengan kata "Rejo" yang mencerminkan kemakmuran dan keramaian kolektif).</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                {{-- Perkembangan --}}
-                <div class="bg-white rounded-lg shadow-md p-4 sm:p-6 border-t-4 border-green-500">
-                    <div class="flex items-start">
-                        <div class="bg-green-100 rounded-full p-2.5 sm:p-3 mr-3 sm:mr-4 shrink-0">
-                            <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 mb-2 text-base sm:text-lg">Perkembangan</h3>
-                            <p class="text-gray-600 text-xs sm:text-sm">
-                                Seiring waktu, Desa Warurejo terus berkembang menuju desa yang lebih maju dan modern.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                            {{-- 5. Para Pendiri Desa Warurejo --}}
+                            <div class="scroll-reveal">
+                                <div class="flex items-start mb-4">
+                                    <div class="shrink-0 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mr-4">
+                                        <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-3">Para Pendiri Desa Warurejo</h3>
+                                    </div>
+                                </div>
+                                
+                                <div class="relative pl-8 sm:pl-12 md:pl-16">
+                                    <div class="absolute left-3 sm:left-6 top-0 bottom-0 w-0.5 bg-red-200"></div>
+                                    
+                                    <div class="space-y-3 text-sm sm:text-base text-gray-700">
+                                        <p class="font-semibold text-gray-800 mb-4">Tokoh-tokoh yang berjasa dalam pembentukan dan kepemimpinan Desa Warurejo:</p>
+                                        
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">1</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">DIPO GATI</h4>
+                                                        <p class="text-xs text-red-700">Tahun 1830</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">2</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">DIPO SEMITO</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">3</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">DIPO YONO</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">4</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">DIPO SONO</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">5</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">TOHJOYO</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">6</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">WONOTIKO</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-400 hover:shadow-md transition md:col-span-2">
+                                                <div class="flex items-center">
+                                                    <span class="bg-red-200 text-red-800 font-bold px-3 py-1 rounded-full text-xs mr-3">7</span>
+                                                    <div>
+                                                        <h4 class="font-bold text-red-900">WONGSO WIJOYO / WONGSO SAIKUN</h4>
+                                                        <p class="text-xs text-red-700">Periode 1959 - 1985</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="bg-linear-to-r from-red-50 to-amber-50 rounded-lg p-4 mt-4 border border-red-200">
+                                            <p class="text-sm italic text-gray-700">
+                                                <svg class="w-5 h-5 inline-block mr-2 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                                </svg>
+                                                Para tokoh ini adalah perintis yang membuka dan mengembangkan Desa Warurejo menjadi permukiman yang makmur seperti sekarang.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-            {{-- Quote Box --}}
-            <div class="bg-linear-to-r from-blue-600 to-blue-700 rounded-lg md:rounded-xl shadow-xl p-4 sm:p-6 md:p-8 mb-8 sm:mb-12 text-white scroll-reveal">
-                <div class="flex items-start">
-                    <svg class="w-10 h-10 sm:w-12 sm:h-12 text-blue-300 mr-3 sm:mr-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <p class="text-lg sm:text-xl md:text-2xl leading-relaxed italic mb-3 sm:mb-4">
-                            "Mengenal sejarah adalah menghargai perjalanan. Dengan memahami masa lalu, kita dapat membangun masa depan yang lebih baik."
-                        </p>
-                        <p class="text-blue-200 font-semibold">- Pepatah Desa Warurejo</p>
+                        </div>
                     </div>
                 </div>
             </div>

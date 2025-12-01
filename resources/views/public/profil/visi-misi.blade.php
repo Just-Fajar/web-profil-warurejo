@@ -64,7 +64,7 @@
 
 {{-- Hero Section --}}
 <section class="bg-primary-700 text-white py-12 md:py-16 lg:py-20 relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary-700 to-primary-800 opacity-90"></div>
+    <div class="absolute inset-0 bg-linear-to-r from-primary-700 to-primary-800 opacity-90"></div>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center scroll-reveal">
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-wide mb-3 md:mb-4">Visi & Misi</h1>
@@ -78,104 +78,217 @@
 <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-5xl">
 
-        {{-- ===== VISI ===== --}}
-        <div class="mb-8 sm:mb-12 md:mb-16 scroll-reveal">
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+{{-- ===== VISI ===== --}}
+<div class="mb-8 sm:mb-12 md:mb-16 scroll-reveal">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
 
-                {{-- Header --}}
-                <div class="bg-gradient-to-r from-primary-700 to-primary-800 p-4 sm:p-6 md:p-7 flex items-center gap-3 sm:gap-4">
-                    <div class="bg-white/20 p-3 sm:p-4 rounded-xl shrink-0">
-                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
+        {{-- Header --}}
+        <div class="bg-linear-to-r from-primary-700 to-primary-800 p-4 sm:p-6 md:p-7 flex items-center gap-3 sm:gap-4">
+            <div class="bg-white/20 p-3 sm:p-4 rounded-xl shrink-0">
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                    <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                </svg>
+            </div>
 
-                    <div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">VISI</h2>
-                        <p class="text-primary-100 text-xs sm:text-sm">Pandangan Masa Depan Desa Warurejo</p>
-                    </div>
-                </div>
-
-                {{-- Content --}}
-                <div class="p-6 sm:p-8 md:p-10">
-                    @if($profil->visi)
-                        <div class="flex items-start gap-5">
-                            <div class="w-1 bg-primary-600 rounded-full"></div>
-
-                            <p class="text-xl sm:text-2xl md:text-3xl font-semibold italic leading-relaxed text-gray-800">
-                                "{{ $profil->visi }}"
-                            </p>
-                        </div>
-                    @else
-                        <div class="text-center py-10 text-gray-500">
-                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                            </svg>
-                            Visi belum tersedia
-                        </div>
-                    @endif
-                </div>
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">VISI</h2>
+                <p class="text-primary-100 text-xs sm:text-sm">Pandangan Masa Depan Desa Warurejo</p>
             </div>
         </div>
+
+        {{-- Content --}}
+        <div class="p-6 sm:p-8 md:p-10">
+            <div class="text-gray-800 text-justify leading-relaxed space-y-6 text-base sm:text-lg">
+
+                <p>
+                    Visi merupakan pandangan jauh ke depan, kemana dan bagaimana Desa Warurejo harus dibawa dan berkarya agar konsisten dan dapat eksis, antisipatif, inovasi serta produktif. Visi adalah suatu gambaran yang menantang tentang keadaan masa depan, berisikan cita dan citra yang ingin diwujudkan, dibangun melalui proses refleksi dan proyeksi yang digali dari nilai-nilai luhur yang dianut oleh seluruh komponen pemerintahan desa. Pernyataan Visi Desa Warurejo adalah:
+                </p>
+
+                <div class="bg-primary-50 border-l-4 border-primary-600 p-5 sm:p-6 rounded-lg my-6">
+                    <p class="text-xl sm:text-2xl md:text-3xl font-bold text-primary-800 leading-relaxed text-center">
+                        "MENCIPTAKAN DESA WARUREJO MENJADI DESA YANG MANDIRI BERBASIS PERTANIAN DAN PERDAGANGAN UNTUK MENCAPAI MASYARAKAT YANG SEJAHTERA DAN MANDIRI"
+                    </p>
+                </div>
+
+                <p>
+                    Pemahaman atas pernyataan visi tersebut mengandung makna terjalinnya sinergi yang dinamis antara masyarakat, pemerintah Desa Warurejo dan seluruh lembaga desa dalam merealisasi pembangunan Desa Warurejo secara terpadu. Secara filosofi visi tersebut dapat dijelaskan melalui makna yang terkandung di dalamnya, yaitu:
+                </p>
+
+                <div class="space-y-4 mt-6">
+                    <div class="bg-blue-50 rounded-lg p-4 sm:p-5 border-l-4 border-blue-500 hover:bg-blue-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-blue-900">1) Menciptakan</span> terkandung upaya dan peran pemerintah Desa dalam mewujudkan Desa Warurejo yang mandiri yang berbasis pertanian dan perdagangan demi masyarakat yang sejahtera.
+                        </p>
+                    </div>
+
+                    <div class="bg-green-50 rounded-lg p-4 sm:p-5 border-l-4 border-green-500 hover:bg-green-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-green-900">2) Desa Warurejo</span> adalah satu kesatuan masyarakat hukum dengan segala potensi dan sumber dayanya dalam sistem pemerintahan.
+                        </p>
+                    </div>
+
+                    <div class="bg-purple-50 rounded-lg p-4 sm:p-5 border-l-4 border-purple-500 hover:bg-purple-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-purple-900">3) Mandiri</span> adalah Mandiri berarti mampu menjalani kehidupan dengan kemampuan diri sendiri, kemampuan untuk melakukan sesuatu seorang diri tanpa banyak melibatkan bantuan orang lain. karena kemandirian adalah sikap yang mutlak diperlukan sebagai prasyarat utama untuk meraih berbagai keberhasilan dalam kehidupan ini.
+                        </p>
+                    </div>
+
+                    <div class="bg-amber-50 rounded-lg p-4 sm:p-5 border-l-4 border-amber-500 hover:bg-amber-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-amber-900">4) Pertanian</span> adalah kondisi masyarakat yang kebanyakan seorang petani yang mengelola lahan pertanian sebagai sumber pencaharian.
+                        </p>
+                    </div>
+
+                    <div class="bg-indigo-50 rounded-lg p-4 sm:p-5 border-l-4 border-indigo-500 hover:bg-indigo-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-indigo-900">5) Perdagangan</span> adalah kondisi kehidupan masyarakat disektor jasa yang menunjang kegiatan ekonomi antar anggota masyarakat yang bisa menumbuhkan perekonomian masyarakat.
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50 rounded-lg p-4 sm:p-5 border-l-4 border-rose-500 hover:bg-rose-100 transition scroll-reveal">
+                        <p>
+                            <span class="font-bold text-rose-900">6) Desa Warurejo MANDIRI</span> adalah <span class="font-semibold">Maju Aman Nyaman Dinamis dan Religius</span>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 
         {{-- ===== MISI ===== --}}
-        <div class="mb-8 sm:mb-12 md:mb-16 scroll-reveal">
-            <div class="bg-white rounded-lg md:rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+<div class="mb-8 sm:mb-12 md:mb-16 scroll-reveal">
+    <div class="bg-white rounded-lg md:rounded-2xl shadow-xl overflow-hidden border border-gray-100">
 
-                {{-- Header --}}
-                <div class="bg-gradient-to-r from-green-600 to-green-700 p-4 sm:p-6 md:p-7 flex items-center gap-3 sm:gap-4">
-                    <div class="bg-white/20 p-3 sm:p-4 rounded-xl shrink-0">
-                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
-                        </svg>
+        {{-- Header --}}
+        <div class="bg-linear-to-r from-green-600 to-green-700 p-4 sm:p-6 md:p-7 flex items-center gap-3 sm:gap-4">
+            <div class="bg-white/20 p-3 sm:p-4 rounded-xl shrink-0">
+                <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">MISI</h2>
+                <p class="text-green-100 text-xs sm:text-sm">Langkah Strategis Mewujudkan Visi</p>
+            </div>
+        </div>
+
+        {{-- Content --}}
+        <div class="p-6 sm:p-8 md:p-10">
+            <div class="text-gray-800 text-justify leading-relaxed space-y-6 text-base sm:text-lg">
+
+                <p>
+                    Misi adalah rumusan umum mengenai upaya-upaya yang akan dilaksanakan untuk mewujudkan visi. Misi berfungsi sebagai pemersatu gerak, langkah dan tindakan nyata bagi segenap komponen penyelenggara pemerintahan tanpa mengabaikan mandat yang diberikannya.
+                </p>
+
+                <p class="font-semibold text-gray-900">
+                    Adapun Misi Pemerintah Desa Warurejo adalah sebagai berikut:
+                </p>
+
+                <div class="space-y-4 mt-6">
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-green-500 bg-green-50 hover:bg-green-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            1
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Mewujudkan dan mengembangkan kegiatan keagamaan untuk menambah keimanan dan ketaqwaan kepada Tuhan Yang Maha Esa.
+                        </p>
                     </div>
 
-                    <div>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">MISI</h2>
-                        <p class="text-green-100 text-xs sm:text-sm">Langkah Strategis Mewujudkan Visi</p>
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-blue-500 bg-blue-50 hover:bg-blue-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            2
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Mewujudkan dan mendorong terjadinya usaha-usaha kerukunan antar dan intern warga masyarakat yang disebabkan karena adanya perbedaan agama, keyakinan, organisasi, dan lainnya dalam suasana saling menghargai dan menghormati.
+                        </p>
                     </div>
-                </div>
 
-                {{-- Content --}}
-                <div class="p-6 sm:p-8 md:p-10">
-                    @if($profil->misi && count($profil->misi_array) > 0)
-                        <div class="space-y-5">
-
-                            @foreach($profil->misi_array as $index => $misi)
-                                <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border border-gray-100 bg-gray-50 hover:bg-green-50 transition scroll-reveal-stagger" style="transition-delay: {{ $index * 0.1 }}s;">
-                                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
-                                        {{ $index + 1 }}
-                                    </div>
-
-                                    <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed">
-                                        {{ $misi }}
-                                    </p>
-                                </div>
-                            @endforeach
-
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-purple-500 bg-purple-50 hover:bg-purple-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            3
                         </div>
-                    @else
-                        <div class="text-center py-10 text-gray-500">
-                            <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
-                            </svg>
-                            Misi belum tersedia
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Membangun dan meningkatkan hasil pertanian dengan jalan penataan pengairan, perbaikan jalan sawah atau jalan usaha tani, pemupukan, dan pola tanam yang baik.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-amber-500 bg-amber-50 hover:bg-amber-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-amber-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            4
                         </div>
-                    @endif
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Menata Pemerintahan Desa Warurejo yang kompak dan bertanggung jawab dalam mengemban amanat masyarakat.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-indigo-500 bg-indigo-50 hover:bg-indigo-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            5
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Meningkatkan pelayanan masyarakat secara terpadu dan serius.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-teal-500 bg-teal-50 hover:bg-teal-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-teal-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            6
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Mencari dan menambah debet air untuk mencukupi kebutuhan pertanian.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-rose-500 bg-rose-50 hover:bg-rose-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-rose-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            7
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Menumbuh Kembangkan Kelompok Tani dan Gabungan Kelompok Tani serta bekerja sama denga HIPPA untuk memfasilitasi kebutuhan Petani.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-cyan-500 bg-cyan-50 hover:bg-cyan-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            8
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Menumbuhkembangkan usaha kecil dan menengah.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border-l-4 border-emerald-500 bg-emerald-50 hover:bg-emerald-100 transition scroll-reveal-stagger">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center font-bold text-base sm:text-lg shrink-0">
+                            9
+                        </div>
+                        <p class="text-gray-800 text-sm sm:text-base md:text-lg leading-relaxed pt-1">
+                            Membangun dan mendorong majunya bidang pendidikan baik formal maupun informal yang mudah diakses dan dinikmati seluruh warga masyarakat tanpa terkecuali yang mampu menghasilkan insan intelektual, inovatif dan enterpreneur (wirausahawan).
+                        </p>
+                    </div>
+
                 </div>
 
             </div>
         </div>
 
+    </div>
+</div>
+
         {{-- Info Box --}}
-        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 md:p-8 rounded-lg md:rounded-xl scroll-reveal">
-            <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-2">Komitmen Kami</h3>
-            <p class="text-sm sm:text-base text-blue-800 leading-relaxed">
-                Visi dan misi ini menjadi pedoman dalam pelaksanaan pembangunan desa. Melalui kerja sama dan gotong royong, 
-                kami berkomitmen mewujudkan Desa Warurejo yang lebih maju, mandiri, dan sejahtera.
-            </p>
-        </div>
+<div class="bg-blue-50 border-l-4 border-blue-500 p-4 sm:p-6 md:p-8 rounded-lg md:rounded-xl scroll-reveal">
+    <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-2">Komitmen Kami</h3>
+
+    <p class="text-sm sm:text-base text-blue-800 leading-relaxed">
+        Visi dan misi ini menjadi pedoman dalam setiap langkah pembangunan Desa Warurejo. 
+        Dengan semangat kebersamaan dan budaya gotong royong, kami berkomitmen mewujudkan Desa Warurejo 
+        yang lebih maju, mandiri, dan sejahtera bagi seluruh masyarakat.
+    </p>
+</div>
 
         {{-- Navigation --}}
         <div class="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 scroll-reveal">

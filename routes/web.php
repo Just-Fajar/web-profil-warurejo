@@ -63,6 +63,11 @@ Route::get('/peta-desa', function () {
     return view('public.peta-desa');
 })->name('peta-desa');
 
+// Tribute KKN 24
+Route::get('/tribute-kkn24', function () {
+    return view('public.tribute-kkn24');
+})->name('tribute.kkn24');
+
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     // Guest Routes (Not Authenticated)

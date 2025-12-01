@@ -89,7 +89,7 @@
                         <svg class="w-5 h-5 mr-2 text-primary-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
                         </svg>
-                        <a href="https://wa.me/6283114796959" target="_blank" class="hover:text-white transition">083114796959</a>
+                        <a href="https://wa.me/62085168687700" target="_blank" class="hover:text-white transition">085168687700</a>
                     </li>
                     <li class="flex items-start">
                         <svg class="w-5 h-5 mr-2 text-primary-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -119,7 +119,7 @@
                     <li><a href="{{ route('potensi.index') }}" class="hover:text-white transition">Potensi</a></li>
                     <li><a href="{{ route('galeri.index') }}" class="hover:text-white transition">Dokumentasi</a></li>
                     <li><a href="{{ route('peta-desa') }}" class="hover:text-white transition">Peta Desa</a></li>
-                    <li><a href="https://wa.me/6283114796959" target="_blank" class="hover:text-white transition">Tanya Jawab & Pengaduan</a></li>
+                    <li><a href="https://wa.me/62085168687700" target="_blank" class="hover:text-white transition">Tanya Jawab & Pengaduan</a></li>
                 </ul>
             </div>
 
@@ -128,7 +128,7 @@
                 <h3 class="text-lg font-bold mb-3">Media Sosial</h3>
                 <div class="flex space-x-3">
                     {{-- Facebook --}}
-                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
+                    <a href="https://www.facebook.com/warurejo.balerejo" target="_blank" rel="noopener noreferrer" 
                        class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition transform hover:scale-110 shadow-md"
                        aria-label="Facebook">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@
                     </a>
 
                     {{-- WhatsApp --}}
-                    <a href="https://wa.me/6283114796959" target="_blank" rel="noopener noreferrer" 
+                    <a href="https://wa.me/62085168687700" target="_blank" rel="noopener noreferrer" 
                        class="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 transition transform hover:scale-110 shadow-md"
                        aria-label="WhatsApp">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -182,8 +182,12 @@
 
         {{-- Copyright --}}
         <div class="border-t border-gray-700 pt-6 text-center text-sm text-gray-400">
-            © {{ date('Y') }} Copyright. All right reserved. 
-            <span>KKN-T Berdampak 24 UNIPMA</span>
+            <p class="mb-2">© 2025 Copyright. All rights reserved. KKN-T Berdampak 24 UNIPMA</p>
+            <p class="text-xs">
+                <a href="{{ route('tribute.kkn24') }}" class="text-primary-400 hover:text-primary-300 transition-colors underline decoration-dotted">
+                    Tribute for Dev — Kelompok 24 KKN
+                </a>
+            </p>
         </div>
     </div>
 </footer>

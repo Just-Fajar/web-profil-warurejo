@@ -327,7 +327,7 @@
                 Bagikan informasi atau kegiatan di desa Anda kepada kami
             </p>
             <a 
-                href="https://wa.me/6283114796959?text=Halo,%20saya%20ingin%20berbagi%20informasi%20berita%20desa" 
+                href="https://wa.me/62085168687700?text=Halo,%20saya%20ingin%20berbagi%20informasi%20berita%20desa" 
                 target="_blank"
                 class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-white text-primary-600 rounded-lg hover:bg-primary-50 transition font-bold text-base sm:text-lg shadow-lg"
             >

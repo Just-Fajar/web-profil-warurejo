@@ -162,13 +162,12 @@ style="background-image: url('{{ asset('images/bg2.jpg') }}');">
                                         <!-- Photo Container -->
                                         <div class="relative bg-gray-100 rounded-lg overflow-hidden shadow-2xl h-full min-h-[350px] lg:min-h-[450px] mt-6 mb-6 lg:mt-0 lg:mb-0">
                                             <img 
-                    src="{{ asset('images/pemandangan-alam.jpg') }}" 
+                    src="{{ asset('images/kades_warurejo.jpg') }}" 
                     alt="Kepala Desa {{ $profil->nama_desa }}"
                     class="max-w-xs md:max-w-sm lg:max-w-md h-auto mx-auto object-contain"
                     loading="lazy"
                     decoding="async"
                 >
-
                                         </div>
                                     </div>
                                 </div>
@@ -182,24 +181,30 @@ style="background-image: url('{{ asset('images/bg2.jpg') }}');">
                     
                     <div class="text-gray-700 space-y-4 text-justify leading-relaxed text-sm md:text-base">
                         <p class="font-medium">Assalamu'alaikum warahmatullahi wabarakatuh,</p>
-                        <p>Salam sejahtera bagi kita semua,</p>
-                        <p>
-                            Dengan penuh rasa syukur, saya menyambut seluruh warga dan pengunjung di website resmi Desa {{ $profil->nama_desa }}. 
-                            Website ini kami hadirkan sebagai wujud keterbukaan informasi dan upaya dalam memajukan desa menuju kemandirian berbasis teknologi.
-                        </p>
-                        <p>
-                            Sebagai Kepala Desa, saya bersama seluruh perangkat desa berkomitmen untuk membangun Desa {{ $profil->nama_desa }} yang mandiri, maju, dan berdaya saing dengan memanfaatkan teknologi sebagai pilar utama pembangunan.
-                        </p>
-                        <p>
-                            Melalui platform ini, kami berharap dapat memberikan kemudahan akses informasi, pelayanan yang lebih baik, serta menjadi jembatan komunikasi antara pemerintah desa dan masyarakat. 
-                            Mari bersama-sama membangun desa yang lebih maju, sejahtera, dan berdaya saing di era digital ini.
-                        </p>
-                        <p class="font-medium">Wassalamu'alaikum warahmatullahi wabarakatuh.</p>
-                        
-                        <div class="mt-8">
-                            <p class="text-lg md:text-xl font-bold text-gray-800">{{ strtoupper($profil->nama_kepala_desa ?? 'Sunarto') }}</p>
-                            <p class="text-gray-600">Kepala {{ $profil->nama_desa }}</p>
-                        </div>
+                            <p>Salam sejahtera bagi kita semua,</p>
+
+                            <p>
+                                Dengan penuh rasa syukur, saya menyambut seluruh warga serta para pengunjung di website resmi {{ $profil->nama_desa }}. 
+                                Kehadiran website ini merupakan bagian dari komitmen kami dalam mewujudkan transparansi, keterbukaan informasi publik, dan pelayanan yang lebih cepat serta mudah diakses oleh masyarakat.
+                            </p>
+
+                            <p>
+                                Pemerintah {{ $profil->nama_desa }} terus berupaya meningkatkan kualitas pelayanan, pembangunan, dan pemberdayaan masyarakat. 
+                                Melalui pemanfaatan teknologi informasi, kami berharap website ini menjadi sarana yang efektif dalam menyampaikan informasi, program kerja, kegiatan desa, serta wadah partisipasi masyarakat dalam proses pembangunan.
+                            </p>
+
+                            <p>
+                                Besar harapan kami, platform ini dapat memperkuat hubungan antara pemerintah desa dan masyarakat, sekaligus menjadi ruang bersama untuk membangun {{ $profil->nama_desa }} yang lebih maju, mandiri, dan sejahtera. 
+                                Semoga melalui sinergi dan kebersamaan, kita mampu menjadikan desa kita sebagai tempat yang membawa manfaat bagi seluruh warga.
+                            </p>
+
+                            <p class="font-medium">Wassalamu'alaikum warahmatullahi wabarakatuh.</p>
+
+                            <div class="mt-8">
+                                <p class="text-lg md:text-xl font-bold text-gray-800">{{ strtoupper($profil->nama_kepala_desa ?? 'Sunarto') }}</p>
+                                <p class="text-gray-600">Kepala {{ $profil->nama_desa }}</p>
+                            </div>
+
                     </div>
                 </div>
 
