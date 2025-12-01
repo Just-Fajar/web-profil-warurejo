@@ -122,7 +122,7 @@ Website Profil Desa Warurejo adalah aplikasi web modern yang dirancang khusus un
 - Chart pengunjung (Chart.js)
 - Aktivitas terbaru
 - Quick actions
-- Dark mode support
+- Dark mode support (belum ada)
 
 #### **Manajemen Berita**
 - Full CRUD operations
@@ -160,10 +160,10 @@ Website Profil Desa Warurejo adalah aplikasi web modern yang dirancang khusus un
 - Hierarchical tree structure
 - Jabatan & bidang
 - Photo upload
-- Kontak person
+- Kontak person (belum ada)
 - Atasan-bawahan relationship
 
-#### **Profil Desa**
+#### **Profil Desa** (BELUM ADA)
 - Edit visi & misi
 - Update sejarah
 - Informasi geografis
