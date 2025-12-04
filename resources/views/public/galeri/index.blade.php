@@ -64,7 +64,7 @@
         <div class="max-w-3xl mx-auto text-center scroll-reveal">
             <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4">Galeri Dokumentasi</h1>
             <p class="text-base sm:text-lg text-purple-100 px-4">
-                Kumpulan Foto dan Video Kegiatan Desa Warurejo
+                Kumpulan Foto Kegiatan Desa Warurejo
             </p>
         </div>
     </div>
@@ -79,7 +79,7 @@
                     <input 
                         type="text" 
                         name="search" 
-                        placeholder="Cari foto atau video..." 
+                        placeholder="Cari foto" 
                         value="{{ request('search') }}"
                         class="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
                     >
